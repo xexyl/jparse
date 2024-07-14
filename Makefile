@@ -161,6 +161,14 @@ prep:
 	@echo "Nothing to do yet."
 
 # XXX - update this when jparse code populated - XXX
+slow_release:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+release:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
 install:
 	@echo "Nothing to install."
 
