@@ -138,10 +138,11 @@ all: jparse.c Makefile
 # .PHONY list of rules that do not create files #
 #################################################
 .PHONY: all \
-	extern_include extern_objs extern_liba extern_man extern_prog extern_everything man/man1/jparse.1 man/man8/jparse_test.8 \
-	parser parser-o use_json_ref rebuild_jnum_test bison flex test tags local_dir_tags all_tags check_man \
-	legacy_clean legacy_clobber load_json_ref install_man \
-	configure clean clobber install depend
+	extern_include extern_objs extern_liba extern_man extern_prog \
+	extern_everything man/man1/jparse.1 man/man8/jparse_test.8 \
+	parser parser-o use_json_ref rebuild_jnum_test bison flex test \
+	tags local_dir_tags all_tags check_man legacy_clean legacy_clobber \
+	load_json_ref install_man configure clean clobber install depend
 
 
 # XXX - update this when jparse code populated - XXX
