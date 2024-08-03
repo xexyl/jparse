@@ -131,8 +131,8 @@ MAKE_CD_Q= --no-print-directory
 # all - default rule - must be first #
 ######################################
 # compile do-nothing jparse.c for now
-all: jparse.c Makefile
-	${CC} jparse.c -o jparse
+all: jparse Makefile
+	@:
 
 #################################################
 # .PHONY list of rules that do not create files #
@@ -144,6 +144,8 @@ all: jparse.c Makefile
 	tags local_dir_tags all_tags check_man legacy_clean legacy_clobber \
 	load_json_ref install_man configure clean clobber install depend
 
+jparse: jparse.c
+	${CC} ${CFLAGS} $< -o $@
 
 # XXX - update this when jparse code populated - XXX
 clean:
