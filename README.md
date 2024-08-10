@@ -56,13 +56,6 @@ For more details on the parser itself, the library and the supplementary tools,
 see [the jparse README.md in the
 mkiocccentry](https://github.com/ioccc-src/mkiocccentry/tree/master/jparse/README.md).
 
-Please be advised that the tools `jfmt`, `jval` and `jnamval`, which are **NOT**
-documented in [that
-README.md](https://github.com/xexyl/jparse/blob/master/README.md) yet, are **INCOMPLETE**
-and will be **HEAVILY MODIFIED*** and very likely will be **almost entirely
-rewritten** as we discovered things that we need as initial work was done.
-However, as other things have taken priority we have not worried about this yet.
-
 Nevertheless, you certainly **can** and **may** clone that repo, run `make all` and then `make
 install` (as root or via `sudo`) to make use of the parser to validate JSON
 files or to make use of the library should you wish to. If you do this and you find
