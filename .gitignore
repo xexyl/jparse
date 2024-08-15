@@ -1,3 +1,10 @@
 .DS_Store
 build.log
 jparse
+*.bz2
+*.Z
+*.gz
+*.tar*
+*.txz
+.sw[a-zA-Z]
+.*.sw[a-zA-Z]
