@@ -148,12 +148,117 @@ jparse: jparse.c
 	${CC} ${CFLAGS} $< -o $@
 
 # XXX - update this when jparse code populated - XXX
-clean:
-	@rm -vf jparse
+extern_include:
+	@echo "Nothing to do yet."
 
 # XXX - update this when jparse code populated - XXX
-clobber: clean
-	@:
+extern_objs:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+extern_liba:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+extern_man:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+extern_prog:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+extern_everything:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+man/man1/jparse.1:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+man/man8/jparse_test.8:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+parser:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+parser-o:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+use_json_ref:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+rebuild_jnum_test:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+bison:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+flex:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+test:
+	@echo "Nothing to test yet."
+
+# XXX - update this when jparse code populated - XXX
+tags:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+local_dir_tags:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+all_tags:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+check_man:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+legacy_clean:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+legacy_clobber:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+load_json_ref:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+install_man:
+	@echo "Nothing to do yet."
+
+# XXX - update this when jparse code populated - XXX
+configure:
+	@echo nothing to $@
+
+# XXX - update this when jparse code populated - XXX
+clean:
+	${S} echo
+	${S} echo "${OUR_NAME}: make $@ starting"
+	@${RM} -f jparse
+	${S} echo
+	${S} echo "${OUR_NAME}: make $@ ending"
+
+# XXX - update this when jparse code populated - XXX
+clobber: legacy_clobber clean
+	${S} echo
+	${S} echo "${OUR_NAME}: make $@ starting"
+	${S} echo
+	${S} echo "Nothing to do yet."
+	${S} echo
+	${S} echo "${OUR_NAME}: make $@ ending"
 
 # XXX - update this when jparse code populated - XXX
 slow_prep:
@@ -173,8 +278,17 @@ release:
 
 # XXX - update this when jparse code populated - XXX
 install:
-	@echo "Nothing to install."
+	${S} echo
+	${S} echo "${OUR_NAME}: make $@ starting"
+	${S} echo
+	${S} echo "Nothing to $@ yet."
+	${S} echo
+	${S} echo "${OUR_NAME}: make $@ ending"
 
-# XXX - update this when jparse code populated - XXX
-test:
-	@echo "Nothing to test yet."
+depend:
+	${S} echo
+	${S} echo "${OUR_NAME}: make $@ starting"
+	${S} echo
+	${S} echo "Nothing to do yet."
+	${S} echo
+	${S} echo "${OUR_NAME}: make $@ ending"
