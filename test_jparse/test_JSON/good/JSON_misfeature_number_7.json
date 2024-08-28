@@ -1,0 +1,5 @@
+{
+  "name1" : "avalue",
+  "name2" : "bvalue",
+  "silly_JSON_spec_disallows_a_trailing_comma" : "zvalue"
+}
