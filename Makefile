@@ -395,7 +395,7 @@ TARGETS= ${LIBA_TARGETS} ${PROG_TARGETS} ${ALL_MAN_BUILT}
 ###########################################
 
 all: ${TARGETS} ${ALL_OTHER_TARGETS} Makefile
-	@:
+	${Q} ${MAKE} ${MAKE_CD_Q} -C test_jparse all C_SPECIAL=${C_SPECIAL}
 
 
 #################################################
@@ -425,20 +425,20 @@ jparse_main.o: jparse_main.c
 jparse.o: jparse.c jparse.h
 	${CC} ${CFLAGS} jparse.c -c
 
-jparse: jparse_main.o jparse.a ../dyn_array/dyn_array.a ../dbg/dbg.a
-	${CC} ${CFLAGS} $^ -lm -o $@
+jparse: jparse_main.o jparse.a
+	${CC} ${CFLAGS} $^ -lm -o $@ -L. -ldbg -ldyn_array
 
 jstrencode.o: jstrencode.c jstrencode.h json_util.h json_util.c
 	${CC} ${CFLAGS} jstrencode.c -c
 
-jstrencode: jstrencode.o jparse.a ../dyn_array/dyn_array.a ../dbg/dbg.a
-	${CC} ${CFLAGS} $^ -lm -o $@
+jstrencode: jstrencode.o jparse.a
+	${CC} ${CFLAGS} $^ -lm -o $@ -L. -ldbg -ldyn_array
 
 jstrdecode.o: jstrdecode.c jstrdecode.h json_util.h json_parse.h
 	${CC} ${CFLAGS} jstrdecode.c -c
 
-jstrdecode: jstrdecode.o jparse.a ../dyn_array/dyn_array.a ../dbg/dbg.a
-	${CC} ${CFLAGS} $^ -lm -o $@
+jstrdecode: jstrdecode.o jparse.a
+	${CC} ${CFLAGS} $^ -lm -o $@ -L. -ldbg -ldyn_array
 
 json_parse.o: json_parse.c
 	${CC} ${CFLAGS} json_parse.c -c
@@ -446,8 +446,8 @@ json_parse.o: json_parse.c
 jsemtblgen.o: jsemtblgen.c jparse.tab.h
 	${CC} ${CFLAGS} jsemtblgen.c -c
 
-jsemtblgen: jsemtblgen.o jparse.a ../dyn_array/dyn_array.a ../dbg/dbg.a
-	${CC} ${CFLAGS} $^ -lm -o $@
+jsemtblgen: jsemtblgen.o jparse.a
+	${CC} ${CFLAGS} $^ -lm -o $@ -L. -ldbg -ldyn_array
 
 json_sem.o: json_sem.c
 	${CC} ${CFLAGS} json_sem.c -c
@@ -485,8 +485,8 @@ util.o: util.c util.h
 verge.o: verge.c verge.h
 	${CC} ${CFLAGS} verge.c -c
 
-verge: verge.o util.o ../dbg/dbg.a ../dyn_array/dyn_array.a
-	${CC} ${CFLAGS} $^ -o $@
+verge: verge.o util.o
+	${CC} ${CFLAGS} $^ -o $@ -L. -ldbg -ldyn_array
 
 jparse.a: ${LIB_OBJS}
 	${RM} -f $@
