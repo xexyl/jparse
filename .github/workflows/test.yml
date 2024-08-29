@@ -40,11 +40,11 @@ jobs:
     - name: clone dbg
       run: git clone https://github.com/lcn2/dbg
     - name: install dbg
-      run: cd dbg && sudo make install
+      run: cd dbg && sudo make clobber all install
     - name: clone dyn_array
       run: git clone https://github.com/lcn2/dyn_array
     - name: install dyn_array
-      run: cd dyn_array && sudo make install
+      run: cd dyn_array && sudo make clobber all install
     - name: make
       run: make
     - name: make slow_release
