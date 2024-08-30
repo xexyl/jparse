@@ -47,9 +47,5 @@ jobs:
       run: cd dyn_array && sudo make clobber all install
     - name: make
       run: make
-    - name: make slow_release
-      run: make slow_release
-    - name: make clobber all test
-      run: make clobber all test
-    - name: make clobber
-      run: make clobber
+    - name: make test
+      run: make test
