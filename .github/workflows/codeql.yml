@@ -74,8 +74,14 @@ jobs:
     #   modify them (or add more) to build your code if your project, please refer to the EXAMPLE below for guidance.
 
      - run: |
-       echo "Run, Build Application using script"
-       ./.github/workflows/buildscript.sh
+       git clone https://github.com/lcn2/dbg
+       cd dbg
+       make clobber all
+       sudo make install
+       git clone https://github.com/lcn2/dyn_array
+       cd dyn_array
+       make clobber all
+       sudo make install
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
