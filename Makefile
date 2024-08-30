@@ -504,12 +504,6 @@ run_flex-v7: verge sorry.tm.ca.h
 # rules that invoke Makefile rules in other directories #
 #########################################################
 
-../dbg/dbg.a: ../dbg/Makefile
-	${Q} ${MAKE} ${MAKE_CD_Q} -C ../dbg extern_liba C_SPECIAL=${C_SPECIAL}
-
-../dyn_array/dyn_array.a: ../dyn_array/Makefile
-	${Q} ${MAKE} ${MAKE_CD_Q} -C ../dyn_array extern_liba C_SPECIAL=${C_SPECIAL}
-
 test_jparse/test_JSON/info.json/good/info.reference.json: test_jparse/Makefile
 	${Q} ${MAKE} ${MAKE_CD_Q} -C test_jparse test_JSON/info.json/good/info.reference.json C_SPECIAL=${C_SPECIAL}
 
