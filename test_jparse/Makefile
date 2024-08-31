@@ -623,6 +623,7 @@ depend: ${ALL_CSRC}
 	    ${SED} -i\.orig -n -e '1,/^### DO NOT CHANGE MANUALLY BEYOND THIS LINE$$/p' Makefile; \
 	    ${CC} ${CFLAGS} -MM -I. ${ALL_CSRC} | \
 	      ${SED} -E -e 's;\s/usr/local/include/\S+;;g' -e 's;\s/usr/include/\S+;;g' | \
+	      ${SED} -e 's;../../jparse/;../;g' | \
 	      ${INDEPEND} >> Makefile; \
 	    if ${CMP} -s Makefile.orig Makefile; then \
 		${RM} -f Makefile.orig; \
@@ -636,11 +637,10 @@ depend: ${ALL_CSRC}
 	${S} echo "${OUR_NAME}: make $@ ending"
 
 ### DO NOT CHANGE MANUALLY BEYOND THIS LINE
-jnum_chk.o: ../../jparse/json_parse.h ../../jparse/json_util.h \
-    ../json_parse.h ../util.h jnum_chk.c jnum_chk.h
+jnum_chk.o: ../json_parse.h ../json_util.h ../util.h jnum_chk.c jnum_chk.h
 jnum_gen.o: ../json_parse.h ../json_util.h ../util.h jnum_gen.c jnum_gen.h
-jnum_header.o: ../../jparse/json_parse.h ../../jparse/json_util.h \
-    ../json_parse.h ../util.h jnum_chk.h jnum_header.c
-jnum_test.o: ../../jparse/json_parse.h ../../jparse/json_util.h \
-    ../json_parse.h ../util.h jnum_chk.h jnum_test.c
+jnum_header.o: ../json_parse.h ../json_util.h ../util.h jnum_chk.h \
+    jnum_header.c
+jnum_test.o: ../json_parse.h ../json_util.h ../util.h jnum_chk.h \
+    jnum_test.c
 pr_jparse_test.o: ../util.h pr_jparse_test.c
