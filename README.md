@@ -41,16 +41,16 @@ repo](https://github.com/lcn2/dyn_array).
 To do this you might try:
 
 ```sh
-    git clone https://github.com/lcn2/dbg
-    cd dbg && make all
-    # then as root or via sudo:
-    make install
+git clone https://github.com/lcn2/dbg
+cd dbg && make all
+# then as root or via sudo:
+make install
 
-    git clone https://github.com/lcn2/dyn_array
-    cd dyn_array
-    make all
-    # then as root or via sudo:
-    make install
+git clone https://github.com/lcn2/dyn_array
+cd dyn_array
+make all
+# then as root or via sudo:
+make install
 ```
 
 If there are any issues with this then please open an issue in the respective
@@ -74,7 +74,7 @@ If you wish to install this, which is recommended, especially if you want to use
 the library, you can do as root or via sudo:
 
 ```sh
-    make install
+make install
 ```
 
 
@@ -88,7 +88,7 @@ if it is validly formed JSON or not.
 
 
 ```sh
-    ./jparse [-h] [-v level] [-J level] [-q] [-V] [-s] -- arg
+jparse [-h] [-v level] [-J level] [-q] [-V] [-s] -- arg
 ```
 
 The `-v` option increases the overall verbosity level whereas the `-J` option
@@ -112,13 +112,13 @@ are for different error conditions, or help or version string printed.
 Parse the JSON string `{ "test_mode" : false }`:
 
 ```sh
-./jparse -s '{ "test_mode" : false }'
+jparse -s '{ "test_mode" : false }'
 ```
 
 Parse input from stdin (send EOF, usually ctrl-d or ^D, to parse):
 
 ```sh
-./jparse -
+jparse -
 []
 ^D
 ```
@@ -126,13 +126,13 @@ Parse input from stdin (send EOF, usually ctrl-d or ^D, to parse):
 Parse just a negative number:
 
 ```sh
-./jparse -s -- -5
+jparse -s -- -5
 ```
 
 Parse .info.json file:
 
 ```sh
-./jparse .info.json
+jparse .info.json
 ```
 
 
@@ -317,15 +317,15 @@ As far as using them, there are two ways to go about it. If you install the
 library, which again we recommend, you can include them like:
 
 ```c
-    #include <jparse/jparse.h>
-    #include <jparse/util.h>
+#include <jparse/jparse.h>
+#include <jparse/util.h>
 ```
 
 or you can instead do:
 
 ```c
-    #include <jparse.h>
-    #include <util.h>
+#include <jparse.h>
+#include <util.h>
 ```
 
 and add to your Makefile or compiler line the option
@@ -344,8 +344,8 @@ instance to compile [json_main.c](json_main.c), with the `#include` lines
 changed to:
 
 ```c
-    #include <jparse/jparse.h>
-    #include <jparse/util.h>
+#include <jparse/jparse.h>
+#include <jparse/util.h>
 ```
 
 we can compile it like:
@@ -428,7 +428,7 @@ it).
 If you wish to run this test-suite, try from the repo directory:
 
 ```sh
-    make clobber all test
+make clobber all test
 ```
 
 
