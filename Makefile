@@ -435,19 +435,19 @@ jparse.o: jparse.c jparse.h
 	${CC} ${CFLAGS} jparse.c -c
 
 jparse: jparse_main.o libjparse.a
-	${CC} ${CFLAGS} $^ -lm -o $@ -ldbg -ldyn_array
+	${CC} ${CFLAGS} $^ -lm -o $@ -L../dbg -L../dyn_array -ldbg -ldyn_array
 
 jstrencode.o: jstrencode.c jstrencode.h json_util.h json_util.c
 	${CC} ${CFLAGS} jstrencode.c -c
 
 jstrencode: jstrencode.o libjparse.a
-	${CC} ${CFLAGS} $^ -lm -o $@ -ldbg -ldyn_array
+	${CC} ${CFLAGS} $^ -lm -o $@ -L../dbg -L../dyn_array -ldbg -ldyn_array
 
 jstrdecode.o: jstrdecode.c jstrdecode.h json_util.h json_parse.h
 	${CC} ${CFLAGS} jstrdecode.c -c
 
 jstrdecode: jstrdecode.o libjparse.a
-	${CC} ${CFLAGS} $^ -lm -o $@ -ldbg -ldyn_array
+	${CC} ${CFLAGS} $^ -lm -o $@ -L../dbg -L../dyn_array -ldbg -ldyn_array
 
 json_parse.o: json_parse.c
 	${CC} ${CFLAGS} json_parse.c -c
@@ -456,7 +456,7 @@ jsemtblgen.o: jsemtblgen.c jparse.tab.h
 	${CC} ${CFLAGS} jsemtblgen.c -c
 
 jsemtblgen: jsemtblgen.o libjparse.a
-	${CC} ${CFLAGS} $^ -lm -o $@ -ldbg -ldyn_array
+	${CC} ${CFLAGS} $^ -lm -o $@ -L../dbg -L../dyn_array -ldbg -ldyn_array
 
 json_sem.o: json_sem.c
 	${CC} ${CFLAGS} json_sem.c -c
@@ -495,7 +495,7 @@ verge.o: verge.c verge.h
 	${CC} ${CFLAGS} verge.c -c
 
 verge: verge.o util.o
-	${CC} ${CFLAGS} $^ -o $@ -ldbg -ldyn_array
+	${CC} ${CFLAGS} $^ -o $@ -L../dbg -L../dyn_array -ldbg -ldyn_array
 
 libjparse.a: ${LIB_OBJS}
 	${RM} -f $@
