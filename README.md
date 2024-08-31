@@ -298,13 +298,14 @@ itself.
 ## Example
 
 For a relatively simple example program that uses the library, take a look at
-[jparse_main](jparse_main.c). As we already gave details on how to use it, we
+[jparse_main](https://github.com/xexyl/jparse/blob/master/jparse_main.c). As we already gave details on how to use it, we
 will not do that here. It is,  however, a nice example program to give you a
 basic idea of how to use the library, especially as it is commented nicely.
 
 As you will see, in the case of this tool, we include
-[jparse_main.h](jparse_main.h), which includes the two most useful header files,
-[jparse.h](jparse.h) and [util.h](util.h), the former of which is required.
+[jparse_main.h](https://github.com/xexyl/jparse/blob/master/jparse_main.h), which includes the two most useful header files,
+[jparse.h](https://github.com/xexyl/jparse/blob/master/jparse.h) and
+[util.h](https://github.com/xexyl/jparse/blob/master/util.h), the former of which is required.
 
 We must also link in the libraries.
 
@@ -340,7 +341,7 @@ In order to use the library you will have to link the static libraries (the
 program.
 
 To do this you should pass to the compiler `-ljparse -ldbg -ldyn_array`. For
-instance to compile [json_main.c](json_main.c), with the `#include` lines
+instance to compile [json_main.c](https://github.com/xexyl/jparse/blob/master/jparse_main.c), with the `#include` lines
 changed to:
 
 ```c
@@ -356,7 +357,8 @@ cc jparse_main.c -o jparse -ljparse -ldbg -ldyn_array
 
 and expect to find `jparse` in the current working directory.
 
-If you need an example for a Makefile, take a look at the [Makefile](Makefile)'s
+If you need an example for a Makefile, take a look at the
+[Makefile](https://github.com/xexyl/jparse/blob/master/Makefile)'s
 `jparse_main.o` and `jparse` rules, to give you an idea.
 
 
