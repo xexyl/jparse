@@ -49,3 +49,5 @@ jobs:
       run: make
     - name: make test
       run: make test
+    - name: run make check_man
+      run: make check_man
