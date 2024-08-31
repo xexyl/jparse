@@ -1,7 +1,8 @@
 *.[ao]
 *.dSYM/
 *~
-.*.swp
+.*.sw[a-zA-Z0-9]*
+.sw[a-zA-Z0-9]*
 .DS_Store
 /.jsemcgen.*.out
 /.local.dir.tags
