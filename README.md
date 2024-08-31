@@ -298,7 +298,7 @@ itself.
 ## Example
 
 For a relatively simple example program that uses the library, take a look at
-[jparse_main](https://github.com/xexyl/jparse/blob/master/jparse_main.c). As we already gave details on how to use it, we
+[jparse_main.c](https://github.com/xexyl/jparse/blob/master/jparse_main.c). As we already gave details on how to use it, we
 will not do that here. It is,  however, a nice example program to give you a
 basic idea of how to use the library, especially as it is commented nicely.
 
