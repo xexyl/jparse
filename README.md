@@ -305,7 +305,9 @@ basic idea of how to use the library, especially as it is commented nicely.
 As you will see, in the case of this tool, we include
 [jparse_main.h](https://github.com/xexyl/jparse/blob/master/jparse_main.h), which includes the two most useful header files,
 [jparse.h](https://github.com/xexyl/jparse/blob/master/jparse.h) and
-[util.h](https://github.com/xexyl/jparse/blob/master/util.h), the former of which is required.
+[util.h](https://github.com/xexyl/jparse/blob/master/util.h), the former of
+which is required (in actuality, `jparse.h` includes it, but it does not hurt to
+include it anyway due to inclusion guards).
 
 We must also link in the libraries.
 
