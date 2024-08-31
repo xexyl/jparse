@@ -436,6 +436,18 @@ make clobber all test
 ```
 
 
+# Uninstalling
+
+If you wish to deobfuscate your system a bit :-) you can uninstall the programs,
+library and header files by running:
+
+```sh
+make uninstall
+```
+
+as root or via sudo.
+
+
 <hr>
 
 # History
