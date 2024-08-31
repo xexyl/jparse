@@ -16,6 +16,7 @@
 /jparse.lex.h
 /jparse.tab.c
 /jparse.tab.h
+/jprint
 /jsemtblgen
 /jstrdecode
 /jstrencode
