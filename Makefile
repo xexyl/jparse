@@ -100,19 +100,33 @@ else
 Q_V_OPTION="1"
 endif
 
+# installing variables
+#
+
 # INSTALL_V=				install w/o -v flag (quiet mode)
 # INSTALL_V= -v				install with -v (debug / verbose mode)
 #
 #INSTALL_V=
 INSTALL_V= -v
 
+# where to install
+#
+# Default PREFIX is /usr/local so binaries would be installed in /usr/local/bin,
+# libraries in /usr/local/lib etc. If one wishes to override this, say
+# installing to /usr, they can do so like:
+#
+#	make PREFIX=/usr install
+#
+PREFIX= /usr/local
+
+# uninstalling variables
+#
+
 # RM_V=					rm w/o -v flag (quiet mode)
 # RM_V= -v				rm with -v (debug / verbose mode)
 #
 #RM_V=
 RM_V= -v
-
-
 
 # MAKE_CD_Q= --no-print-directory	silence make cd messages (quiet mode)
 # MAKE_CD_Q=				silence make cd messages (quiet mode)
@@ -170,9 +184,9 @@ C_SPECIAL=
 LDFLAGS=
 
 # how to compile
+#
 CFLAGS= ${C_STD} ${C_OPT} ${WARN_FLAGS} ${C_SPECIAL} ${LDFLAGS}
 #CFLAGS= -O3 -g3 -pedantic -Wall -Werror ${C_SPECIAL}
-
 
 ###############
 # source code #
@@ -320,12 +334,12 @@ ALL_SRC= ${ALL_CSRC} ${ALL_HSRC} ${SH_FILES}
 
 # where to install
 #
-MAN1_DIR= /usr/local/share/man/man1
-MAN3_DIR= /usr/local/share/man/man3
-MAN8_DIR= /usr/local/share/man/man8
-DEST_INCLUDE= /usr/local/include/jparse
-DEST_LIB= /usr/local/lib
-DEST_DIR= /usr/local/bin
+MAN1_DIR= ${PREFIX}/share/man/man1
+MAN3_DIR= ${PREFIX}/share/man/man3
+MAN8_DIR= ${PREFIX}/share/man/man8
+DEST_INCLUDE= ${PREFIX}/include/jparse
+DEST_LIB= ${PREFIX}/lib
+DEST_DIR= ${PREFIX}/bin
 
 
 #################################
@@ -905,6 +919,8 @@ uninstall:
 	${S} echo
 	${S} echo "${OUR_NAME}: make $@ starting"
 	${S} echo
+	# uninstall files under test_jparse:
+	${E} ${MAKE} ${MAKE_CD_Q} -C test_jparse $@ C_SPECIAL=${C_SPECIAL}
 	${I} ${RM} -r -f ${RM_V} ${DEST_LIB}/libjparse.a
 	${I} ${RM} -r -f ${RM_V} ${DEST_INCLUDE}
 	${RM} -r -f ${RM_V} ${DEST_DIR}/jparse
