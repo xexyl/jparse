@@ -957,6 +957,18 @@ depend: ${ALL_CSRC}
 	    echo 'See the following GitHub repo for ${INDEPEND}:'; 1>&2; \
 	    echo ''; 1>&2; \
 	    echo '    https://github.com/lcn2/independ'; 1>&2; \
+	elif ! type -P ${SED} >/dev/null 2>&1; then \
+	    echo '${OUR_NAME}: The ${SED} command could not be found.' 1>&2; \
+	    echo '${OUR_NAME}: The ${SED} command is required to run the $@ rule'; 1>&2; \
+	    echo ''; 1>&2; \
+	elif ! type -P ${GREP} >/dev/null 2>&1; then \
+	    echo '${OUR_NAME}: The ${GREP} command could not be found.' 1>&2; \
+	    echo '${OUR_NAME}: The ${GREP} command is required to run the $@ rule'; 1>&2; \
+	    echo ''; 1>&2; \
+	elif ! type -P ${CMP} >/dev/null 2>&1; then \
+	    echo '${OUR_NAME}: The ${CMP} command could not be found.' 1>&2; \
+	    echo '${OUR_NAME}: The ${CMP} command is required to run the $@ rule'; 1>&2; \
+	    echo ''; 1>&2; \
 	else \
 	    if ! ${GREP} -q '^### DO NOT CHANGE MANUALLY BEYOND THIS LINE$$' Makefile; then \
 	        echo "${OUR_NAME}: make $@ aborting, Makefile missing: ### DO NOT CHANGE MANUALLY BEYOND THIS LINE" 1>&2; \
