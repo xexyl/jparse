@@ -210,11 +210,11 @@ BISONFILES= jparse.y
 
 # all shell scripts
 #
-SH_FILES= jsemcgen.sh run_bison.sh run_flex.sh
+SH_FILES= jsemcgen.sh run_bison.sh run_flex.sh jparse_bug_report.sh
 
 # all man pages that NOT built and NOT removed by make clobber
 #
-MAN1_PAGES= man/man1/jparse.1 man/man1/jstrdecode.1 man/man1/jstrencode.1
+MAN1_PAGES= man/man1/jparse.1 man/man1/jstrdecode.1 man/man1/jstrencode.1 man/man1/jparse_bug_report.1
 MAN3_PAGES= man/man3/jparse.3 man/man3/json_dbg.3 man/man3/json_dbg_allowed.3 \
 	    man/man3/json_err_allowed.3 man/man3/json_warn_allowed.3 man/man3/parse_json.3 \
 	    man/man3/parse_json_file.3 man/man3/parse_json_stream.3
@@ -420,6 +420,21 @@ TARGETS= ${LIBA_TARGETS} ${PROG_TARGETS} ${ALL_MAN_BUILT}
 all: ${TARGETS} ${ALL_OTHER_TARGETS} Makefile
 	${Q} ${MAKE} ${MAKE_CD_Q} -C test_jparse all C_SPECIAL=${C_SPECIAL}
 
+bug_report: jparse_bug_report.sh
+	-${Q} ./jparse_bug_report.sh -v 1
+
+bug_report-tx: jparse_bug_report.sh
+	${S} echo "${OUR_NAME}: make $@: starting test of jparse_bug_report.sh -t -x"
+	${S} echo
+	${Q} ./jparse_bug_report.sh -t -x
+	${S} echo
+	${S} echo "${OUR_NAME}: ending test of jparse_bug_report.sh -t -x"
+
+bug_report-txl: jparse_bug_report.sh
+	${S} echo "${OUR_NAME}: make $@: starting test of jparse_bug_report.sh -t -x -l"
+	${Q} ./jparse_bug_report.sh -t -x -l
+	${S} echo "${OUR_NAME}: ending test of jparse_bug_report.sh -t -x -l"
+
 
 #################################################
 # .PHONY list of rules that do not create files #
@@ -429,7 +444,8 @@ all: ${TARGETS} ${ALL_OTHER_TARGETS} Makefile
 	extern_everything man/man1/jparse.1 man/man8/jparse_test.8 \
 	parser parser-o use_json_ref rebuild_jnum_test bison flex test \
 	tags local_dir_tags all_tags check_man legacy_clean legacy_clobber \
-	load_json_ref install_man configure clean clobber install depend
+	load_json_ref install_man configure clean clobber install depend \
+	bug_report bug_report-tx bug_report-txl
 
 
 ####################################
@@ -931,6 +947,7 @@ uninstall:
 	${RM} -r -f ${RM_V} ${DEST_DIR}/jsemcgen.sh
 	${RM} -r -f ${RM_V} ${DEST_DIR}/run_bison.sh
 	${RM} -r -f ${RM_V} ${DEST_DIR}/run_flex.sh
+	${RM} -f -v ${RM_V} ${MAN1_DIR}/jparse_bug_report.1
 	${RM} -r -f ${RM_V} ${MAN1_DIR}/jparse.1
 	${RM} -r -f ${RM_V} ${MAN1_DIR}/jstrdecode.1
 	${RM} -r -f ${RM_V} ${MAN1_DIR}/jstrencode.1

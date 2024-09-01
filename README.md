@@ -493,6 +493,31 @@ If you wish to run this test-suite, try from the repo directory:
 make clobber all test
 ```
 
+# Bug reporting
+
+If you have a problem with this repo in some form, for example you cannot
+compile it in your system, or if you think there is a bug of some kind, please
+kindly run from the repo directory:
+
+```sh
+make bug_report
+```
+
+and attach the log file (it will tell you what the name is) to a new issue at
+the [jparse issues page](https://github.com/xexyl/jparse/issues). If it's a bug
+please select the bug template.
+
+Note that the script,
+[jparse_bug_report.sh](https://github.com/xexyl/jparse/blob/master/jparse_bug_report.sh),
+will tell you if it finds any problems and if it does not it tells you that you
+can safely delete it. Of course just because it does not find any problems does
+not necessarily mean there is not a problem. On the other hand, just because it
+tells you that there is a problem does not mean that there is a problem with the
+repo; it could be your environment or something else entirely.
+
+Please do **NOT** report a problem with JSON: we know that there are a number
+of, shall we say, 'issues', but this is not an issue here but rather
+[there](https://www.json.org/json-en.html). :-)
 
 
 <hr>
