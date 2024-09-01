@@ -930,6 +930,12 @@ install: all test_jparse/Makefile install_man
 	${I} ${INSTALL} ${INSTALL_V} -m 0444 ${H_SRC_TARGETS} ${DEST_INCLUDE}
 	${I} ${INSTALL} ${INSTALL_V} -d -m 0775 ${DEST_DIR}
 	${I} ${INSTALL} ${INSTALL_V} -m 0555 ${SH_TARGETS} ${PROG_TARGETS} ${DEST_DIR}
+	${I} ${INSTALL} ${INSTALL_V} -d -m 0775 ${MAN1_DIR}
+	${I} ${INSTALL} ${INSTALL_V} -m 0444 ${MAN1_TARGETS} ${MAN1_DIR}
+	${I} ${INSTALL} ${INSTALL_V} -d -m 0775 ${MAN3_DIR}
+	${I} ${INSTALL} ${INSTALL_V} -m 0444 ${MAN3_TARGETS} ${MAN3_DIR}
+	${I} ${INSTALL} ${INSTALL_V} -d -m 0775 ${MAN8_DIR}
+	${I} ${INSTALL} ${INSTALL_V} -m 0444 ${MAN8_TARGETS} ${MAN8_DIR}
 	${S} echo
 	${S} echo "${OUR_NAME}: make $@ ending"
 
