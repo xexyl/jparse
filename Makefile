@@ -128,6 +128,9 @@ PREFIX= /usr/local
 #RM_V=
 RM_V= -v
 
+# Additional controls
+#
+
 # MAKE_CD_Q= --no-print-directory	silence make cd messages (quiet mode)
 # MAKE_CD_Q=				silence make cd messages (quiet mode)
 #
