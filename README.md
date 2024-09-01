@@ -94,8 +94,8 @@ make install
 ```
 
 We also support the `PREFIX` standard so if you need to install the binaries to
-`/usr/bin`, library to `/usr/lib` and the header files to `/usr/include/jparse`,
-then do:
+`/usr/bin`, library to `/usr/lib`, the header files to `/usr/include/jparse` and
+the man pages to `/usr/share/man/man[138]`, then do:
 
 ```sh
 make PREFIX=/usr install
