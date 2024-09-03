@@ -923,7 +923,7 @@ legacy_clobber: legacy_clean test_jparse/Makefile
 configure:
 	@echo nothing to $@
 
-clean:
+clean: clean_generated_obj
 	${S} echo
 	${S} echo "${OUR_NAME}: make $@ starting"
 	${S} echo

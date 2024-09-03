@@ -433,8 +433,17 @@ test:
 	    echo "${OUR_NAME}: ERROR: unable to perform complete test" 1>&2; \
 	    exit 1; \
 	else \
-	    echo "./jparse_test.sh -L -j ../jparse -p ./pr_jparse_test -d test_JSON -s . ./json_teststr.txt"; \
-	    ./jparse_test.sh -L -j ../jparse -p ./pr_jparse_test -d test_JSON -s . ./json_teststr.txt; \
+	    echo "./jparse_test.sh -j ../jparse -p ./pr_jparse_test -d test_JSON -s . ./json_teststr.txt"; \
+	    ./jparse_test.sh -j ../jparse -p ./pr_jparse_test -d test_JSON -s . ./json_teststr.txt; \
+	    EXIT_CODE="$$?"; \
+	    if [[ $$EXIT_CODE -ne 0 ]]; then \
+		echo "${OUR_NAME}: ERROR: jparse_test.sh failed, error code: $$EXIT_CODE"; \
+		exit "$$EXIT_CODE"; \
+	    else \
+		echo ${OUR_NAME}: "PASSED: jparse_test.sh"; \
+	    fi; \
+	    echo "./jparse_test.sh -f -j ../jparse ./json_teststr_fail.txt"; \
+	    ./jparse_test.sh -f -j ../jparse ./json_teststr_fail.txt >/dev/null 2>&1; \
 	    EXIT_CODE="$$?"; \
 	    if [[ $$EXIT_CODE -ne 0 ]]; then \
 		echo "${OUR_NAME}: ERROR: jparse_test.sh failed, error code: $$EXIT_CODE"; \
