@@ -385,7 +385,7 @@ MAN3_TARGETS= ${MAN3_PAGES} ${MAN3_BUILT}
 MAN8_TARGETS= ${MAN8_PAGES} ${MAN8_BUILT}
 ALL_MAN_TARGETS= ${MAN1_TARGETS} ${MAN3_TARGETS} ${MAN8_TARGETS}
 
-# libraries to make by all, what to install, and removed by clobber
+# libraries to make by all, what to install, and remove by clobber
 #
 LIBA_TARGETS= libjparse.a
 
@@ -960,7 +960,16 @@ install: all test_jparse/Makefile install_man
 	${S} echo "${OUR_NAME}: make $@ ending"
 
 # uninstall: we provide this in case someone wants to deobfuscate their system. :-)
-uninstall:
+legacy_uninstall:
+	${S} echo
+	${S} echo "${OUR_NAME}: make $@ starting"
+	${S} echo
+	${RM} -f ${RM_V} ${DEST_INCLUDE}/jparse.h ${DEST_LIB}/jparse.a
+	${S} echo
+	${S} echo "${OUR_NAME}: make $@ ending"
+
+# uninstall: we provide this in case someone wants to deobfuscate their system. :-)
+uninstall: legacy_uninstall
 	${S} echo
 	${S} echo "${OUR_NAME}: make $@ starting"
 	${S} echo
