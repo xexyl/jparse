@@ -266,7 +266,7 @@ OTHER_OBJS= verge.o jsemtblgen.o jstrdecode.o jstrencode.o jparse_main.o
 #
 ALL_OBJS= ${LIB_OBJS} ${OTHER_OBJS}
 
-# rule used by prep.sh and make clean via make clean_generated_obj
+# built object files created by make parser
 #
 BUILT_OBJS= jparse.o jparse.tab.o
 
@@ -300,6 +300,7 @@ BISON_DIRS= \
 	-B /opt/local/bin \
 	-B /usr/local/opt \
 	-B /usr/local/bin \
+	-B /usr/bin \
 	-B .
 
 # Additional flags to pass to bison
@@ -330,6 +331,7 @@ FLEX_DIRS= \
 	-F /opt/local/bin \
 	-F /usr/local/opt \
 	-F /usr/local/bin \
+	-F /usr/bin \
 	-F .
 
 # flags to pass to flex
@@ -679,6 +681,26 @@ bison: jparse.tab.c jparse.tab.h
 
 flex: jparse.c jparse.lex.h
 	@:
+
+# rebuild jparse error files for testing
+#
+# IMPORTANT: DO NOT run this rule unless you KNOW that the output produced by
+#	     jparse on each file is CORRECT!
+#
+rebuild_jparse_err_files: jparse
+	${S} echo
+	${S} echo "${OUR_NAME}: make $@ starting"
+	${S} echo
+	${RM} -f test_jparse/test_JSON/bad_loc/*.err
+	-@for i in test_jparse/test_JSON/./bad_loc/*.json; do \
+	    ./jparse -- "$$i" 2> "$$i.err" ;  \
+	done
+	${S} echo
+	${S} echo "Make sure to run make test from the top level directory before doing a"
+	${S} echo "git add on all the *.json and *.json.err files in test_jparse/test_JSON/bad_loc!"
+	${S} echo
+	${S} echo "${OUR_NAME}: make $@ ending"
+
 
 test:
 	${S} echo

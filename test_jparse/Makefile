@@ -405,22 +405,12 @@ rebuild_jnum_test: jnum_gen jnum.testset jnum_header.c
 	${CP} -f -v jnum_header.c jnum_test.c
 	./jnum_gen jnum.testset >> jnum_test.c
 
-# rebuild jparse error files for testing
-#
-# IMPORTANT: DO NOT run this tool unless you KNOW that
-#	     the tables produced by jparse are CORRECT!
-#
-rebuild_jparse_err_files: ../jparse
+rebuild_jparse_err_files:
 	${S} echo
-	${S} echo "${OUR_NAME}: make $@ starting"
+	${S} echo "${OUT_NAME}: make $@ starting"
 	${S} echo
-	${RM} -f test_JSON/bad_loc/*.err
-	-@for i in test_JSON/./bad_loc/*.json; do \
-	    ../jparse -- "$$i" 2> "$$i.err" ;  \
-	done
-	${S} echo
-	${S} echo "Make sure to run make test from the top level directory befor doing a"
-	${S} echo "git add on all the *.json and *.json.err files in test_json/bad_loc!"
+	${Q} cd .. ; \
+	    ${MAKE} $@
 	${S} echo
 	${S} echo "${OUR_NAME}: make $@ ending"
 
@@ -433,8 +423,8 @@ test:
 	    echo "${OUR_NAME}: ERROR: unable to perform complete test" 1>&2; \
 	    exit 1; \
 	else \
-	    echo "./jparse_test.sh -j ../jparse -p ./pr_jparse_test -d test_JSON -s . ./json_teststr.txt"; \
-	    ./jparse_test.sh -j ../jparse -p ./pr_jparse_test -d test_JSON -s . ./json_teststr.txt; \
+	    echo "./jparse_test.sh -j ./jparse -p test_jparse/pr_jparse_test -d test_jparse/test_JSON -s . test_jparse/json_teststr.txt"; \
+	    ./jparse_test.sh -j ./jparse -p test_jparse/pr_jparse_test -d test_jparse/test_JSON -s . test_jparse/json_teststr.txt; \
 	    EXIT_CODE="$$?"; \
 	    if [[ $$EXIT_CODE -ne 0 ]]; then \
 		echo "${OUR_NAME}: ERROR: jparse_test.sh failed, error code: $$EXIT_CODE"; \
@@ -442,8 +432,8 @@ test:
 	    else \
 		echo ${OUR_NAME}: "PASSED: jparse_test.sh"; \
 	    fi; \
-	    echo "./jparse_test.sh -f -j ../jparse ./json_teststr_fail.txt"; \
-	    ./jparse_test.sh -f -j ../jparse ./json_teststr_fail.txt >/dev/null 2>&1; \
+	    echo "./jparse_test.sh -f -j ./jparse test_jparse/json_teststr_fail.txt"; \
+	    ./jparse_test.sh -f -j ./jparse test_jparse/json_teststr_fail.txt >/dev/null 2>&1; \
 	    EXIT_CODE="$$?"; \
 	    if [[ $$EXIT_CODE -ne 0 ]]; then \
 		echo "${OUR_NAME}: ERROR: jparse_test.sh failed, error code: $$EXIT_CODE"; \

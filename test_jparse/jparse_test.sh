@@ -43,14 +43,15 @@
 
 # setup
 #
-export JPARSE_TEST_VERSION="1.0.4 03-09-2024"
+export JPARSE_TEST_VERSION="1.0.5 04-09-2024"
 export CHK_TEST_FILE="./test_jparse/json_teststr.txt"
 export JPARSE="./jparse"
 export PRINT_TEST="./test_jparse/print_test"
 export JSON_TREE="./test_jparse/test_JSON"
 export PASS_FAIL="pass"
 export SUBDIR="."
-export USAGE="usage: $0 [-h] [-V] [-v level] [-D dbg_level] [-J level] [-q] [-j jparse] [-p print_test] [-d json_tree] [-s subdir] [-k] [-f] [file ..]
+export USAGE="usage: $0 [-h] [-V] [-v level] [-D dbg_level] [-J level] [-q] [-j jparse] 
+		[-p print_test] [-d json_tree] [-s subdir] [-Z topdir] [-k] [-f] [file ..]
 
     -h			print help and exit
     -V			print version and exit
@@ -66,6 +67,7 @@ export USAGE="usage: $0 [-h] [-V] [-v level] [-D dbg_level] [-J level] [-q] [-j 
 				json_tree/tree/subdir/bad_loc
 				json_tree/tree/subdir/good
     -s subdir		subdirectory under json_tree to find the good and bad subdirectories (def: $SUBDIR)
+    -Z topdir		set path to top directory
     -k			keep temporary files on exit (def: remove temporary files before exiting)
     -f			files specified must fail check, not pass (def: must $PASS_FAIL)
 
@@ -98,10 +100,11 @@ export PRINT_TEST_FLAG_USED=""
 export PRINT_TEST_FAILURE=""
 export K_FLAG=""
 export D_FLAG=""
+export TOPDIR=
 
 # parse args
 #
-while getopts :hVv:D:J:qj:p:d:s:kf flag; do
+while getopts :hVv:D:J:qj:p:d:s:Z:kf flag; do
     case "$flag" in
     h)	echo "$USAGE" 1>&2
 	exit 2
@@ -126,6 +129,8 @@ while getopts :hVv:D:J:qj:p:d:s:kf flag; do
 	D_FLAG="-d"
 	;;
     s)  SUBDIR="$OPTARG"
+	;;
+    Z)	TOPDIR="$OPTARG";
 	;;
     k)  K_FLAG="true";
         ;;
@@ -168,6 +173,62 @@ export JSON_GOOD_TREE="$JSON_TREE/$SUBDIR/good"
 export JSON_BAD_TREE="$JSON_TREE/$SUBDIR/bad"
 export JSON_BAD_LOC_TREE="$JSON_TREE/$SUBDIR/bad_loc"
 
+# change to the top level directory as needed
+#
+if [[ -n $TOPDIR ]]; then
+    if [[ ! -d $TOPDIR ]]; then
+	echo "$0: ERROR: -Z $TOPDIR given: not a directory: $TOPDIR" 1>&2
+	exit 3
+    fi
+    if [[ $V_FLAG -ge 1 ]]; then
+	echo "$0: debug[1]: -Z $TOPDIR given, about to cd $TOPDIR" 1>&2
+    fi
+    # SC2164 (warning): Use 'cd ... || exit' or 'cd ... || return' in case cd fails.
+    # https://www.shellcheck.net/wiki/SC2164
+    # shellcheck disable=SC2164
+    cd "$TOPDIR"
+    status="$?"
+    if [[ $status -ne 0 ]]; then
+	echo "$0: ERROR: -Z $TOPDIR given: cd $TOPDIR exit code: $status" 1>&2
+	exit 3
+    fi
+elif [[ -f jparse.c ]]; then
+    TOPDIR="$PWD"
+    if [[ $V_FLAG -ge 3 ]]; then
+	echo "$0: debug[3]: assume TOPDIR is .: $TOPDIR" 1>&2
+    fi
+elif [[ -f ../jparse.c ]]; then
+    cd ..
+    status="$?"
+    if [[ $status -ne 0 ]]; then
+	echo "$0: ERROR: cd .. exit code: $status" 1>&2
+	exit 3
+    fi
+    TOPDIR="$PWD"
+    if [[ $V_FLAG -ge 3 ]]; then
+	echo "$0: debug[3]: assume TOPDIR is ..: $TOPDIR" 1>&2
+    fi
+elif [[ -f ../../jparse.c ]]; then
+    cd ../..
+    status="$?"
+    if [[ $status -ne 0 ]]; then
+	echo "$0: ERROR: cd .. exit code: $status" 1>&2
+	exit 3
+    fi
+    TOPDIR="$PWD"
+    if [[ $V_FLAG -ge 3 ]]; then
+	echo "$0: debug[3]: assume TOPDIR is ..: $TOPDIR" 1>&2
+    fi
+
+else
+    echo "$0: ERROR: cannot determine TOPDIR, use -Z topdir" 1>&2
+    exit 3
+fi
+if [[ $V_FLAG -ge 3 ]]; then
+    echo "$0: debug[3]: TOPDIR is the current directory: $TOPDIR" 1>&2
+fi
+
+
 # firewall
 #
 if [[ ! -e $JPARSE ]]; then
@@ -175,7 +236,7 @@ if [[ ! -e $JPARSE ]]; then
     exit 4
 fi
 if [[ ! -f $JPARSE ]]; then
-    echo "$0: ERROR: jparse not a regular file: $JPARSE"
+    echo "$0: ERROR: jparse not a regular file: $JPARSE" 1>&2
     exit 4
 fi
 if [[ ! -x $JPARSE ]]; then
