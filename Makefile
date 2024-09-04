@@ -32,6 +32,7 @@ CTAGS= ctags
 GREP= grep
 INDEPEND= independ
 INSTALL= install
+MV= mv
 PICKY= picky
 RANLIB= ranlib
 RM= rm
@@ -412,6 +413,11 @@ ALL_OTHER_TARGETS= ${SH_TARGETS} extern_everything ${ALL_MAN_PAGES}
 #
 TARGETS= ${LIBA_TARGETS} ${PROG_TARGETS} ${ALL_MAN_BUILT}
 
+# logs for testing
+#
+TMP_BUILD_LOG= ".build.log.$$$$"
+BUILD_LOG= build.log
+
 
 ############################################################
 # User specific configurations - override Makefile values  #
@@ -632,6 +638,114 @@ parser: jparse.y jparse.l
 #
 parser-o: jparse.y jparse.l
 	${E} ${MAKE} parser RUN_O_FLAG='-o' C_SPECIAL=${C_SPECIAL}
+
+# make prep
+#
+# Things to do before a release, forming a pull request and/or updating the
+# GitHub repo.
+#
+# This runs through all of the prep steps.  If some step failed along the way,
+# exit non-zero at the end.
+#
+# NOTE: This rule is useful if for example you're not working on the parser and
+# you're on a system without the proper versions of flex and/or bison but you
+# still want to work on the repo. Another example use is if you don't have
+# shellcheck and/or picky and you want to work on the repo.
+#
+# The point is: if you're working on this repo and make build fails, try this
+# rule instead.
+#
+prep: test_jparse/prep.sh
+	${S} echo "${OUR_NAME}: make $@ starting at: `date`"
+	${Q} ${RM} -f ${TMP_BUILD_LOG}
+	${Q} ./test_jparse/prep.sh -m${MAKE} -l "${TMP_BUILD_LOG}"; \
+	    EXIT_CODE="$$?"; \
+	    ${MV} -f ${TMP_BUILD_LOG} ${BUILD_LOG}; \
+	    if [[ $$EXIT_CODE -ne 0 ]]; then \
+		echo; \
+	        echo "make $@: ERROR: ./test_jparse/prep.sh exit code: $$EXIT_CODE"; \
+	    fi; \
+	    echo; \
+	    echo "make $@: see ${BUILD_LOG} for details"; \
+	    if [[ $$EXIT_CODE -ne 0 ]]; then \
+		exit "$$EXIT_CODE"; \
+	    else \
+	        echo "All Done!!! All Done!!! -- Jessica Noll, Age 2"; \
+	    fi
+	    ${S} echo "${OUR_NAME}: make $@ ending at: `date`"; \
+
+# a slower version of prep that does not write to a log file so one can see the
+# full details.
+#
+slow_prep: test_jparse/prep.sh
+	${S} echo "${OUR_NAME}: make $@ starting at: `date`"
+	${Q} ${RM} -f ${TMP_BUILD_LOG}
+	${Q} ./test_jparse/prep.sh -m${MAKE}; \
+	    EXIT_CODE="$$?"; \
+	    if [[ $$EXIT_CODE -ne 0 ]]; then \
+		echo; \
+	        echo "make $@: ERROR: ./test_jparse/prep.sh exit code: $$EXIT_CODE"; \
+	    fi; \
+	    echo; \
+	    echo "make $@: see ${BUILD_LOG} for details"; \
+	    if [[ $$EXIT_CODE -ne 0 ]]; then \
+		exit "$$EXIT_CODE"; \
+	    else \
+	         echo "All Done!!! All Done!!! -- Jessica Noll, Age 2"; \
+	    fi
+	    ${S} echo "${OUR_NAME}: make $@ ending at: `date`"; \
+
+
+# make build release pull
+#
+# Things to do before a release, forming a pull request and/or updating the
+# GitHub repo.
+#
+# This runs through all of the prep steps, exiting on the first failure.
+#
+# NOTE: The reference copies of the JSON parser C code will NOT be used
+# so if bison and/or flex is not found or too old THIS RULE WILL FAIL!
+#
+# NOTE: Please try this rule BEFORE make prep.
+#
+build: release
+pull: release
+release: test_jparse/prep.sh
+	${Q} ${RM} -f ${TMP_BUILD_LOG}
+	${Q} ./test_jparse/prep.sh -m${MAKE} -e -o -l "${TMP_BUILD_LOG}"; \
+	    EXIT_CODE="$$?"; \
+	    ${MV} -f ${TMP_BUILD_LOG} ${BUILD_LOG}; \
+	    if [[ $$EXIT_CODE -ne 0 ]]; then \
+		echo; \
+	        echo "make $@: ERROR: ./test_jparse/prep.sh exit code: $$EXIT_CODE"; \
+	    fi; \
+	    echo; \
+	    echo "make $@: see ${BUILD_LOG} for details"; \
+	    if [[ $$EXIT_CODE -ne 0 ]]; then \
+		exit "$$EXIT_CODE"; \
+	    else \
+	         echo "All Done!!! All Done!!! -- Jessica Noll, Age 2"; \
+	    fi
+
+# a slower version of release that does not write to a log file so one can see the
+# full details.
+#
+slow_release: test_jparse/prep.sh
+	${Q} ${RM} -f ${TMP_BUILD_LOG}
+	${Q} ./test_jparse/prep.sh -m${MAKE} -e -o; \
+	    EXIT_CODE="$$?"; \
+	    if [[ $$EXIT_CODE -ne 0 ]]; then \
+		echo; \
+	        echo "make $@: ERROR: ./test_jparse/prep.sh exit code: $$EXIT_CODE"; \
+	    fi; \
+	    echo; \
+	    echo "make $@: see ${BUILD_LOG} for details"; \
+	    if [[ $$EXIT_CODE -ne 0 ]]; then \
+		exit "$$EXIT_CODE"; \
+	    else \
+	         echo "All Done!!! All Done!!! -- Jessica Noll, Age 2"; \
+	    fi
+
 
 # load reference code from the previous successful make parser
 #
