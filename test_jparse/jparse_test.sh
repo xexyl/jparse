@@ -50,7 +50,7 @@ export PRINT_TEST="./test_jparse/print_test"
 export JSON_TREE="./test_jparse/test_JSON"
 export PASS_FAIL="pass"
 export SUBDIR="."
-export USAGE="usage: $0 [-h] [-V] [-v level] [-D dbg_level] [-J level] [-q] [-j jparse] 
+export USAGE="usage: $0 [-h] [-V] [-v level] [-D dbg_level] [-J level] [-q] [-j jparse]
 		[-p print_test] [-d json_tree] [-s subdir] [-Z topdir] [-k] [-f] [file ..]
 
     -h			print help and exit
