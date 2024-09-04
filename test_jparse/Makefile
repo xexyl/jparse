@@ -422,6 +422,10 @@ test:
 	    echo "${OUR_NAME}: ERROR: executable not found: ./jparse_test.sh" 1>&2; \
 	    echo "${OUR_NAME}: ERROR: unable to perform complete test" 1>&2; \
 	    exit 1; \
+	elif [[ ! -x ./jstr_test.sh ]]; then \
+	    echo "${OUR_NAME}: ERROR: executable not found: ./jstr_test.sh" 1>&2; \
+	    echo "${OUR_NAME}: ERROR: unable to perform complete test" 1>&2; \
+	    exit 1; \
 	else \
 	    echo "./jparse_test.sh -j ./jparse -p test_jparse/pr_jparse_test -d test_jparse/test_JSON -s . test_jparse/json_teststr.txt"; \
 	    ./jparse_test.sh -j ./jparse -p test_jparse/pr_jparse_test -d test_jparse/test_JSON -s . test_jparse/json_teststr.txt; \
@@ -440,6 +444,14 @@ test:
 		exit "$$EXIT_CODE"; \
 	    else \
 		echo ${OUR_NAME}: "PASSED: jparse_test.sh"; \
+	    fi; \
+	    ./jstr_test.sh 2>&1; \
+	    EXIT_CODE="$$?"; \
+	    if [[ $$EXIT_CODE -ne 0 ]]; then \
+		echo "${OUR_NAME}: ERROR: jstr_test.sh failed, error code: $$EXIT_CODE"; \
+		exit "$$EXIT_CODE"; \
+	    else \
+		echo ${OUR_NAME}: "PASSED: jstr_test.sh"; \
 	    fi; \
 	fi
 	${S} echo
