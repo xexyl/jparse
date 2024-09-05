@@ -426,25 +426,32 @@ test:
 	    echo "${OUR_NAME}: ERROR: executable not found: ./jstr_test.sh" 1>&2; \
 	    echo "${OUR_NAME}: ERROR: unable to perform complete test" 1>&2; \
 	    exit 1; \
+	elif [[ ! -x ./jnum_chk ]]; then \
+	    echo "${OUR_NAME}: ERROR: executable not found: ./jnum_chk" 1>&2; \
+	    echo "${OUR_NAME}: ERROR: unable to perform complete test" 1>&2; \
+	    exit 1; \
 	else \
-	    echo "./jparse_test.sh -j ./jparse -p test_jparse/pr_jparse_test -d test_jparse/test_JSON -s . test_jparse/json_teststr.txt"; \
+	    echo "${OUR_NAME}: RUNNING: ./jparse_test.sh -j ./jparse -p test_jparse/pr_jparse_test -d test_jparse/test_JSON -s . test_jparse/json_teststr.txt"; \
 	    ./jparse_test.sh -j ./jparse -p test_jparse/pr_jparse_test -d test_jparse/test_JSON -s . test_jparse/json_teststr.txt; \
 	    EXIT_CODE="$$?"; \
 	    if [[ $$EXIT_CODE -ne 0 ]]; then \
 		echo "${OUR_NAME}: ERROR: jparse_test.sh failed, error code: $$EXIT_CODE"; \
 		exit "$$EXIT_CODE"; \
 	    else \
-		echo ${OUR_NAME}: "PASSED: jparse_test.sh"; \
+		echo "${OUR_NAME}: PASSED: jparse_test.sh"; \
 	    fi; \
-	    echo "./jparse_test.sh -f -j ./jparse test_jparse/json_teststr_fail.txt"; \
+	    echo; \
+	    echo "${OUR_NAME}: RUNNING: ./jparse_test.sh -f -j ./jparse test_jparse/json_teststr_fail.txt"; \
 	    ./jparse_test.sh -f -j ./jparse test_jparse/json_teststr_fail.txt >/dev/null 2>&1; \
 	    EXIT_CODE="$$?"; \
 	    if [[ $$EXIT_CODE -ne 0 ]]; then \
 		echo "${OUR_NAME}: ERROR: jparse_test.sh failed, error code: $$EXIT_CODE"; \
 		exit "$$EXIT_CODE"; \
 	    else \
-		echo ${OUR_NAME}: "PASSED: jparse_test.sh"; \
+		echo "${OUR_NAME}: PASSED: jparse_test.sh"; \
 	    fi; \
+	    echo; \
+	    echo "${OUR_NAME}: RUNNING: ./jstr_test.sh"; \
 	    ./jstr_test.sh 2>&1; \
 	    EXIT_CODE="$$?"; \
 	    if [[ $$EXIT_CODE -ne 0 ]]; then \
@@ -452,6 +459,16 @@ test:
 		exit "$$EXIT_CODE"; \
 	    else \
 		echo ${OUR_NAME}: "PASSED: jstr_test.sh"; \
+	    fi; \
+	    echo; \
+	    echo "${OUR_NAME}: RUNNING: ./jnum_chk"; \
+	    ./jnum_chk 2>&1; \
+	    EXIT_CODE="$$?"; \
+	    if [[ $$EXIT_CODE -ne 0 ]]; then \
+		echo "${OUR_NAME}: ERROR: jnum_chk failed, error code: $$EXIT_CODE"; \
+		exit "$$EXIT_CODE"; \
+	    else \
+		echo ${OUR_NAME}: "PASSED: jnum_chk"; \
 	    fi; \
 	fi
 	${S} echo
