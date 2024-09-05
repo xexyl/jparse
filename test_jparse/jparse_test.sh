@@ -43,7 +43,7 @@
 
 # setup
 #
-export JPARSE_TEST_VERSION="1.0.5 04-09-2024"
+export JPARSE_TEST_VERSION="1.0.5 09-04-2024"
 export CHK_TEST_FILE="./test_jparse/json_teststr.txt"
 export JPARSE="./jparse"
 export PRINT_TEST="./test_jparse/print_test"
