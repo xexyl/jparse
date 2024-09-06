@@ -1,5 +1,19 @@
 # Significant changes in the JSON parser repo
 
+## Release 1.0.1 2024-09-06
+
+Add option `-L` to `jparse_test.sh` to skip error location tests. This is useful
+in the case one has a different directory structure or the need of options that
+change the paths causes incorrect error files.
+
+`jparse_test.sh` now will try the default JSON strings files if no file is given
+on the command line.
+
+Updated man page `jparse_test.8`.
+
+The new version of `jparse_test.sh` is `1.0.6 2024-09-06`.
+
+
 ## Release 1.0.0 2024-09-06
 
 Cloned from
