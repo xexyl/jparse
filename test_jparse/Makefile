@@ -1,6 +1,6 @@
 #!/usr/bin/env make
 #
-# test_jparse - mkiocccentry jparse test tools
+# test_jparse - jparse test tools
 #
 # "Because specs w/o version numbers are forced to commit to their original design flaws." :-)
 #

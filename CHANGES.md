@@ -13,6 +13,10 @@ Updated man page `jparse_test.8`.
 
 The new version of `jparse_test.sh` is `1.0.6 2024-09-06`.
 
+Removed where necessary some references to the [IOCCC](https://www.ioccc.org)
+and the [mkiocccentry repo](https://github.com/ioccc-src/mkiocccentry), changing
+some to [this repo](https://github.com/xexyl/jparse).
+
 
 ## Release 1.0.0 2024-09-06
 

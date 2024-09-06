@@ -2,8 +2,8 @@
 #
 # bug_report.sh - produce a file suitable for filing a bug report
 #
-# Collect system information to help user report bugs and issues
-# using the mkiocccentry tools.
+# Collect system information to help users report bugs and issues
+# using the jparse tools.
 #
 # When you run this script without any arguments:
 #
@@ -24,7 +24,8 @@
 #
 # Please upload the bug-report.YYYYMMDD.HHMMSS.txt file as part of your report.
 #
-# This script was written in 2022 for the mkiocccentry repo by:
+# This script was written in 2022 for the mkiocccentry repo
+# (https://github.com/ioccc-src/mkiocccentry) by:
 #
 #	@xexyl
 #	https://xexyl.net		Cody Boone Ferguson
@@ -1025,7 +1026,7 @@ run_check()
     # Once upon a time there was a bug in this script in this function.
     # PIPESTATUS was needed to fix a bug introduced in commit
     # 8343c4b8cb97e52df64fe8973e68f0d83c6090e1 in the mkiocccentry repo (where
-    # this script was originally developed)  where the exit status of each
+    # this script was originally developed) where the exit status of each
     # command was not checked properly which meant that even if a test failed it
     # would not be reported as an issue which rather defeated the purpose of
     # this script.
