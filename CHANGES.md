@@ -17,6 +17,9 @@ Removed where necessary some references to the [IOCCC](https://www.ioccc.org)
 and the [mkiocccentry repo](https://github.com/ioccc-src/mkiocccentry), changing
 some to [this repo](https://github.com/xexyl/jparse).
 
+Don't report 'valid JSON' in `jparse` unless verbosity level > 0. It is still an
+error if the JSON is invalid.
+
 
 ## Release 1.0.0 2024-09-06
 
