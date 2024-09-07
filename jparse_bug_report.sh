@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# bug_report.sh - produce a file suitable for filing a bug report
+# jparse_bug_report.sh - produce a file suitable for filing a bug report
 #
 # Collect system information to help users report bugs and issues
 # using the jparse tools.
@@ -44,7 +44,7 @@
 #
 # Maintain this list towards the top of file, in sorted order.
 #
-# Do NOT put this tool (bug_report.sh) in the list, it will
+# Do NOT put this tool (jparse_bug_report.sh) in the list, it will
 # cause an infinite loop.
 #
 export TOOLS="
@@ -106,7 +106,7 @@ Exit codes:
      4	    error in function call
  >= 10	    at least one check failed
 
-bug_report.sh version: $BUG_REPORT_VERSION"
+jparse_bug_report.sh version: $BUG_REPORT_VERSION"
 
 # Determine the name of the log file
 #
