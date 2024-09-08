@@ -70,7 +70,7 @@ V= @:
 #S= @:
 S= @
 
-# action commands that are NOT echo
+# action commands that are NOT echoed
 
 # Q= @					do not echo internal Makefile actions (quiet mode)
 # Q=					echo internal Makefile actions (debug / verbose mode)
