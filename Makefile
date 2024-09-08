@@ -1047,6 +1047,7 @@ legacy_clobber: legacy_clean test_jparse/Makefile
 	${S} echo
 	${S} echo "${OUR_NAME}: make $@ starting"
 	${S} echo
+	${E} ${RM} -f jparse.a
 	${Q} ${MAKE} ${MAKE_CD_Q} -C test_jparse $@ C_SPECIAL=${C_SPECIAL} \
 		     LD_DIR2="${LD_DIR2}"
 	${V} echo
