@@ -1,5 +1,16 @@
 # Significant changes in the JSON parser repo
 
+## Release 1.0.3 2024-09-08
+
+Fix `make clobber` to remove `jparse_test.log` and `Makefile.orig`.
+
+Fix `make legacy_clobber` to remove `jparse.a`.
+
+Fix `${RM}` in Makefiles to use `${Q}` variable (not in `make depend` as it is
+used in an earlier command in the multiple line commands), in some cases changed
+from the wrong variable, and `${RM_V}` (where this was not done).
+
+
 ## Release 1.0.2 2024-09-07
 
 Improve error messages if invalid JSON in the following ways:
