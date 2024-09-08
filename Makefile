@@ -1104,7 +1104,7 @@ legacy_uninstall:
 	${S} echo
 	${S} echo "${OUR_NAME}: make $@ starting"
 	${S} echo
-	${Q} ${RM} ${RM_V} -f ${RM_V} ${DEST_INCLUDE}/jparse.h ${DEST_LIB}/jparse.a
+	${Q} ${RM} ${RM_V} -f ${DEST_INCLUDE}/jparse.h ${DEST_LIB}/jparse.a
 	${S} echo
 	${S} echo "${OUR_NAME}: make $@ ending"
 

@@ -668,9 +668,9 @@ uninstall:
 	${S} echo
 	${S} echo "${OUR_NAME}: make $@ starting"
 	${S} echo
-	${Q} ${RM} ${RM_V} -f ${RM_V} ${DEST_DIR}/jnum_chk
-	${Q} ${RM} ${RM_V} -f ${RM_V} ${DEST_DIR}/jnum_gen
-	${Q} ${RM} ${RM_V} -f ${RM_V} ${DEST_DIR}/pr_jparse_test
+	${Q} ${RM} ${RM_V} -f ${DEST_DIR}/jnum_chk
+	${Q} ${RM} ${RM_V} -f ${DEST_DIR}/jnum_gen
+	${Q} ${RM} ${RM_V} -f ${DEST_DIR}/pr_jparse_test
 	${S} echo
 	${S} echo "${OUR_NAME}: make $@ ending"
 
