@@ -711,7 +711,7 @@ depend: ${ALL_CSRC}
 	      ${SED} -e 's;../../jparse/;../;g' | \
 	      ${INDEPEND} >> Makefile; \
 	    if ${CMP} -s Makefile.orig Makefile; then \
-		${Q} ${RM} ${RM_V} -f Makefile.orig; \
+		${RM} ${RM_V} -f Makefile.orig; \
 	    else \
 		echo "${OUR_NAME}: Makefile dependencies updated"; \
 		echo; \

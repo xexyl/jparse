@@ -1192,7 +1192,7 @@ depend: ${ALL_CSRC}
 	      ${SED} -E -e 's;\s/usr/local/include/\S+;;g' -e 's;\s/usr/include/\S+;;g' | \
 	      ${INDEPEND} >> Makefile; \
 	    if ${CMP} -s Makefile.orig Makefile; then \
-		${Q} ${RM} ${RM_V} -f Makefile.orig; \
+		${RM} ${RM_V} -f Makefile.orig; \
 	    else \
 		echo "${OUR_NAME}: Makefile dependencies updated"; \
 		echo; \
