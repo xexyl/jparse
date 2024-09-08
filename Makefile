@@ -1078,7 +1078,7 @@ clobber: legacy_clobber clean
 	${RM} -f ${TARGETS}
 	${RM} -f jparse.output lex.yy.c jparse.c lex.jparse_.c
 	${RM} -f jsemcgen.out.*
-	${RM} -f ${BUILD_LOG}
+	${RM} -f ${BUILD_LOG} jparse_test.log
 	${RM} -f tags ${LOCAL_DIR_TAGS}
 	${S} echo
 	${S} echo "${OUR_NAME}: make $@ ending"
