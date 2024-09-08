@@ -12,6 +12,8 @@ from the wrong variable, and `${RM_V}` (where this was not done).
 
 Do not use `-r` in rm in Makefiles unless removing a directory, for safety.
 
+Make `rm` in Makefiles silent by default (as in do not use `-v`).
+
 
 ## Release 1.0.2 2024-09-07
 
