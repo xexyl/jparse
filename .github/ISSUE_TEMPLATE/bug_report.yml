@@ -46,9 +46,9 @@ body:
 
 - type: textarea
   attributes:
-    label: bug_report.sh output
+    label: jparse_bug_report.sh output
     description: |
-      Please attach the log file of './bug_report.sh' as well as anything else you think might be useful.
+      Please attach the log file of './jparse_bug_report.sh' as well as anything else you think might be useful.
 
       Tip: you can attach files by clicking the text area to highlight it and then click the link that says paste, drop or click to add files.
   validations:
