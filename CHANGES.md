@@ -1,5 +1,11 @@
 # Significant changes in the JSON parser repo
 
+## Release 1.0.5 2024-09-11
+
+Fixes in `#include` paths in `test_jparse`, run `make depend`, add JSON parser
+version string to `jnum_gen` and `jnum_chk`.
+
+
 ## Release 1.0.4 2024-09-09
 
 Bug fix and improve `jstrdecode`.
