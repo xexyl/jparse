@@ -5,6 +5,19 @@
 Fixes in `#include` paths in `test_jparse`, run `make depend`, add JSON parser
 version string to `jnum_gen` and `jnum_chk`.
 
+Rename Makefile variable `Q_V_OPTION` to `VERBOSITY` and add it to many rules so
+one can more easily do something like:
+
+```sh
+make VERBOSITY=3 test
+```
+
+or so. Not all rules have the `-v ${VERBOSITY}` as not all rules should have it.
+In many cases where this is true there is a comment in the Makefiles.
+
+The GitHub workflow has been updated to use `VERBOSITY=3` for more details in
+the case that there is a failure.
+
 
 ## Release 1.0.4 2024-09-09
 

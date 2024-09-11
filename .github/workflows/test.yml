@@ -49,9 +49,9 @@ jobs:
       run: make parser-o
     - name: make
       run: make
-    - name: make test
-      run: make test
-    - name: make slow_release
-      run: make slow_release
+    - name: make VERBOSITY=3 test
+      run: make VERBOSITY=3 test
+    - name: make VERBOSITY=3 slow_release
+      run: make VERBOSITY=3 slow_release
     - name: run make check_man
       run: make check_man
