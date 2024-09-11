@@ -15,6 +15,10 @@ make VERBOSITY=3 test
 or so. Not all rules have the `-v ${VERBOSITY}` as not all rules should have it.
 In many cases where this is true there is a comment in the Makefiles.
 
+Other fixes in the Makefiles have been applied as well, in particular the tags
+related rules that referred to `../dbg` and (incorrectly) `../dyn_alloc` (the
+repo is actually `dyn_array`).
+
 The GitHub workflow has been updated to use `VERBOSITY=3` for more details in
 the case that there is a failure.
 
@@ -22,6 +26,7 @@ Add to `-V` and `-h` options of `jparse` (the tool) and `jsemtblgen` the JSON
 parser version (this was already done in the tools in `test_jparse/` and will be
 done with `jstrencode` and `jstrdecode` along with some bug fixes when those
 have been properly addressed).
+
 
 
 ## Release 1.0.4 2024-09-09
