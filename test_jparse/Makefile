@@ -756,4 +756,5 @@ jnum_header.o: ../jparse.h ../jparse.tab.h ../json_parse.h ../json_sem.h \
     ../json_util.h ../util.h jnum_chk.h jnum_header.c
 jnum_test.o: ../jparse.h ../jparse.tab.h ../json_parse.h ../json_sem.h \
     ../json_util.h ../util.h jnum_chk.h jnum_test.c
-pr_jparse_test.o: ../util.h pr_jparse_test.c
+pr_jparse_test.o: ../jparse.h ../jparse.tab.h ../json_parse.h ../json_sem.h \
+    ../json_util.h ../util.h pr_jparse_test.c

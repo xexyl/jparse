@@ -34,6 +34,10 @@ bytes which causes problems for the dynamic array facility, and because for some
 options like `jstrdecode -Q` we have to wait until after everything is
 processed, particularly due to reading from stdin.
 
+The tool `pr_jparse_test` now shows the JSON parser version with `-V` and `-h`
+and `-h` now works (the function checks for `devnull` which is now opened before
+parsing args).
+
 
 
 ## Release 1.0.5 2024-09-11
