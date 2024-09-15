@@ -2402,6 +2402,9 @@ vjson_tree_walk(struct json *node, unsigned int max_depth, unsigned int depth, b
  * 0x7F (and changing that check to be just <= 0x7F as described below); and
  * possibly other things. Nonetheless we thank the answerer very much!
  *
+ * NOTE: the regexp comes from
+ * https://www.w3.org/International/questions/qa-forms-utf-8.
+ *
  * NOTE: according to https://www.fileformat.info/info/unicode/utf8.htm we do
  * NOT need to include a length to check for the NUL byte as no UTF-8 byte will
  * be encoded to a NUL byte: it just works.
