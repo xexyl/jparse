@@ -22,6 +22,10 @@ time').
 Fixed `check_man` make rule so that it would fail if `checknr` exits non-zero.
 This helped uncover a problem (though not in display) in` jparse.1`.
 
+Added helper script `test_jparse/is_available.sh` which exits 0 if the arg can
+be found via `type -P`, else 1. This will be used in prep.sh, in a future
+update, to help prevent superfluous bug reports.
+
 
 ## Release 1.0.8 2024-09-14
 
