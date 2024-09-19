@@ -1,5 +1,14 @@
 # Significant changes in the JSON parser repo
 
+## Release 1.0.10 2024-09-19
+
+Add call to `setlocale()` in `jstrencode.c` and `jstrdecode.c`.
+
+Removed helper function `is_utf8()` as it appears to be not useful and might
+actually be incorrect. A copy of this function has been made in the case it
+actually does prove useful, unlikely as that seems.
+
+
 ## Release 1.0.9 2024-09-15
 
 Add helper function `is_utf8()` to determine if a `char *` is a UTF-8 encoded

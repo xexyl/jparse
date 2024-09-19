@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <locale.h>
 
 /*
  * jstrencode - tool to encode a string for JSON
@@ -42,7 +43,7 @@
 /*
  * official jstrencode version
  */
-#define JSTRENCODE_VERSION "1.1.1 2024-09-15"	/* format: major.minor YYYY-MM-DD */
+#define JSTRENCODE_VERSION "1.1.2 2024-09-19"	/* format: major.minor YYYY-MM-DD */
 
 /*
  * usage message
@@ -337,6 +338,13 @@ main(int argc, char **argv)
     int i;
     struct jstring *jstr = NULL;    /* to iterate through list */
 
+    /*
+     * set locale
+     */
+    if (setlocale(LC_ALL, "") == NULL) {
+	err(10, __func__, "failed to set locale");
+	not_reached();
+    }
 
     /*
      * parse args
