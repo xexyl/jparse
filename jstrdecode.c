@@ -278,7 +278,7 @@ main(int argc, char **argv)
      * set locale
      */
     if (setlocale(LC_ALL, "") == NULL) {
-	err(10, __func__, "failed to set locale");
+	err(11, __func__, "failed to set locale");
 	not_reached();
     }
 

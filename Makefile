@@ -176,7 +176,7 @@ C_OPT= -O3 -g3
 
 # Compiler warnings
 #
-WARN_FLAGS= -pedantic -Wall -Wextra -Wno-unused-but-set-variable -Wno-char-subscripts
+WARN_FLAGS= -pedantic -Wall -Wextra -Wno-unused-but-set-variable -Wno-char-subscripts -Wno-sign-compare
 #WARN_FLAGS= -pedantic -Wall -Wextra -Werror
 
 # special compiler flags
@@ -263,7 +263,7 @@ LIB_OBJS= jparse.o jparse.tab.o json_parse.o json_sem.o json_util.o util.o
 
 # NOTE: ${OTHER_OBJS} are objects NOT put into a library and ARE removed by make clean
 #
-OTHER_OBJS= verge.o jsemtblgen.o jstrdecode.o jstrencode.o jparse_main.o
+OTHER_OBJS= verge.o jsemtblgen.o jstrdecode.o jstrencode.o jparse_main.o json_utf8.o
 
 # all intermediate files which are also removed by make clean
 #
@@ -490,35 +490,38 @@ jparse.tab.o: jparse.tab.c
 jparse_main.o: jparse_main.c
 	${CC} ${CFLAGS} jparse_main.c -c
 
-jparse.o: jparse.c jparse.h
+jparse.o: jparse.c jparse.h json_utf8.o
 	${CC} ${CFLAGS} jparse.c -c
 
-jparse: jparse_main.o libjparse.a
+jparse: jparse_main.o libjparse.a json_utf8.o
 	${CC} ${CFLAGS} $^ -lm -o $@ ${LD_DIR} -ldbg -ldyn_array
 
 
 jstr_util.o: jstr_util.c jstr_util.h
 	${CC} ${CFLAGS} jstr_util.c -c
 
-jstrencode.o: jstrencode.c jstrencode.h json_util.h json_util.c
+jstrencode.o: jstrencode.c jstrencode.h json_util.h json_util.c json_utf8.h
 	${CC} ${CFLAGS} jstrencode.c -c
 
-jstrencode: jstrencode.o libjparse.a jstr_util.o
+jstrencode: jstrencode.o libjparse.a jstr_util.o json_utf8.o
 	${CC} ${CFLAGS} $^ -lm -o $@ ${LD_DIR} -ldbg -ldyn_array
 
-jstrdecode.o: jstrdecode.c jstrdecode.h json_util.h json_parse.h
+json_utf8.o: json_utf8.c json_utf8.h
+	${CC} ${CFLAGS} json_utf8.c -c
+
+jstrdecode.o: jstrdecode.c jstrdecode.h json_util.h json_parse.h json_utf8.h
 	${CC} ${CFLAGS} jstrdecode.c -c
 
-jstrdecode: jstrdecode.o libjparse.a jstr_util.o
+jstrdecode: jstrdecode.o libjparse.a jstr_util.o json_utf8.o
 	${CC} ${CFLAGS} $^ -lm -o $@ ${LD_DIR} -ldbg -ldyn_array
 
 json_parse.o: json_parse.c
 	${CC} ${CFLAGS} json_parse.c -c
 
-jsemtblgen.o: jsemtblgen.c jparse.tab.h
+jsemtblgen.o: jsemtblgen.c jparse.tab.h json_utf8.h
 	${CC} ${CFLAGS} jsemtblgen.c -c
 
-jsemtblgen: jsemtblgen.o libjparse.a
+jsemtblgen: jsemtblgen.o libjparse.a json_utf8.o
 	${CC} ${CFLAGS} $^ -lm -o $@ ${LD_DIR} -ldbg -ldyn_array
 
 json_sem.o: json_sem.c
@@ -1257,25 +1260,26 @@ depend: ${ALL_CSRC}
 
 ### DO NOT CHANGE MANUALLY BEYOND THIS LINE
 jparse.o: jparse.c jparse.h jparse.tab.h json_parse.h json_sem.h \
-    json_util.h util.h
+    json_utf8.h json_util.h util.h
 jparse.ref.o: jparse.h jparse.ref.c jparse.tab.h json_parse.h json_sem.h \
-    json_util.h util.h
+    json_utf8.h json_util.h util.h
 jparse.tab.o: jparse.h jparse.lex.h jparse.tab.c jparse.tab.h json_parse.h \
-    json_sem.h json_util.h util.h
+    json_sem.h json_utf8.h json_util.h util.h
 jparse.tab.ref.o: jparse.h jparse.lex.h jparse.tab.h jparse.tab.ref.c \
-    json_parse.h json_sem.h json_util.h util.h
+    json_parse.h json_sem.h json_utf8.h json_util.h util.h
 jparse_main.o: jparse.h jparse.tab.h jparse_main.c jparse_main.h \
-    json_parse.h json_sem.h json_util.h util.h
+    json_parse.h json_sem.h json_utf8.h json_util.h util.h
 jsemtblgen.o: jparse.h jparse.tab.h jsemtblgen.c jsemtblgen.h json_parse.h \
-    json_sem.h json_util.h util.h
-json_parse.o: json_parse.c json_parse.h json_util.h util.h
-json_sem.o: json_parse.h json_sem.c json_sem.h json_util.h util.h
-json_util.o: json_parse.h json_util.c json_util.h util.h
-jstr_util.o: jparse.h jparse.tab.h json_parse.h json_sem.h json_util.h \
-    jstr_util.c jstr_util.h util.h
-jstrdecode.o: jparse.h jparse.tab.h json_parse.h json_sem.h json_util.h \
-    jstr_util.h jstrdecode.c jstrdecode.h util.h
-jstrencode.o: jparse.h jparse.tab.h json_parse.h json_sem.h json_util.h \
-    jstr_util.h jstrencode.c jstrencode.h util.h
+    json_sem.h json_utf8.h json_util.h util.h
+json_parse.o: json_parse.c json_parse.h json_utf8.h json_util.h util.h
+json_sem.o: json_parse.h json_sem.c json_sem.h json_utf8.h json_util.h \
+    util.h
+json_util.o: json_parse.h json_utf8.h json_util.c json_util.h util.h
+jstr_util.o: jparse.h jparse.tab.h json_parse.h json_sem.h json_utf8.h \
+    json_util.h jstr_util.c jstr_util.h util.h
+jstrdecode.o: jparse.h jparse.tab.h json_parse.h json_sem.h json_utf8.h \
+    json_util.h jstr_util.h jstrdecode.c jstrdecode.h util.h
+jstrencode.o: jparse.h jparse.tab.h json_parse.h json_sem.h json_utf8.h \
+    json_util.h jstr_util.h jstrencode.c jstrencode.h util.h
 util.o: util.c util.h
 verge.o: util.h verge.c verge.h

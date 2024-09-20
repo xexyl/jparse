@@ -1,5 +1,27 @@
 # Significant changes in the JSON parser repo
 
+## Release 1.0.11 2024-09-20
+
+Add (as `json_utf8.h` and `json_utf8.c`) the files `unicode.h` and `unicode.c`
+from the C unicode library [unicode-c
+repo](https://github.com/benkasminbullock/unicode-c), slightly modified to fit
+our needs. More modification can be done once the bug in `json_parse.c`'s
+`json_decode()` function is modified to use what appears to be the function
+`ucs2_to_utf8()`. It is not clear at this point but it might be possible to
+greatly reduce these new files in code to just the bare minimum of what we
+require but right now it is all included, even the repeat macros in the C file
+(when `HEADER` is defined which it is not). The test code was removed from these
+files as that was part of its test suite that we do not need. A link back to the
+repo has been added, along with the author and the same header comments in the
+files. If it turns out we can just use the UTF-8 decoding algorithm by itself we
+might reduce the code to just that, making sure to credit (and link back) the
+author.  But in the meantime we still have to resolve the UTF-8 decoding bugs.
+
+The Makefiles now compile and link in `json_utf8.c`.
+
+Run `make seqcexit`.
+
+
 ## Release 1.0.10 2024-09-19
 
 Add call to `setlocale()` in `jstrencode.c` and `jstrdecode.c`.
