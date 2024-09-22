@@ -42,11 +42,15 @@
 
 
 /*
- * JSON encoding of an octet in a JSON string
+ * byte2asciistr - a trivial way to map an 8-bit byte into string of ASCII characters
  *
  * NOTE: this table assumes we process on a byte basis.
+ *
+ * XXX - This is NOT the canonical way to encode Unicode characters! - XXX
+ * XXX - Valid Unicode symbols when encoded as UTF-8 bytes should be - XXX
+ * XXX - encoded as 1 or more consecutive \\u[0-9A-Fa-f]{4} strings! - XXX
  */
-struct encode
+struct byte2asciistr
 {
     const u_int8_t byte;    /* 8 bit character to encode */
     const size_t len;	    /* length of encoding */
@@ -462,10 +466,18 @@ struct json
 
 /*
  * external data structures
- *
- * NOTE: this table assumes we process on an 8-bit byte basis.
  */
-extern struct encode jenc[];
+
+/*
+ * byte2asciistr - a trivial way to map an 8-bit byte into string of ASCII characters
+ *
+ * NOTE: This table assumes we process on an 8-bit byte basis.
+ *
+ * XXX - This is NOT the canonical way to encode Unicode characters! - XXX
+ * XXX - Valid Unicode symbols when encoded as UTF-8 bytes should be - XXX
+ * XXX - encoded as 1 or more consecutive \\u[0-9A-Fa-f]{4} strings! - XXX
+ */
+extern struct byte2asciistr byte2asciistr[];
 
 
 /*

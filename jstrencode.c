@@ -56,7 +56,7 @@ static const char * const usage_msg =
     "\t-v level\tset verbosity level: (def level: %d)\n"
     "\t-q\t\tquiet mode: silence msg(), warn(), warnp() if -v 0 (def: not quiet)\n"
     "\t-V\t\tprint version string and exit\n"
-    "\t-t\t\tperform jencchk test on code JSON encode/decode functions\n"
+    "\t-t\t\tperform tests of JSON decode/encode functionality\n"
     "\t-n\t\tdo not output newline after encode output (def: print final newline)\n"
     "\t-Q\t\tdo not encode double quotes that enclose the concatenation of args (def: do encode)\n"
     "\t-e\t\tdo not output double quotes that enclose each arg (def: do not remove)\n"
@@ -366,10 +366,13 @@ main(int argc, char **argv)
 	    exit(2); /*ooo*/
 	    not_reached();
 	    break;
-	case 't':		/* -t - validate the contents of the jenc[] table */
-	    print("%s: Beginning jencchk test on code JSON encode/decode functions ...\n", program);
+	case 't':		/* -t - validate the contents of the byte2asciistr[] table */
+	    print("%s: Beginning jencchk test of the byte2asciistr table...\n", program);
 	    jencchk();
-	    print("%s: ... passed JSON encode/decode test\n", program);
+	    print("%s: ... passed byte2asciistr table test\n", program);
+	    print("%s: Beginning tests of JSON decode/encode functionality ...\n", program);
+	    print("%s: XXX - JSON encode/decode tests not yet written - XXX\n", program);
+	    print("%s: ... passed JSON encode/decode tests\n", program);
 	    exit(0); /*ooo*/
 	    not_reached();
 	    break;
