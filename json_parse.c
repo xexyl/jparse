@@ -57,12 +57,18 @@
 
 
 /*
- * JSON encoding of an octet in a JSON string
+ * byte2asciistr - a trivial way to map an 8-bit byte into string of ASCII characters
  *
  * NOTE: JSON_BYTE_VALUES is #defined as (BYTE_VALUES) (see util.h) and this table
  * MUST be 256 long.
+ *
+ * NOTE: This table assumes we process on an 8-bit byte basis.
+ *
+ * XXX - This is NOT the canonical way to encode Unicode characters! - XXX
+ * XXX - Valid Unicode symbols when encoded as UTF-8 bytes should be - XXX
+ * XXX - encoded as 1 or more consecutive \\u[0-9A-Fa-f]{4} strings! - XXX
  */
-struct encode jenc[JSON_BYTE_VALUES] = {
+struct byte2asciistr byte2asciistr[JSON_BYTE_VALUES] = {
 
     /* \x00 - \x0f */
     {0x00, 6, "\\u0000"}, {0x01, 6, "\\u0001"}, {0x02, 6, "\\u0002"}, {0x03, 6, "\\u0003"},
@@ -225,7 +231,7 @@ json_encode(char const *ptr, size_t len, size_t *retlen, bool skip_quote)
      * count the bytes that will be in the encoded allocated string
      */
     for (i=0; i < len; ++i) {
-	mlen += jenc[(uint8_t)(ptr[i])].len;
+	mlen += byte2asciistr[(uint8_t)(ptr[i])].len;
     }
     if (mlen < 0) { /* paranoia */
 	/* error - clear allocated length */
@@ -270,7 +276,7 @@ json_encode(char const *ptr, size_t len, size_t *retlen, bool skip_quote)
      * JSON encode each byte
      */
     for (p=ret; i < len; ++i) {
-	if (p+jenc[(uint8_t)(ptr[i])].len > beyond) {
+	if (p+byte2asciistr[(uint8_t)(ptr[i])].len > beyond) {
 	    /* error - clear allocated length */
 	    if (retlen != NULL) {
 		*retlen = 0;
@@ -282,8 +288,8 @@ json_encode(char const *ptr, size_t len, size_t *retlen, bool skip_quote)
 	    warn(__func__, "encoding ran beyond end of allocated encoded string");
 	    return NULL;
 	}
-	strcpy(p, jenc[(uint8_t)(ptr[i])].enc);
-	p += jenc[(uint8_t)(ptr[i])].len;
+	strcpy(p, byte2asciistr[(uint8_t)(ptr[i])].enc);
+	p += byte2asciistr[(uint8_t)(ptr[i])].len;
     }
     *p = '\0';	/* paranoia */
     mlen = p - ret; /* paranoia */
@@ -361,9 +367,9 @@ json_encode_str(char const *str, size_t *retlen, bool skip_quote)
 
 
 /*
- * jencchk - validate the contents of the jenc[] table
+ * jencchk - validate the contents of the byte2asciistr[] table
  *
- * This function performs various sanity checks on the jenc[] table.
+ * This function performs various sanity checks on the byte2asciistr[] table.
  *
  * This function does not return on error.
  */
@@ -401,9 +407,9 @@ jencchk(void)
     /*
      * assert: table must be of size 256
      */
-    if (TBLLEN(jenc) != JSON_BYTE_VALUES) {
-	err(102, __func__, "jenc table length is %ju instead of %d",
-			   (uintmax_t)TBLLEN(jenc), JSON_BYTE_VALUES);
+    if (TBLLEN(byte2asciistr) != JSON_BYTE_VALUES) {
+	err(102, __func__, "byte2asciistr table length is %ju instead of %d",
+			   (uintmax_t)TBLLEN(byte2asciistr), JSON_BYTE_VALUES);
 	not_reached();
     }
 
@@ -411,8 +417,8 @@ jencchk(void)
      * assert: byte must be an index from 0 to 256
      */
     for (i=0; i < JSON_BYTE_VALUES; ++i) {
-	if (jenc[i].byte != i) {
-	    err(103, __func__, "jenc[0x%02x].byte: %d != %d", i, jenc[i].byte, i);
+	if (byte2asciistr[i].byte != i) {
+	    err(103, __func__, "byte2asciistr[0x%02x].byte: %d != %d", i, byte2asciistr[i].byte, i);
 	    not_reached();
 	}
     }
@@ -421,8 +427,8 @@ jencchk(void)
      * assert: enc string must be non-NULL
      */
     for (i=0; i < JSON_BYTE_VALUES; ++i) {
-	if (jenc[i].enc == NULL) {
-	    err(104, __func__, "jenc[0x%02x].enc == NULL", i);
+	if (byte2asciistr[i].enc == NULL) {
+	    err(104, __func__, "byte2asciistr[0x%02x].enc == NULL", i);
 	    not_reached();
 	}
     }
@@ -431,10 +437,10 @@ jencchk(void)
      * assert: length of enc string must match len
      */
     for (i=0; i < JSON_BYTE_VALUES; ++i) {
-	if (strlen(jenc[i].enc) != jenc[i].len) {
-	    err(105, __func__, "jenc[0x%02x].enc length: %ju != jenc[0x%02x].len: %ju",
-			       i, (uintmax_t)strlen(jenc[i].enc),
-			       i, (uintmax_t)jenc[i].len);
+	if (strlen(byte2asciistr[i].enc) != byte2asciistr[i].len) {
+	    err(105, __func__, "byte2asciistr[0x%02x].enc length: %ju != byte2asciistr[0x%02x].len: %ju",
+			       i, (uintmax_t)strlen(byte2asciistr[i].enc),
+			       i, (uintmax_t)byte2asciistr[i].len);
 	    not_reached();
 	}
     }
@@ -443,19 +449,19 @@ jencchk(void)
      * assert: \x00-\x07 encodes to \uxxxx
      */
     for (i=0x00; i <= 0x07; ++i) {
-	if (jenc[i].len != LITLEN("\\uxxxx")) {
-	    err(106, __func__, "jenc[0x%02x].enc length: %ju != %ju",
-			       i, (uintmax_t)strlen(jenc[i].enc),
+	if (byte2asciistr[i].len != LITLEN("\\uxxxx")) {
+	    err(106, __func__, "byte2asciistr[0x%02x].enc length: %ju != %ju",
+			       i, (uintmax_t)strlen(byte2asciistr[i].enc),
 			       (uintmax_t)LITLEN("\\uxxxx"));
 	    not_reached();
 	}
-	ret = sscanf(jenc[i].enc, "\\u%04x%c", &int_hexval, &guard);
+	ret = sscanf(byte2asciistr[i].enc, "\\u%04x%c", &int_hexval, &guard);
 	if (ret != 1) {
-	    err(107, __func__, "jenc[0x%02x].enc: <%s> is not in <\\uxxxx> form", i, jenc[i].enc);
+	    err(107, __func__, "byte2asciistr[0x%02x].enc: <%s> is not in <\\uxxxx> form", i, byte2asciistr[i].enc);
 	    not_reached();
 	}
 	if (i != int_hexval) {
-	    err(108, __func__, "jenc[0x%02x].enc: <%s> != <\\u%04x> form", i, jenc[i].enc, i);
+	    err(108, __func__, "byte2asciistr[0x%02x].enc: <%s> != <\\u%04x> form", i, byte2asciistr[i].enc, i);
 	    not_reached();
 	}
     }
@@ -465,14 +471,14 @@ jencchk(void)
      */
     indx = 0x08;
     encstr = "\\b";
-    if (jenc[indx].len != LITLEN("\\b")) {
-	err(109, __func__, "jenc[0x%02x].enc length: %ju != %ju",
-			   indx, (uintmax_t)strlen(jenc[indx].enc),
+    if (byte2asciistr[indx].len != LITLEN("\\b")) {
+	err(109, __func__, "byte2asciistr[0x%02x].enc length: %ju != %ju",
+			   indx, (uintmax_t)strlen(byte2asciistr[indx].enc),
 			   (uintmax_t)strlen(encstr));
 	not_reached();
     }
-    if (strcmp(jenc[indx].enc, encstr) != 0) {
-	err(110, __func__, "jenc[0x%02x].enc: <%s> != <%s>", indx, jenc[indx].enc, encstr);
+    if (strcmp(byte2asciistr[indx].enc, encstr) != 0) {
+	err(110, __func__, "byte2asciistr[0x%02x].enc: <%s> != <%s>", indx, byte2asciistr[indx].enc, encstr);
 	not_reached();
     }
 
@@ -481,14 +487,14 @@ jencchk(void)
      */
     indx = 0x09;
     encstr = "\\t";
-    if (jenc[indx].len != LITLEN("\\b")) {
-	err(111, __func__, "jenc[0x%02x].enc length: %ju != %ju",
-			   indx, (uintmax_t)strlen(jenc[indx].enc),
+    if (byte2asciistr[indx].len != LITLEN("\\b")) {
+	err(111, __func__, "byte2asciistr[0x%02x].enc length: %ju != %ju",
+			   indx, (uintmax_t)strlen(byte2asciistr[indx].enc),
 			   (uintmax_t)strlen(encstr));
 	not_reached();
     }
-    if (strcmp(jenc[indx].enc, encstr) != 0) {
-	err(112, __func__, "jenc[0x%02x].enc: <%s> != <%s>", indx, jenc[indx].enc, encstr);
+    if (strcmp(byte2asciistr[indx].enc, encstr) != 0) {
+	err(112, __func__, "byte2asciistr[0x%02x].enc: <%s> != <%s>", indx, byte2asciistr[indx].enc, encstr);
 	not_reached();
     }
 
@@ -497,14 +503,14 @@ jencchk(void)
      */
     indx = 0x0a;
     encstr = "\\n";
-    if (jenc[indx].len != strlen(encstr)) {
-	err(113, __func__, "jenc[0x%02x].enc length: %ju != %ju",
-			   indx, (uintmax_t)strlen(jenc[indx].enc),
+    if (byte2asciistr[indx].len != strlen(encstr)) {
+	err(113, __func__, "byte2asciistr[0x%02x].enc length: %ju != %ju",
+			   indx, (uintmax_t)strlen(byte2asciistr[indx].enc),
 			   (uintmax_t)strlen(encstr));
 	not_reached();
     }
-    if (strcmp(jenc[indx].enc, encstr) != 0) {
-	err(114, __func__, "jenc[0x%02x].enc: <%s> != <%s>", indx, jenc[indx].enc, encstr);
+    if (strcmp(byte2asciistr[indx].enc, encstr) != 0) {
+	err(114, __func__, "byte2asciistr[0x%02x].enc: <%s> != <%s>", indx, byte2asciistr[indx].enc, encstr);
 	not_reached();
     }
 
@@ -513,14 +519,14 @@ jencchk(void)
      */
     indx = 0x0b;
     encstr = "\\u000b";
-    if (jenc[indx].len != strlen(encstr)) {
-	err(115, __func__, "jenc[0x%02x].enc length: %ju != %ju",
-			   indx, (uintmax_t)strlen(jenc[indx].enc),
+    if (byte2asciistr[indx].len != strlen(encstr)) {
+	err(115, __func__, "byte2asciistr[0x%02x].enc length: %ju != %ju",
+			   indx, (uintmax_t)strlen(byte2asciistr[indx].enc),
 			   (uintmax_t)strlen(encstr));
 	not_reached();
     }
-    if (strcmp(jenc[indx].enc, encstr) != 0) {
-	err(116, __func__, "jenc[0x%02x].enc: <%s> != <%s>", indx, jenc[indx].enc, encstr);
+    if (strcmp(byte2asciistr[indx].enc, encstr) != 0) {
+	err(116, __func__, "byte2asciistr[0x%02x].enc: <%s> != <%s>", indx, byte2asciistr[indx].enc, encstr);
 	not_reached();
     }
 
@@ -529,14 +535,14 @@ jencchk(void)
      */
     indx = 0x0c;
     encstr = "\\f";
-    if (jenc[indx].len != strlen(encstr)) {
-	err(117, __func__, "jenc[0x%02x].enc length: %ju != %ju",
-			   indx, (uintmax_t)strlen(jenc[indx].enc),
+    if (byte2asciistr[indx].len != strlen(encstr)) {
+	err(117, __func__, "byte2asciistr[0x%02x].enc length: %ju != %ju",
+			   indx, (uintmax_t)strlen(byte2asciistr[indx].enc),
 			   (uintmax_t)strlen(encstr));
 	not_reached();
     }
-    if (strcmp(jenc[indx].enc, encstr) != 0) {
-	err(118, __func__, "jenc[0x%02x].enc: <%s> != <%s>", indx, jenc[indx].enc, encstr);
+    if (strcmp(byte2asciistr[indx].enc, encstr) != 0) {
+	err(118, __func__, "byte2asciistr[0x%02x].enc: <%s> != <%s>", indx, byte2asciistr[indx].enc, encstr);
 	not_reached();
     }
 
@@ -545,14 +551,14 @@ jencchk(void)
      */
     indx = 0x0d;
     encstr = "\\r";
-    if (jenc[indx].len != strlen(encstr)) {
-	err(119, __func__, "jenc[0x%02x].enc length: %ju != %ju",
-			   indx, (uintmax_t)strlen(jenc[indx].enc),
+    if (byte2asciistr[indx].len != strlen(encstr)) {
+	err(119, __func__, "byte2asciistr[0x%02x].enc length: %ju != %ju",
+			   indx, (uintmax_t)strlen(byte2asciistr[indx].enc),
 			   (uintmax_t)strlen(encstr));
 	not_reached();
     }
-    if (strcmp(jenc[indx].enc, encstr) != 0) {
-	err(120, __func__, "jenc[0x%02x].enc: <%s> != <%s>", indx, jenc[indx].enc, encstr);
+    if (strcmp(byte2asciistr[indx].enc, encstr) != 0) {
+	err(120, __func__, "byte2asciistr[0x%02x].enc: <%s> != <%s>", indx, byte2asciistr[indx].enc, encstr);
 	not_reached();
     }
 
@@ -560,19 +566,19 @@ jencchk(void)
      * assert: \x0e-\x1f encodes to \uxxxx
      */
     for (i=0x0e; i <= 0x1f; ++i) {
-	if (jenc[i].len != LITLEN("\\uxxxx")) {
-	    err(121, __func__, "jenc[0x%02x].enc length: %ju != %ju",
-			       i, (uintmax_t)strlen(jenc[i].enc),
+	if (byte2asciistr[i].len != LITLEN("\\uxxxx")) {
+	    err(121, __func__, "byte2asciistr[0x%02x].enc length: %ju != %ju",
+			       i, (uintmax_t)strlen(byte2asciistr[i].enc),
 			       (uintmax_t)LITLEN("\\uxxxx"));
 	    not_reached();
 	}
-	ret = sscanf(jenc[i].enc, "\\u%04x%c", &int_hexval, &guard);
+	ret = sscanf(byte2asciistr[i].enc, "\\u%04x%c", &int_hexval, &guard);
 	if (ret != 1) {
-	    err(122, __func__, "jenc[0x%02x].enc: <%s> is not in <\\uxxxx> form", i, jenc[i].enc);
+	    err(122, __func__, "byte2asciistr[0x%02x].enc: <%s> is not in <\\uxxxx> form", i, byte2asciistr[i].enc);
 	    not_reached();
 	}
 	if (i != int_hexval) {
-	    err(123, __func__, "jenc[0x%02x].enc: <%s> != <\\u%04x> form", i, jenc[i].enc, i);
+	    err(123, __func__, "byte2asciistr[0x%02x].enc: <%s> != <\\u%04x> form", i, byte2asciistr[i].enc, i);
 	    not_reached();
 	}
     }
@@ -581,13 +587,13 @@ jencchk(void)
      * assert: \x20-\x21 encodes to the character
      */
     for (i=0x20; i <= 0x21; ++i) {
-	if (jenc[i].len != 1) {
-	    err(124, __func__, "jenc[0x%02x].enc length: %ju != %d",
-			       i, (uintmax_t)strlen(jenc[i].enc), 1);
+	if (byte2asciistr[i].len != 1) {
+	    err(124, __func__, "byte2asciistr[0x%02x].enc length: %ju != %d",
+			       i, (uintmax_t)strlen(byte2asciistr[i].enc), 1);
 	    not_reached();
 	}
-	if ((unsigned int)(jenc[i].enc[0]) != i) {
-	    err(125, __func__, "jenc[0x%02x].enc: <%s> is not <%c>", i, jenc[i].enc, (char)i);
+	if ((unsigned int)(byte2asciistr[i].enc[0]) != i) {
+	    err(125, __func__, "byte2asciistr[0x%02x].enc: <%s> is not <%c>", i, byte2asciistr[i].enc, (char)i);
 	    not_reached();
 	}
     }
@@ -597,14 +603,14 @@ jencchk(void)
      */
     indx = 0x22;
     encstr = "\\\"";
-    if (jenc[indx].len != strlen(encstr)) {
-	err(126, __func__, "jenc[0x%02x].enc length: %ju != %ju",
-			   indx, (uintmax_t)strlen(jenc[indx].enc),
+    if (byte2asciistr[indx].len != strlen(encstr)) {
+	err(126, __func__, "byte2asciistr[0x%02x].enc length: %ju != %ju",
+			   indx, (uintmax_t)strlen(byte2asciistr[indx].enc),
 			   (uintmax_t)strlen(encstr));
 	not_reached();
     }
-    if (strcmp(jenc[indx].enc, encstr) != 0) {
-	err(128, __func__, "jenc[0x%02x].enc: <%s> != <%s>", indx, jenc[indx].enc, encstr);
+    if (strcmp(byte2asciistr[indx].enc, encstr) != 0) {
+	err(128, __func__, "byte2asciistr[0x%02x].enc: <%s> != <%s>", indx, byte2asciistr[indx].enc, encstr);
 	not_reached();
     }
 
@@ -612,13 +618,13 @@ jencchk(void)
      * assert: \x23-\x5b encodes to the character
      */
     for (i=0x23; i <= 0x5b; ++i) {
-	if (jenc[i].len != 1) {
-	    err(129, __func__, "jenc[0x%02x].enc length: %ju != %d",
-			       i, (uintmax_t)strlen(jenc[i].enc), 1);
+	if (byte2asciistr[i].len != 1) {
+	    err(129, __func__, "byte2asciistr[0x%02x].enc length: %ju != %d",
+			       i, (uintmax_t)strlen(byte2asciistr[i].enc), 1);
 	    not_reached();
 	}
-	if ((unsigned int)(jenc[i].enc[0]) != i) {
-	    err(130, __func__, "jenc[0x%02x].enc: <%s> is not <%c>", i, jenc[i].enc, (char)i);
+	if ((unsigned int)(byte2asciistr[i].enc[0]) != i) {
+	    err(130, __func__, "byte2asciistr[0x%02x].enc: <%s> is not <%c>", i, byte2asciistr[i].enc, (char)i);
 	    not_reached();
 	}
     }
@@ -628,14 +634,14 @@ jencchk(void)
      */
     indx = 0x5c;
     encstr = "\\\\";
-    if (jenc[indx].len != strlen(encstr)) {
-	err(131, __func__, "jenc[0x%02x].enc length: %ju != %ju",
-			   indx, (uintmax_t)strlen(jenc[indx].enc),
+    if (byte2asciistr[indx].len != strlen(encstr)) {
+	err(131, __func__, "byte2asciistr[0x%02x].enc length: %ju != %ju",
+			   indx, (uintmax_t)strlen(byte2asciistr[indx].enc),
 			   (uintmax_t)strlen(encstr));
 	not_reached();
     }
-    if (strcmp(jenc[indx].enc, encstr) != 0) {
-	err(132, __func__, "jenc[0x%02x].enc: <%s> != <%s>", indx, jenc[indx].enc, encstr);
+    if (strcmp(byte2asciistr[indx].enc, encstr) != 0) {
+	err(132, __func__, "byte2asciistr[0x%02x].enc: <%s> != <%s>", indx, byte2asciistr[indx].enc, encstr);
 	not_reached();
     }
 
@@ -643,13 +649,13 @@ jencchk(void)
      * assert: \x5d-\x7e encodes to the character
      */
     for (i=0x5d; i <= 0x7e; ++i) {
-	if (jenc[i].len != 1) {
-	    err(133, __func__, "jenc[0x%02x].enc length: %ju != %d",
-			       i, (uintmax_t)strlen(jenc[i].enc), 1);
+	if (byte2asciistr[i].len != 1) {
+	    err(133, __func__, "byte2asciistr[0x%02x].enc length: %ju != %d",
+			       i, (uintmax_t)strlen(byte2asciistr[i].enc), 1);
 	    not_reached();
 	}
-	if ((unsigned int)(jenc[i].enc[0]) != i) {
-	    err(134, __func__, "jenc[0x%02x].enc: <%s> is not <%c>", i, jenc[i].enc, (char)i);
+	if ((unsigned int)(byte2asciistr[i].enc[0]) != i) {
+	    err(134, __func__, "byte2asciistr[0x%02x].enc: <%s> is not <%c>", i, byte2asciistr[i].enc, (char)i);
 	    not_reached();
 	}
     }
@@ -658,19 +664,19 @@ jencchk(void)
      * assert: \x7f encodes to \u007f
      */
     for (i=0x7f; i <= 0x7f; ++i) {
-	if (jenc[i].len != LITLEN("\\uxxxx")) {
-	    err(135, __func__, "jenc[0x%02x].enc length: %ju != %ju",
-			       i, (uintmax_t)strlen(jenc[i].enc),
+	if (byte2asciistr[i].len != LITLEN("\\uxxxx")) {
+	    err(135, __func__, "byte2asciistr[0x%02x].enc length: %ju != %ju",
+			       i, (uintmax_t)strlen(byte2asciistr[i].enc),
 			       (uintmax_t)LITLEN("\\uxxxx"));
 	    not_reached();
 	}
-	ret = sscanf(jenc[i].enc, "\\u%04x%c", &int_hexval, &guard);
+	ret = sscanf(byte2asciistr[i].enc, "\\u%04x%c", &int_hexval, &guard);
 	if (ret != 1) {
-	    err(136, __func__, "jenc[0x%02x].enc: <%s> is not in <\\uxxxx> form", i, jenc[i].enc);
+	    err(136, __func__, "byte2asciistr[0x%02x].enc: <%s> is not in <\\uxxxx> form", i, byte2asciistr[i].enc);
 	    not_reached();
 	}
 	if (i != int_hexval) {
-	    err(137, __func__, "jenc[0x%02x].enc: <%s> != <\\u%04x> form", i, jenc[i].enc, i);
+	    err(137, __func__, "byte2asciistr[0x%02x].enc: <%s> != <\\u%04x> form", i, byte2asciistr[i].enc, i);
 	    not_reached();
 	}
     }
@@ -679,19 +685,19 @@ jencchk(void)
      * assert: \x80-\xff encodes to the character
      */
     for (i=0x80; i <= 0xff; ++i) {
-	if (jenc[i].len != 1) {
-	    err(138, __func__, "jenc[0x%02x].enc length: %ju != %d",
-			       i, (uintmax_t)strlen(jenc[i].enc), 1);
+	if (byte2asciistr[i].len != 1) {
+	    err(138, __func__, "byte2asciistr[0x%02x].enc length: %ju != %d",
+			       i, (uintmax_t)strlen(byte2asciistr[i].enc), 1);
 	    not_reached();
 	}
-	if ((uint8_t)(jenc[i].enc[0]) != i) {
-	    err(139, __func__, "jenc[0x%02x].enc[0]: 0x%02x is not 0x%02jx",
-			       i, (uint8_t)(jenc[i].enc[0]) & 0xff, (uintmax_t)i);
+	if ((uint8_t)(byte2asciistr[i].enc[0]) != i) {
+	    err(139, __func__, "byte2asciistr[0x%02x].enc[0]: 0x%02x is not 0x%02jx",
+			       i, (uint8_t)(byte2asciistr[i].enc[0]) & 0xff, (uintmax_t)i);
 	    not_reached();
 	}
-	if ((uint8_t)(jenc[i].enc[1]) != 0) {
-	    err(140, __func__, "jenc[0x%02x].enc[1]: 0x%02x is not 0",
-			       i, (uint8_t)(jenc[i].enc[1]) & 0xff);
+	if ((uint8_t)(byte2asciistr[i].enc[1]) != 0) {
+	    err(140, __func__, "byte2asciistr[0x%02x].enc[1]: 0x%02x is not 0",
+			       i, (uint8_t)(byte2asciistr[i].enc[1]) & 0xff);
 	    not_reached();
 	}
     }
@@ -706,14 +712,14 @@ jencchk(void)
 	err(141, __func__, "json_encode(0x00, 1, *mlen: %ju) == NULL", (uintmax_t)mlen);
 	not_reached();
     }
-    if (mlen != jenc[0].len) {
+    if (mlen != byte2asciistr[0].len) {
 	err(142, __func__, "json_encode(0x00, 1, *mlen: %ju != %ju)",
-			   (uintmax_t)mlen, (uintmax_t)(jenc[0].len));
+			   (uintmax_t)mlen, (uintmax_t)(byte2asciistr[0].len));
 	not_reached();
     }
-    if (strcmp(jenc[0].enc, mstr) != 0) {
+    if (strcmp(byte2asciistr[0].enc, mstr) != 0) {
 	err(143, __func__, "json_encode(0x00, 1, *mlen: %ju) != <%s>",
-			   (uintmax_t)mlen, jenc[0].enc);
+			   (uintmax_t)mlen, byte2asciistr[0].enc);
 	not_reached();
     }
     /* free the allocated encoded string */
@@ -741,14 +747,14 @@ jencchk(void)
 			       i, (uintmax_t)mlen);
 	    not_reached();
 	}
-	if (mlen != jenc[i].len) {
+	if (mlen != byte2asciistr[i].len) {
 	    err(145, __func__, "json_encode_str(0x%02x, *mlen %ju != %ju)",
-			       i, (uintmax_t)mlen, (uintmax_t)jenc[i].len);
+			       i, (uintmax_t)mlen, (uintmax_t)byte2asciistr[i].len);
 	    not_reached();
 	}
-	if (strcmp(jenc[i].enc, mstr) != 0) {
+	if (strcmp(byte2asciistr[i].enc, mstr) != 0) {
 	    err(146, __func__, "json_encode_str(0x%02x, *mlen: %ju) != <%s>", i,
-			       (uintmax_t)mlen, jenc[i].enc);
+			       (uintmax_t)mlen, byte2asciistr[i].enc);
 	    not_reached();
 	}
 	dbg(DBG_VVHIGH, "testing json_encode_str(0x%02x, *mlen) encoded to <%s>", i, mstr);
@@ -787,9 +793,9 @@ jencchk(void)
     }
 
     /*
-     * all seems well win the jenc[] table
+     * all seems well win the byte2asciistr[] table
      */
-    dbg(DBG_VVHIGH, "jenc[] table passes");
+    dbg(DBG_VVHIGH, "byte2asciistr[] table passes");
     return;
 }
 

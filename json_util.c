@@ -362,9 +362,13 @@ json_putc(uint8_t const c, FILE *stream)
 
     /*
      * write JSON encoding to stream
+     *
+     * XXX - This is NOT the canonical way to encode Unicode characters! - XXX
+     * XXX - Valid Unicode symbols when encoded as UTF-8 bytes should be - XXX
+     * XXX - encoded as 1 or more consecutive \\u[0-9A-Fa-f]{4} strings! - XXX
      */
     errno = 0;	    /* pre-clear errno for warnp */
-    ret = fprintf(stream, "%s", jenc[c].enc);
+    ret = fprintf(stream, "%s", byte2asciistr[c].enc);
     if (chk_stdio_printf_err(stream, ret)) {
 	warnp(__func__, "fprintf #1 error");
 	return false;
