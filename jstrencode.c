@@ -204,7 +204,7 @@ jstrencode_stream(FILE *in_stream, bool skip_enclosing, bool ignore_first, bool 
 {
     char *orig_input = NULL;	/* argument to process */
     char *input = NULL;		/* possibly updated orig_input */
-    size_t inputlen;		/* length of input buffer */
+    size_t inputlen = 0;	/* length of input buffer */
     char *buf = NULL;		/* encode buffer */
     size_t bufsiz;		/* length of the buffer */
     struct jstring *jstr = NULL; /* for jstring list */
@@ -326,7 +326,7 @@ main(int argc, char **argv)
     extern char *optarg;	/* option argument */
     extern int optind;		/* argv index of the next arg */
     char *input;		/* argument to process */
-    size_t inputlen;		/* length of input buffer */
+    size_t inputlen = 0;	/* length of input buffer */
     char *buf;			/* encode buffer */
     size_t bufsiz;		/* length of the buffer */
     size_t outputlen;		/* length of write of encode buffer */

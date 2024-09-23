@@ -1,5 +1,34 @@
 # Significant changes in the JSON parser repo
 
+## Release 1.0.13 2024-09-23
+
+Rename `jenc` to `byte2asciistr` in `json_parse.c` to avoid confusion about its
+purpose.
+
+Expand the output of `jstrencode -t` and `jstrdecode -t` to express that the
+encode/decode tests have not yet been written. This depends on bug #13 being
+resolved first.
+
+Changed optimisation flags in the Makefiles to not specify `-g3` as debug
+symbols are almost useless when optimising and we have `-O3` in use. During
+debugging one can always use:
+
+```sh
+make C_OPT="-g3" clobber all
+```
+
+to compile in debug symbols or have a file in the respective directories (those
+needed) called `makefile.local` with the line:
+
+```makefile
+C_OPT= -g3
+```
+
+which is used for development purposes but should not normally be done.
+
+Fix potential use without initialisation of `inputlen` in `jstrencode.c`.
+
+
 ## Release 1.0.11 2024-09-20
 
 Add (as `json_utf8.h` and `json_utf8.c`) the files `unicode.h` and `unicode.c`
