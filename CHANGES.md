@@ -28,6 +28,18 @@ which is used for development purposes but should not normally be done.
 
 Fix potential use without initialisation of `inputlen` in `jstrencode.c`.
 
+Add function `decode_json_string()` to help simplify the `json_decode()`
+function as it's quite long. This new function takes the length and calculated
+decoded size as well as the pointers (the block of memory, the return length and
+the `has_nul` as well) and then allocates the `char *` and does what was the
+second half of the `json_decode()` function. As `json_encode()` is much simpler
+it seems like at this time that something like this is not needed. This new
+function is not static but it is entirely unclear if that is necessary.
+
+Add to `struct json_string` the `bool unicode`. Currently unused (just
+initialised to false) the purpose will be to indicate whether or not the string
+has any invalid unicode symbols found during decoding.
+
 
 ## Release 1.0.11 2024-09-20
 

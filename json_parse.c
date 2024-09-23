@@ -799,6 +799,233 @@ jencchk(void)
     return;
 }
 
+/*
+ * decode_json_string - return the decoding of a JSON encoded block of memory
+ *
+ * given:
+ *	ptr	start of memory block to decode
+ *	len	length of block
+ *	mlen	length of decoded bytes to allocate
+ *	retlen	address of where to store allocated length, if retlen != NULL
+ *	has_nul	if != NULL and we find an encoded NUL byte we will do *has_nul = true
+ *
+ * returns:
+ *	allocated JSON decoding of a block, or NULL ==> error
+ *	NOTE: retlen, if non-NULL, is set to 0 on error
+ *
+ * NOTE: this function is used by json_decode().
+ */
+char *
+decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen, bool *has_nul)
+{
+    char *ret = NULL;	    /* allocated encoding string or NULL */
+    char *beyond = NULL;    /* beyond the end of the allocated encoding string */
+    char *p = NULL;	    /* next place to encode */
+    char n = 0;		    /* next character beyond a \\ */
+    int xa = 0;		    /* first hex character numeric value */
+    int xb = 0;		    /* second hex character numeric value */
+    char c = 0;		    /* character to decode or third hex character after \u */
+    int xc = 0;		    /* 3nd hex character numeric value */
+    int xd = 0;		    /* fourth hex character numeric value */
+    size_t i;
+
+    /*
+     * firewall
+     */
+    if (ptr == NULL) {
+	/* error - clear allocated length */
+	if (retlen != NULL) {
+	    *retlen = 0;
+	}
+	warn(__func__, "called with NULL ptr");
+	return NULL;
+    }
+
+    /*
+     * allocated decoded string
+     */
+    ret = malloc(mlen + 1 + 1);
+    if (ret == NULL) {
+	/* error - clear allocated length */
+	if (retlen != NULL) {
+	    *retlen = 0;
+	}
+	warn(__func__, "malloc of %ju bytes failed", (uintmax_t)(mlen + 1 + 1));
+	return NULL;
+    }
+    ret[mlen] = '\0';   /* terminate string */
+    ret[mlen + 1] = '\0';   /* paranoia */
+    beyond = &(ret[mlen]);
+
+
+    /*
+     * JSON string decode
+     *
+     * In the counting code in json_decode(), prior to the malloc for the
+     * decoded string, we already determined that the JSON encoded block of
+     * memory is valid.
+     */
+    for (i=0, p=ret; i < len; ++i) {
+
+	/*
+	 * examine the current character
+	 */
+	c = (char)((uint8_t)(ptr[i]));
+
+	/*
+	 * paranoia
+	 */
+	if (p >= beyond) {
+	    /* error - clear allocated length */
+	    if (retlen != NULL) {
+		*retlen = 0;
+	    }
+	    warn(__func__, "ran beyond end of decoded string");
+	    return NULL;
+	}
+
+	/*
+	 * case: JSON decode non \-escape character
+	 */
+	if (c != '\\') {
+	    /* no translation encoding */
+	    *p++ = c;
+
+	/*
+	 * case: JSON decode \-escape character
+	 */
+	} else {
+
+	    /*
+	     * look at the next character beyond \
+	     */
+	    n = (char)((uint8_t)(ptr[i+1]));
+
+	    /*
+	     * decode single \c escaped pairs
+	     */
+	    switch (n) {
+	    case 'b':	/* ASCII backspace */
+		++i;
+		*p++ = '\b';
+		break;
+	    case 't':	/* ASCII horizontal tab */
+		++i;
+		*p++ = '\t';
+		break;
+	    case 'n':	/* ASCII line feed */
+		++i;
+		*p++ = '\n';
+		break;
+	    case 'f':	/* ASCII form feed */
+		++i;
+		*p++ = '\f';
+		break;
+	    case 'r':	/* ASCII carriage return */
+		++i;
+		*p++ = '\r';
+		break;
+	    case 'a':	/* ASCII bell */
+		++i;
+		*p++ = '\a';
+		break;
+	    case 'v':	/* ASCII vertical tab */
+		++i;
+		*p++ = '\v';
+		break;
+	    case 'e':	/* ASCII escape */
+		++i;
+		*p++ = 0x0b;  /* not all C compilers understand \e */
+		break;
+	    case '"':	/*fallthrough*/
+	    case '/':	/*fallthrough*/
+	    case '\\':
+		++i;
+		*p++ = n;	/* escape decodes to itself */
+		break;
+
+	    /*
+	     * decode \uxxxx
+	     */
+	    case 'u':
+
+		/*
+		 * there must be at least five more characters beyond \
+		 */
+		if (i+5 >= len) {
+		    /* error - clear allocated length */
+		    if (retlen != NULL) {
+			*retlen = 0;
+		    }
+		    warn(__func__, "found \\u while decoding, but not enough for 4 hex chars at end of buffer");
+		    return NULL;
+		}
+		xa = hexval[(uint8_t)(ptr[i+2])];
+		xb = hexval[(uint8_t)(ptr[i+3])];
+		xc = hexval[(uint8_t)(ptr[i+4])];
+		xd = hexval[(uint8_t)(ptr[i+5])];
+
+		/*
+		 * case: \u00xx
+		 */
+		if (xa == 0 && xb == 0) {
+		    /* single byte \u00xx */
+		    i += 5;
+		    *p++ = (char)((xc << 4) | xd);
+
+		    if (xc == 0 && xd == 0 && has_nul != NULL) {
+			*has_nul = true; /* record NUL byte */
+		    }
+		/*
+		 * case: \uxxxx
+		 */
+		} else {
+
+		    /*
+		     * paranoia
+		     */
+		    if (p+1 >= beyond) {
+			/* error - clear allocated length */
+			if (retlen != NULL) {
+			    *retlen = 0;
+			}
+			warn(__func__, "ran beyond end of decoded string for non-UTF-8 \\u encoding");
+			return NULL;
+		    }
+		    /* double byte \uxxxx */
+		    i += 5;
+		    *p++ = (char)((xa << 4) | xb);
+		    *p++ = (char)((xc << 4) | xd);
+		}
+		break;
+
+	    /*
+	     * unknown \c escaped pairs
+	     */
+	    default:
+		/* error - clear allocated length */
+		if (retlen != NULL) {
+		    *retlen = 0;
+		}
+		warn(__func__, "found invalid JSON \\-escape while decoding: followed by 0x%02x", (uint8_t)c);
+		return NULL;
+	    }
+	}
+     }
+
+    /*
+     * return result
+     */
+
+    dbg(DBG_VVVHIGH, "returning from decode_json_string(ptr, %ju, %ju, *%ju, %s)",
+		 (uintmax_t)len, (uintmax_t)mlen, retlen != NULL ? *retlen : 0, has_nul != NULL ? booltostr(*has_nul) : "false");
+    if (retlen != NULL) {
+	*retlen = len;
+    }
+
+    return ret;
+}
+
 
 /*
  * json_decode - return the decoding of a JSON encoded block of memory
@@ -817,18 +1044,12 @@ char *
 json_decode(char const *ptr, size_t len, size_t *retlen, bool *has_nul)
 {
     char *ret = NULL;	    /* allocated encoding string or NULL */
-    char *beyond = NULL;    /* beyond the end of the allocated encoding string */
     size_t mlen = 0;	    /* length of allocated encoded string */
-    char *p = NULL;	    /* next place to encode */
     char n = 0;		    /* next character beyond a \\ */
     char a = 0;		    /* first hex character after \u */
-    int xa = 0;		    /* first hex character numeric value */
     char b = 0;		    /* second hex character after \u */
-    int xb = 0;		    /* second hex character numeric value */
     char c = 0;		    /* character to decode or third hex character after \u */
-    int xc = 0;		    /* 3nd hex character numeric value */
     char d = 0;		    /* fourth hex character after \u */
-    int xd = 0;		    /* fourth hex character numeric value */
     size_t i;
 
     /*
@@ -1013,171 +1234,28 @@ json_decode(char const *ptr, size_t len, size_t *retlen, bool *has_nul)
 	warn(__func__, "malloc of %ju bytes failed", (uintmax_t)(mlen + 1 + 1));
 	return NULL;
     }
-    ret[mlen] = '\0';   /* terminate string */
-    ret[mlen + 1] = '\0';   /* paranoia */
-    beyond = &(ret[mlen]);
 
     /*
-     * JSON string decode
-     *
-     * In the above counting code, prior to the malloc for the decoded string,
-     * we already determined that the JSON encoded block of memory is valid.
+     * decode JSON string
      */
-    for (i=0, p=ret; i < len; ++i) {
-
-	/*
-	 * examine the current character
-	 */
-	c = (char)((uint8_t)(ptr[i]));
-
-	/*
-	 * paranoia
-	 */
-	if (p >= beyond) {
-	    /* error - clear allocated length */
-	    if (retlen != NULL) {
-		*retlen = 0;
-	    }
-	    warn(__func__, "ran beyond end of decoded string");
-	    return NULL;
-	}
-
-	/*
-	 * case: JSON decode non \-escape character
-	 */
-	if (c != '\\') {
-	    /* no translation encoding */
-	    *p++ = c;
-
-	/*
-	 * case: JSON decode \-escape character
-	 */
-	} else {
-
-	    /*
-	     * look at the next character beyond \
-	     */
-	    n = (char)((uint8_t)(ptr[i+1]));
-
-	    /*
-	     * decode single \c escaped pairs
-	     */
-	    switch (n) {
-	    case 'b':	/* ASCII backspace */
-		++i;
-		*p++ = '\b';
-		break;
-	    case 't':	/* ASCII horizontal tab */
-		++i;
-		*p++ = '\t';
-		break;
-	    case 'n':	/* ASCII line feed */
-		++i;
-		*p++ = '\n';
-		break;
-	    case 'f':	/* ASCII form feed */
-		++i;
-		*p++ = '\f';
-		break;
-	    case 'r':	/* ASCII carriage return */
-		++i;
-		*p++ = '\r';
-		break;
-	    case 'a':	/* ASCII bell */
-		++i;
-		*p++ = '\a';
-		break;
-	    case 'v':	/* ASCII vertical tab */
-		++i;
-		*p++ = '\v';
-		break;
-	    case 'e':	/* ASCII escape */
-		++i;
-		*p++ = 0x0b;  /* not all C compilers understand \e */
-		break;
-	    case '"':	/*fallthrough*/
-	    case '/':	/*fallthrough*/
-	    case '\\':
-		++i;
-		*p++ = n;	/* escape decodes to itself */
-		break;
-
-	    /*
-	     * decode \uxxxx
-	     */
-	    case 'u':
-
-		/*
-		 * there must be at least five more characters beyond \
-		 */
-		if (i+5 >= len) {
-		    /* error - clear allocated length */
-		    if (retlen != NULL) {
-			*retlen = 0;
-		    }
-		    warn(__func__, "found \\u while decoding, but not enough for 4 hex chars at end of buffer");
-		    return NULL;
-		}
-		xa = hexval[(uint8_t)(ptr[i+2])];
-		xb = hexval[(uint8_t)(ptr[i+3])];
-		xc = hexval[(uint8_t)(ptr[i+4])];
-		xd = hexval[(uint8_t)(ptr[i+5])];
-
-		/*
-		 * case: \u00xx
-		 */
-		if (xa == 0 && xb == 0) {
-		    /* single byte \u00xx */
-		    i += 5;
-		    *p++ = (char)((xc << 4) | xd);
-
-		    if (xc == 0 && xd == 0 && has_nul != NULL) {
-			*has_nul = true; /* record NUL byte */
-		    }
-		/*
-		 * case: \uxxxx
-		 */
-		} else {
-
-		    /*
-		     * paranoia
-		     */
-		    if (p+1 >= beyond) {
-			/* error - clear allocated length */
-			if (retlen != NULL) {
-			    *retlen = 0;
-			}
-			warn(__func__, "ran beyond end of decoded string for non-UTF-8 \\u encoding");
-			return NULL;
-		    }
-		    /* double byte \uxxxx */
-		    i += 5;
-		    *p++ = (char)((xa << 4) | xb);
-		    *p++ = (char)((xc << 4) | xd);
-		}
-		break;
-
-	    /*
-	     * unknown \c escaped pairs
-	     */
-	    default:
-		/* error - clear allocated length */
-		if (retlen != NULL) {
-		    *retlen = 0;
-		}
-		warn(__func__, "found invalid JSON \\-escape while decoding: followed by 0x%02x", (uint8_t)c);
-		return NULL;
-	    }
-	}
-     }
+    ret = decode_json_string(ptr, (uintmax_t)len, (uintmax_t)mlen, retlen, has_nul);
 
     /*
-     * return result
+     * return result, if not NULL
      */
-    dbg(DBG_VVVHIGH, "returning from json_decode(ptr, %ju, *%ju, %s)",
-		     (uintmax_t)len, (uintmax_t)mlen, has_nul != NULL ? booltostr(*has_nul) : "false");
-    if (retlen != NULL) {
-	*retlen = mlen;
+    if (ret != NULL) {
+	dbg(DBG_VVVHIGH, "returning from json_decode(ptr, %ju, *%ju, %s)",
+			 (uintmax_t)len, (uintmax_t)mlen, has_nul != NULL ? booltostr(*has_nul) : "false");
+	if (retlen != NULL) {
+	    *retlen = mlen;
+	}
+    } else {
+	if (retlen != NULL) {
+	    *retlen = 0;
+	}
+	dbg(DBG_VVVHIGH, "returning from decode_json_string(ptr, %ju, %ju, *%ju, %s)",
+		 (uintmax_t)len, (uintmax_t)mlen, retlen != NULL ? *retlen : 0, has_nul != NULL ? booltostr(*has_nul) : "false");
+	return NULL;
     }
     return ret;
 }
@@ -2755,6 +2833,7 @@ json_conv_string(char const *ptr, size_t len, bool quote)
     item->str = NULL;
     item->converted = false;
     item->parsed = false;
+    item->unicode = false;
     item->quote = false;
     item->same = false;
     item->has_nul = false;
