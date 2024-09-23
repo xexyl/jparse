@@ -168,7 +168,7 @@ C_STD= -std=gnu17
 
 # optimization and debug level
 #
-C_OPT= -O3 -g3
+C_OPT= -O3
 #C_OPT= -O0 -g
 
 # Compiler warnings
