@@ -490,10 +490,10 @@ jparse.tab.o: jparse.tab.c
 jparse_main.o: jparse_main.c
 	${CC} ${CFLAGS} jparse_main.c -c
 
-jparse.o: jparse.c jparse.h json_utf8.o
+jparse.o: jparse.c jparse.h
 	${CC} ${CFLAGS} jparse.c -c
 
-jparse: jparse_main.o libjparse.a json_utf8.o
+jparse: jparse_main.o libjparse.a
 	${CC} ${CFLAGS} $^ -lm -o $@ ${LD_DIR} -ldbg -ldyn_array
 
 
@@ -503,7 +503,7 @@ jstr_util.o: jstr_util.c jstr_util.h
 jstrencode.o: jstrencode.c jstrencode.h json_util.h json_util.c json_utf8.h
 	${CC} ${CFLAGS} jstrencode.c -c
 
-jstrencode: jstrencode.o libjparse.a jstr_util.o json_utf8.o
+jstrencode: jstrencode.o libjparse.a jstr_util.o
 	${CC} ${CFLAGS} $^ -lm -o $@ ${LD_DIR} -ldbg -ldyn_array
 
 json_utf8.o: json_utf8.c json_utf8.h
@@ -512,7 +512,7 @@ json_utf8.o: json_utf8.c json_utf8.h
 jstrdecode.o: jstrdecode.c jstrdecode.h json_util.h json_parse.h json_utf8.h
 	${CC} ${CFLAGS} jstrdecode.c -c
 
-jstrdecode: jstrdecode.o libjparse.a jstr_util.o json_utf8.o
+jstrdecode: jstrdecode.o libjparse.a jstr_util.o
 	${CC} ${CFLAGS} $^ -lm -o $@ ${LD_DIR} -ldbg -ldyn_array
 
 json_parse.o: json_parse.c
@@ -521,7 +521,7 @@ json_parse.o: json_parse.c
 jsemtblgen.o: jsemtblgen.c jparse.tab.h json_utf8.h
 	${CC} ${CFLAGS} jsemtblgen.c -c
 
-jsemtblgen: jsemtblgen.o libjparse.a json_utf8.o
+jsemtblgen: jsemtblgen.o libjparse.a
 	${CC} ${CFLAGS} $^ -lm -o $@ ${LD_DIR} -ldbg -ldyn_array
 
 json_sem.o: json_sem.c
