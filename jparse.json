@@ -1,0 +1,57 @@
+{
+    "no_comment" : "mandatory comment: because comments were removed from the original JSON spec",
+    "name" : "jparse",
+    "description" : "JSON parser API and tools written in C",
+    "repo" : "https://github.com/xexyl/jparse",
+    "tools" : [
+	{
+	    "name" : "jparse",
+	    "description" : "JSON parser stand-alone tool"
+	},
+	{
+	    "name" : "jstrencode",
+	    "description" : "tool to encode a string for JSON"
+	},
+	{
+	    "name" : "jstrdecode",
+	    "description" : "tool to decode JSON encoded strings"
+	},
+	{
+	    "name" : "verge",
+	    "description" : "tool to determine if first version is greater or equal to the second version"
+	},
+	{
+	    "name" : "jnum_chk",
+	    "description" : "tool to check JSON number string conversions"
+	},
+	{
+	    "name" : "jnum_gen",
+	    "description" : "tool to generate JSON number string conversion test data"
+	},
+	{
+	    "name" : "jsemtblgen",
+	    "description" : "tool to generate JSON semantics table"
+	}
+    ],
+    "generators" : [
+	{
+	    "name": "flex",
+	    "minimum_version" : "2.6.4"
+	},
+	{
+	    "name" : "bison",
+	    "minimum_version" : "3.8.2"
+	}
+    ],
+    "authors" : [
+	{
+	    "name" : "Cody Boone Ferguson",
+	    "url" : "https://xexyl.net"
+	},
+	{
+	    "name" : "Landon Curt Noll",
+	    "url" : "http://www.isthe.com"
+	}
+    ],
+    "timestamp" : "Wed 25 Sep 2024 20:15:55 UTC"
+}

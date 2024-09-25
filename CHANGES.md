@@ -8,6 +8,8 @@ written in C.
 Fix broken link in `jparse_bug_report.sh` and fix some formatting issues there
 as well.
 
+Add `jparse.json` file with information about this repo and what it consists of.
+
 
 ## Release 1.0.14 2024-09-24
 
