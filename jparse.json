@@ -1,8 +1,19 @@
 {
     "no_comment" : "mandatory comment: because comments were removed from the original JSON spec",
+    "timestamp" : "Wed 25 Sep 2024 20:30:27 UTC",
     "name" : "jparse",
     "description" : "JSON parser API and tools written in C",
     "repo" : "https://github.com/xexyl/jparse",
+    "jparse" : [
+	{
+	    "file" : "jparse.l",
+	    "description" : "JSON scanner in flex grammar form"
+	},
+	{
+	    "file" : "jparse.y",
+	    "description" : "JSON parser in bison grammar form"
+	}
+    ],
     "tools" : [
 	{
 	    "name" : "jparse",
@@ -52,6 +63,5 @@
 	    "name" : "Landon Curt Noll",
 	    "url" : "http://www.isthe.com"
 	}
-    ],
-    "timestamp" : "Wed 25 Sep 2024 20:15:55 UTC"
+    ]
 }
