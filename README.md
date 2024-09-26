@@ -189,7 +189,7 @@ This tool converts data into JSON encoded strings according to the so-called
 
 
 ```sh
-jstrencode [-h] [-v level] [-q] [-V] [-t] [-n] [-Q] [string ...]
+jstrencode [-h] [-v level] [-q] [-V] [-t] [-n] [-Q] [-e] [string ...]
 ```
 
 The `-v` option increases the overall verbosity level. Unlike the `jparse`
@@ -264,7 +264,7 @@ This tool converts JSON encoded strings to their original data according to the 
 
 
 ```sh
-jstrdecode [-h] [-v level] [-q] [-V] [-t] [-n] [-Q] [string ...]
+jstrdecode [-h] [-v level] [-q] [-V] [-t] [-n] [-Q] [-e] [string ...]
 ```
 
 
