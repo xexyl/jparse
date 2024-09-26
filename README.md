@@ -17,7 +17,7 @@ Contest](https://www.ioccc.org)), originally in the [mkiocccentry
 repo](https://github.com/ioccc-src/mkiocccentry), but we provide it here so that
 anyone may use it.
 
-As a stand-alone tool it is less useful, except for validating json
+As a stand-alone tool, `jparse` itself is less useful, except for validating JSON
 documents/strings, and to see how it works. The library is much more useful
 because you can integrate it into your own applications and work with the parsed
 tree(s). More details (beyond the man page) on the library will be documented at
@@ -106,7 +106,7 @@ Of course, you can specify a different `PREFIX` than `/usr` if you wish.
 # Uninstalling
 
 If you wish to deobfuscate your system a bit :-), you can uninstall the programs,
-library and header files by running:
+library and header files by running as root or by sudo:
 
 ```sh
 make uninstall
