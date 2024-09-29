@@ -149,8 +149,7 @@ utf8decode(const char *str)
 	not_reached();
     }
 
-    s = (const unsigned char*)str;
-
+    s = (const unsigned char *)str;
 
     if (*s < 0x80) {
 	unichar = *s;
