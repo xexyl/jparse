@@ -5,6 +5,9 @@
 Add a couple functions to `json_utf8.c` for UTF-8 encoding/decoding. These
 functions are not currently used but might be when issue #13 is looked at more.
 
+Improve and replace tabs with four spaces in `jparse.json`.
+
+
 ## Release 1.0.15 2024-09-25
 
 Use `FOO_BASENAME` when `prog == NULL` in `usage()` functions of the tools
