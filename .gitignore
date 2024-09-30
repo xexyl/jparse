@@ -21,6 +21,7 @@ build.log
 /jparse.lex.h
 /jparse.tab.c
 /jparse.tab.h
+/jparse_test.log
 /jprint
 /jsemtblgen
 /jstrdecode
