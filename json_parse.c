@@ -825,11 +825,11 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen, boo
     char *p = NULL;	    /* next place to encode */
     char n = 0;		    /* next character beyond a \\ */
     int xa = 0;		    /* first hex character numeric value */
-    int xb = 0;		    /* second hex character numeric value */
     char c = 0;		    /* character to decode or third hex character after \u */
-    int xc = 0;		    /* 3nd hex character numeric value */
-    int xd = 0;		    /* fourth hex character numeric value */
     size_t i;
+    int32_t bytes = 0;
+    char *offset = NULL;
+    int scanned = 0;
 
     /*
      * firewall
@@ -867,28 +867,29 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen, boo
      * decoded string, we already determined that the JSON encoded block of
      * memory is valid.
      */
-    for (i=0, p=ret; i < len; ++i) {
+    for (i=0, p=offset=ret; i < len; ++i) {
+	/*
+	 * paranoia
+	 */
+	if (p >= beyond) {
+	    /* error - clear allocated length and buffer */
+	    if (retlen != NULL) {
+		*retlen = 0;
+	    }
+	    if (ret != NULL) {
+		free(ret);
+		ret = NULL;
+	    }
+
+	    warn(__func__, "ran beyond end of decoded string");
+	    return NULL;
+	}
 
 	/*
 	 * examine the current character
 	 */
 	c = (char)((uint8_t)(ptr[i]));
 
-	/*
-	 * paranoia
-	 */
-	if (p >= beyond) {
-	    /* error - free buffer and clear allocated length */
-	    if (ret != NULL) {
-		free(ret);
-		ret = NULL;
-	    }
-	    if (retlen != NULL) {
-		*retlen = 0;
-	    }
-	    warn(__func__, "ran beyond end of decoded string");
-	    return NULL;
-	}
 
 	/*
 	 * case: JSON decode non \-escape character
@@ -954,77 +955,69 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen, boo
 	     * decode \uxxxx
 	     */
 	    case 'u':
-
 		/*
 		 * there must be at least five more characters beyond \
 		 */
 		if (i+5 >= len) {
-		    /* error - free buffer and clear allocated length */
+		    /* error - clear allocated length and free buffer */
+		    if (retlen != NULL) {
+			*retlen = 0;
+		    }
 		    if (ret != NULL) {
 			free(ret);
 			ret = NULL;
 		    }
-		    if (retlen != NULL) {
-			*retlen = 0;
-		    }
+
 		    warn(__func__, "found \\u while decoding, but not enough for 4 hex chars at end of buffer");
 		    return NULL;
 		}
-		xa = hexval[(uint8_t)(ptr[i+2])];
-		xb = hexval[(uint8_t)(ptr[i+3])];
-		xc = hexval[(uint8_t)(ptr[i+4])];
-		xd = hexval[(uint8_t)(ptr[i+5])];
-
-		/*
-		 * case: \u00xx
-		 */
-		if (xa == 0 && xb == 0) {
-		    /* single byte \u00xx */
-		    i += 5;
-		    *p++ = (char)((xc << 4) | xd);
-
-		    if (xc == 0 && xd == 0 && has_nul != NULL) {
-			*has_nul = true; /* record NUL byte */
+		xa = 0;
+		scanned = sscanf(ptr + i + 2, "%4x", &xa);
+		if (scanned == EOF) {
+		    /* error - clear allocated length and free buffer */
+		    if (retlen != NULL) {
+			*retlen = 0;
 		    }
-		/*
-		 * case: \uxxxx
-		 */
-		} else {
-
-		    /*
-		     * paranoia
-		     */
-		    if (p+1 >= beyond) {
-			/* error - free buffer and clear allocated length */
-			if (ret != NULL) {
-			    free(ret);
-			    ret = NULL;
-			}
-			if (retlen != NULL) {
-			    *retlen = 0;
-			}
-			warn(__func__, "ran beyond end of decoded string for non-UTF-8 \\u encoding");
-			return NULL;
+		    if (ret != NULL) {
+			free(ret);
+			ret = NULL;
 		    }
-		    /* double byte \uxxxx */
-		    i += 5;
-		    *p++ = (char)((xa << 4) | xb);
-		    *p++ = (char)((xc << 4) | xd);
+
+		    warn(__func__, "reached EOF trying to scan for hex bytes");
+		    return NULL;
+		} else if (scanned != 1) {
+		    /* error - clear allocated length and free buffer */
+		    if (retlen != NULL) {
+			*retlen = 0;
+		    }
+		    if (ret != NULL) {
+			free(ret);
+			ret = NULL;
+		    }
+		    warn(__func__, "did not read \\uxxxx hex value");
+		    return NULL;
 		}
+		bytes = utf8encode(offset, xa);
+		offset += bytes;
+		*offset = '\0';
+		p += bytes;
+		i += 5;
+
 		break;
 
 	    /*
 	     * unknown \c escaped pairs
 	     */
 	    default:
-		/* error - free buffer and clear allocated length */
+		/* error - clear allocated length and free buffer */
+		if (retlen != NULL) {
+		    *retlen = 0;
+		}
 		if (ret != NULL) {
 		    free(ret);
 		    ret = NULL;
 		}
-		if (retlen != NULL) {
-		    *retlen = 0;
-		}
+
 		warn(__func__, "found invalid JSON \\-escape while decoding: followed by 0x%02x", (uint8_t)c);
 		return NULL;
 	    }
@@ -1037,18 +1030,21 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen, boo
     if (unicode != NULL) {
 	*unicode = unicode_count_chars((uint8_t *)ptr) >= 0;
     }
+
     /*
      * return result
      */
-    dbg(DBG_VVVHIGH, "returning from decode_json_string(ptr, %ju, %ju, *%ju, %s, %s)",
-		 (uintmax_t)len, (uintmax_t)mlen, retlen != NULL ? *retlen : 0, has_nul != NULL ? booltostr(*has_nul) : "false",
-		 unicode != NULL ? booltostr(*unicode) : "false");
+
+    dbg(DBG_VVVHIGH, "returning from decode_json_string(ptr, %ju, %ju, *%ju, %s)",
+		 (uintmax_t)len, (uintmax_t)mlen, retlen != NULL ? *retlen : 0, has_nul != NULL ? booltostr(*has_nul) : "false");
     if (retlen != NULL) {
-	*retlen = len;
+	*retlen = mlen;
     }
 
     return ret;
 }
+
+
 
 
 /*
@@ -1205,26 +1201,24 @@ json_decode(char const *ptr, size_t len, size_t *retlen, bool *has_nul, bool *un
 		 * the next 4 characters beyond \u must be hex characters
 		 */
 		if (isxdigit(a) && isxdigit(b) && isxdigit(c) && isxdigit(d)) {
-
 		    /*
-		     * case: \u00xx is 1 character
+		     * case: \u00xx
 		     */
 		    if (a == '0' && b == '0') {
-			++mlen;
 			i += 5;
 
-			if (c == '0' && d == '0' && has_nul != NULL) {
+			if (has_nul != NULL) {
 			    *has_nul = true; /* set has_nul to true */
 			}
+			mlen += 2;
 		    /*
-		     * case: count \uxxxx as 2 characters
+		     * case: \uxxxx
 		     */
 		    } else {
 			mlen += 2;
 			i += 5;
 		    }
 		    break;
-
 		/*
 		 * case: \uxxxx is invalid because xxxx is not HEX
 		 */
@@ -1260,13 +1254,13 @@ json_decode(char const *ptr, size_t len, size_t *retlen, bool *has_nul, bool *un
 	dbg(DBG_VVVHIGH, "returning from json_decode(ptr, %ju, *%ju, %s)",
 			 (uintmax_t)len, (uintmax_t)mlen, has_nul != NULL ? booltostr(*has_nul) : "false");
 	if (retlen != NULL) {
-	    *retlen = mlen;
+	    *retlen = len;
 	}
     } else {
 	dbg(DBG_VVVHIGH, "in json_decode(): decode_json_string(ptr, %ju, *%ju, %s) returned NULL",
 			 (uintmax_t)len, (uintmax_t)mlen, has_nul != NULL ? booltostr(*has_nul) : "false");
 	if (retlen != NULL) {
-	    *retlen = mlen;
+	    *retlen = 0;
 	}
 	return NULL;
     }

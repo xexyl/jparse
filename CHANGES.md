@@ -1,5 +1,23 @@
 # Significant changes in the JSON parser repo
 
+## Release 1.0.19 2024-10-04
+
+Fix the JSON decode bug #13. Using the function `utf8encode()` it appears that
+the bug is now fixed. More testing does need to be done but numerous test cases
+now seem to work.
+
+The calculation of the length to allocate has been changed somewhat to get this
+to work. The retlen had to be updated too, to refer to len, not mlen.
+
+The check for the `unicode` boolean should be improved and it is not
+even clear if it can remain the way it is (this is the part where it checks for
+invalid codes).
+
+Assuming that this bug is indeed fixed entirely test cases for this needs to be
+added. Also, once this is done, the file `json_utf8.c` and the file
+`json_utf8.h` can be cleaned up.
+
+
 ## Release 1.0.18 2024-10-01
 
 Improve `test_jparse/is_available.sh`: it now will do a trivial test on
