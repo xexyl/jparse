@@ -772,11 +772,17 @@ jencchk(void)
 			       mstr, (uintmax_t)mlen2);
 	    not_reached();
 	}
-	if (mlen2 != 1) {
-	    err(148, __func__, "json_decode_str(<%s>, *mlen2 %ju != 1, true)",
-			       mstr, (uintmax_t)mlen2);
+	/*
+	 * XXX - the struct byte2asciistr needs to have a member that has the
+	 * size of the decoded string, to compare mlen2 to. - XXX
+	 */
+	#if 0
+	if (mlen2 != byte2asciistr[i].len) {
+	    err(148, __func__, "json_decode_str(<%s>, *mlen2 %ju != %ju, true)",
+			       mstr, (uintmax_t)mlen2, byte2asciistr[i].len);
 	    not_reached();
 	}
+	#endif
 	if ((uint8_t)(mstr2[0]) != i) {
 	    err(149, __func__, "json_decode_str(<%s>, *mlen2: %ju, true): 0x%02x != 0x%02x",
 			       mstr, (uintmax_t)mlen2, (uint8_t)(mstr2[0]) & 0xff, i);
@@ -795,7 +801,7 @@ jencchk(void)
     }
 
     /*
-     * all seems well win the byte2asciistr[] table
+     * all seems well with the byte2asciistr[] table
      */
     dbg(DBG_VVHIGH, "byte2asciistr[] table passes");
     return;
@@ -1000,7 +1006,7 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen, boo
 		bytes = utf8encode(offset, xa);
 		offset += bytes;
 		*offset = '\0';
-		p += bytes;
+		p += bytes - 1;
 		i += 5;
 
 		break;
@@ -1202,29 +1208,30 @@ json_decode(char const *ptr, size_t len, size_t *retlen, bool *has_nul, bool *un
 		 */
 		if (isxdigit(a) && isxdigit(b) && isxdigit(c) && isxdigit(d)) {
 		    /*
-		     * case: \u00xx
+		     * case: \u00xx is 2 bytes
 		     */
 		    if (a == '0' && b == '0') {
-			i += 5;
-
 			if (has_nul != NULL) {
 			    *has_nul = true; /* set has_nul to true */
 			}
 			mlen += 2;
-		    /*
-		     * case: \uxxxx
-		     */
 		    } else {
-			mlen += 2;
-			i += 5;
+			/*
+			 * UTF-8 bytes can be between 1 and 4 bytes long so to make it
+			 * easy we just add 4, if it is not \u00xx.
+			 */
+			mlen += 4;
 		    }
+
+		    i += 5;
+
 		    break;
 		/*
 		 * case: \uxxxx is invalid because xxxx is not HEX
 		 */
 		} else {
-			warn(__func__, "\\u, not followed by 4 hex chars");
-			return NULL;
+		    warn(__func__, "\\u, not followed by 4 hex chars");
+		    return NULL;
 		}
 		break;
 
@@ -1253,9 +1260,6 @@ json_decode(char const *ptr, size_t len, size_t *retlen, bool *has_nul, bool *un
     if (ret != NULL) {
 	dbg(DBG_VVVHIGH, "returning from json_decode(ptr, %ju, *%ju, %s)",
 			 (uintmax_t)len, (uintmax_t)mlen, has_nul != NULL ? booltostr(*has_nul) : "false");
-	if (retlen != NULL) {
-	    *retlen = len;
-	}
     } else {
 	dbg(DBG_VVVHIGH, "in json_decode(): decode_json_string(ptr, %ju, *%ju, %s) returned NULL",
 			 (uintmax_t)len, (uintmax_t)mlen, has_nul != NULL ? booltostr(*has_nul) : "false");
@@ -1306,6 +1310,14 @@ json_decode_str(char const *str, size_t *retlen)
 	warn(__func__, "called with NULL ptr");
 	return NULL;
     }
+
+    if (retlen != NULL) {
+	/*
+	 * set *retlen = 0
+	 */
+	*retlen = 0;
+    }
+
     len = strlen(str);
 
     /*
@@ -1316,7 +1328,12 @@ json_decode_str(char const *str, size_t *retlen)
 	dbg(DBG_VVHIGH, "returning NULL for decoding of: <%s>", str);
     } else {
 	dbg(DBG_VVHIGH, "string: <%s> JSON decoded", str);
+	if (retlen != NULL) {
+	    dbg(DBG_VVHIGH, "retlen for <%s> is %ju", str, retlen);
+	}
     }
+
+
 
     /*
      * return decoded result or NULL

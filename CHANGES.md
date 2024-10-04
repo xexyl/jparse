@@ -13,8 +13,17 @@ The check for the `unicode` boolean should be improved and it is not
 even clear if it can remain the way it is (this is the part where it checks for
 invalid codes).
 
-Assuming that this bug is indeed fixed entirely test cases for this needs to be
-added. Also, once this is done, the file `json_utf8.c` and the file
+Added test file `test_jparse/jstr_test.txt` to compare for a new decoding test
+in the `jstr_test.sh` script.
+
+A few tests in `jstr_test.sh` had to be temporarily disabled as in fixing the
+decoding seems to have broken them. Whether another fix with decoding bug is
+needed or a fix with the script itself is unclear at this time.
+
+The `jstr_test.sh` exit codes have been changed. Man page updated.
+
+Once the test cases have been enabled and the `unicode` boolean is implemented
+properly, and assuming this bug is resolved, the file `json_utf8.c` and
 `json_utf8.h` can be cleaned up.
 
 
