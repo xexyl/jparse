@@ -771,9 +771,9 @@ jencchk(void)
 			       mstr, (uintmax_t)mlen2);
 	    not_reached();
 	}
-	if (mlen2 != byte2asciistr[i].dec_len) {
+	if (mlen2 != byte2asciistr[i].decoded_len) {
 	    err(148, __func__, "json_decode_str(<%s>, *mlen2 %ju != %ju, true)",
-			       mstr, (uintmax_t)mlen2, byte2asciistr[i].dec_len);
+			       mstr, (uintmax_t)mlen2, byte2asciistr[i].decoded_len);
 	    not_reached();
 	}
 	if ((uint8_t)(mstr2[0]) != i) {
