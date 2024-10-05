@@ -1,5 +1,12 @@
 # Significant changes in the JSON parser repo
 
+## Release 1.0.20 2024-10-05
+
+Add to `struct byte2asciistr` a `size_t` for the decoded length in order to
+verify the decoded length is correct, since not every byte has the same decoded
+length. This allows us to test the decoded length in the table.
+
+
 ## Release 1.0.19 2024-10-04
 
 Fix the JSON decode bug #13. Using the function `utf8encode()` it appears that
