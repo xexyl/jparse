@@ -827,7 +827,7 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen, boo
     char c = 0;		    /* character to decode or third hex character after \u */
     size_t i;
     int32_t bytes = 0;
-    char *offset = NULL;
+    char *utf8 = NULL;
     int scanned = 0;
 
     /*
@@ -866,7 +866,7 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen, boo
      * decoded string, we already determined that the JSON encoded block of
      * memory is valid.
      */
-    for (i=0, p=offset=ret; i < len; ++i, ++offset) {
+    for (i=0, p=utf8=ret; i < len; ++i, ++utf8) {
 	/*
 	 * paranoia
 	 */
@@ -996,8 +996,16 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen, boo
 		    warn(__func__, "did not read \\uxxxx hex value");
 		    return NULL;
 		}
-		bytes = utf8encode(offset, xa);
-		offset += bytes - 1;
+
+		bytes = utf8encode(utf8, xa);
+		/*
+		 * bytes - 1 because we increment utf8 in the increment phase
+		 * of the loop
+		 */
+		utf8 += bytes - 1;
+		/*
+		 * however, for p we need to update the entire amount
+		 */
 		p += bytes;
 		i += 5;
 
@@ -1210,7 +1218,7 @@ json_decode(char const *ptr, size_t len, size_t *retlen, bool *has_nul, bool *un
 			/* count_utf8_bytes() already warns */
 			return NULL;
 		    }
-		    dbg(DBG_VVHIGH, "bytes: %ju", (uintmax_t)bytes);
+		    dbg(DBG_VVHIGH, "UTF-8 bytes: %ju", (uintmax_t)bytes);
 		    mlen += bytes;
 		    i += 5;
 

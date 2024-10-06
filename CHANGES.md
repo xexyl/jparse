@@ -12,13 +12,18 @@ With this change the `jstr_test.sh` script now passes all tests.
 The above fixes required a modification to `jstr_test.txt` and its change is the
 answer to the above fixes: it had extra bytes in it as all decoding with
 `\uxxxx` did. After that problem was fixed (the `count_utf8_bytes()`) the loop
-had to be fixed so that `offset` is always incremented by 1 (this is why in
-`decode_json_string()` we now have `offset += bytes - 1;` and `p += bytes;`).
+had to be fixed so that `char *utf8` (renamed from `offset`) is always
+incremented by 1 (this is why in `decode_json_string()` we now have `utf8 +=
+bytes - 1;` and `p += bytes;`).
 
 The `byte2asciistr` table had to be updated as obviously some size differences
 occurred.
 
 The JSON parser version has been bumped to `"1.1.7 2024-10-06"`.
+
+The issue #13 is NOT completely resolved as the recent commits do not address
+sequences in `\uxxxx\uxxxx` and it also does not work for every `\uxxxx`
+sequence.
 
 
 ## Release 1.0.20 2024-10-05
