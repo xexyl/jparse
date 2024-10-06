@@ -185,42 +185,36 @@ else
 fi
 
 # test JSON encoding and decoding pipe
-#
-# XXX - test #1 has to be fixed - XXX
-#
-echo "# XXX - test #1 temporarily disabled - XXX" 1>&2
-#echo "$0: about to run test #1"
-#echo "$JSTRENCODE -v $V_FLAG -n < $JSTRENCODE | $JSTRDECODE -v $V_FLAG -n > $TEST_FILE"
+echo "$0: about to run test #1"
+echo "$JSTRENCODE -v $V_FLAG -n < $JSTRENCODE | $JSTRDECODE -v $V_FLAG -n > $TEST_FILE"
 # This warning is not correct in our case:
 #
 # SC2094 (info): Make sure not to read and write the same file in the same pipeline.
 # https://www.shellcheck.net/wiki/SC2094
 # shellcheck disable=SC2094
-#"$JSTRENCODE" -v "$V_FLAG" -n < "$JSTRENCODE" | $JSTRDECODE -v "$V_FLAG" -n > "$TEST_FILE"
-#if cmp -s "$JSTRENCODE" "$TEST_FILE"; then
-#    echo "$0: test #1 passed" 1>&2
-#else
-#    echo "$0: test #1 failed" 1>&2
-#    EXIT_CODE=4
-#fi
+"$JSTRENCODE" -v "$V_FLAG" -n < "$JSTRENCODE" | $JSTRDECODE -v "$V_FLAG" -n > "$TEST_FILE"
+if cmp -s "$JSTRENCODE" "$TEST_FILE"; then
+    echo "$0: test #1 passed" 1>&2
+else
+    echo "$0: test #1 failed" 1>&2
+    EXIT_CODE=4
+fi
 
-# XXX - test #2 has to be fixed - XXX
-echo "# XXX - test #2 temporarily disabled - XXX" 1>&2
-# echo "$0: about to run test #2"
-# echo "$JSTRENCODE -v $V_FLAG -n < $JSTRDECODE | $JSTRDECODE -v $V_FLAG -n > $TEST_FILE"
+echo "$0: about to run test #2"
+echo "$JSTRENCODE -v $V_FLAG -n < $JSTRDECODE | $JSTRDECODE -v $V_FLAG -n > $TEST_FILE"
 # This warning is incorrect in our case:
 #
 # SC2094 (info): Make sure not to read and write the same file in the same pipeline.
 # https://www.shellcheck.net/wiki/SC2094
 # shellcheck disable=SC2094
 #
-#"$JSTRENCODE" -v "$V_FLAG" -n < "$JSTRDECODE" | "$JSTRDECODE" -v "$V_FLAG" -n > "$TEST_FILE"
-#if cmp -s "$JSTRDECODE" "$TEST_FILE"; then
-#    echo "$0: test #2 passed"
-#else
-#    echo "$0: test #2 failed" 1>&2
-#    EXIT_CODE=4
-#fi
+"$JSTRENCODE" -v "$V_FLAG" -n < "$JSTRDECODE" | "$JSTRDECODE" -v "$V_FLAG" -n > "$TEST_FILE"
+if cmp -s "$JSTRDECODE" "$TEST_FILE"; then
+    echo "$0: test #2 passed"
+else
+    echo "$0: test #2 failed" 1>&2
+    EXIT_CODE=4
+fi
 
 # test some text holes in the encoding and decoding pipe
 #
@@ -257,22 +251,16 @@ STATUS=("${PIPESTATUS[@]}")
 # test each part of the pipeline
 #
 
-# XXX - uncomment this once the other part of test #3 is fixed - XXX
-#ERROR=
+ERROR=
 for status in "${STATUS[@]}"; do
     if [[ "$status" -ne 0 ]]; then
 	echo "$0: test #3 failed" 1>&2
 	EXIT_CODE=4
-	# XXX - uncomment this once the other part of test #3 is fixed - XXX
-	#
-	#ERROR=1
+	ERROR=1
 	break
     fi
 done
-# XXX - this part of test #3 has to be fixed - XXX
-#
-echo "# XXX - part of test #3 temporarily disabled - XXX" 1>&2
-#if [[ -z "$ERROR" ]]; then
+if [[ -z "$ERROR" ]]; then
     # We cannot double quote "$SRC_SET" because it would make the shell think it's a
     # single file which of course does not exist by that name as it's actually a
     # list of files. Thus we disable shellcheck check SC2086.
@@ -280,16 +268,16 @@ echo "# XXX - part of test #3 temporarily disabled - XXX" 1>&2
     # SC2086 (info): Double quote to prevent globbing and word splitting.
     # https://www.shellcheck.net/wiki/SC2086
     # shellcheck disable=SC2086
-#    if ! cat $SRC_SET > "$TEST_FILE2"; then
-#	echo "$0: test #3 failed" 1>&2
-#	EXIT_CODE=4
-#    elif cmp -s "$TEST_FILE2" "$TEST_FILE"; then
-#	echo "$0: test #3 passed" 1>&2
-#    else
-#	echo "$0: test #3 failed" 1>&2
-#	EXIT_CODE=4
-#    fi
-#fi
+    if ! cat $SRC_SET > "$TEST_FILE2"; then
+	echo "$0: test #3 failed" 1>&2
+	EXIT_CODE=4
+    elif cmp -s "$TEST_FILE2" "$TEST_FILE"; then
+	echo "$0: test #3 passed" 1>&2
+    else
+	echo "$0: test #3 failed" 1>&2
+	EXIT_CODE=4
+    fi
+fi
 
 echo "$0: about to run test #4" 1>&2
 echo "$JSTRDECODE -Q -n foo bar"

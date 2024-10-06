@@ -71,16 +71,16 @@
 struct byte2asciistr byte2asciistr[JSON_BYTE_VALUES] = {
 
     /* \x00 - \x0f */
-    {0x00, 6, "\\u0000", 2}, {0x01, 6, "\\u0001", 2}, {0x02, 6, "\\u0002", 2}, {0x03, 6, "\\u0003",2},
-    {0x04, 6, "\\u0004", 2}, {0x05, 6, "\\u0005", 2}, {0x06, 6, "\\u0006", 2}, {0x07, 6, "\\u0007",2},
-    {0x08, 2, "\\b", 1}, {0x09, 2, "\\t", 1}, {0x0a, 2, "\\n", 1}, {0x0b, 6, "\\u000b", 2},
-    {0x0c, 2, "\\f", 1}, {0x0d, 2, "\\r", 1}, {0x0e, 6, "\\u000e", 2}, {0x0f, 6, "\\u000f", 2},
+    {0x00, 6, "\\u0000", 2}, {0x01, 6, "\\u0001", 1}, {0x02, 6, "\\u0002", 1}, {0x03, 6, "\\u0003",1},
+    {0x04, 6, "\\u0004", 1}, {0x05, 6, "\\u0005", 1}, {0x06, 6, "\\u0006", 1}, {0x07, 6, "\\u0007",1},
+    {0x08, 2, "\\b", 1}, {0x09, 2, "\\t", 1}, {0x0a, 2, "\\n", 1}, {0x0b, 6, "\\u000b", 1},
+    {0x0c, 2, "\\f", 1}, {0x0d, 2, "\\r", 1}, {0x0e, 6, "\\u000e", 1}, {0x0f, 6, "\\u000f", 1},
 
     /* \x10 - \x1f */
-    {0x10, 6, "\\u0010", 2}, {0x11, 6, "\\u0011", 2}, {0x12, 6, "\\u0012", 2}, {0x13, 6, "\\u0013", 2},
-    {0x14, 6, "\\u0014", 2}, {0x15, 6, "\\u0015", 2}, {0x16, 6, "\\u0016", 2}, {0x17, 6, "\\u0017", 2},
-    {0x18, 6, "\\u0018", 2}, {0x19, 6, "\\u0019", 2}, {0x1a, 6, "\\u001a", 2}, {0x1b, 6, "\\u001b", 2},
-    {0x1c, 6, "\\u001c", 2}, {0x1d, 6, "\\u001d", 2}, {0x1e, 6, "\\u001e", 2}, {0x1f, 6, "\\u001f", 2},
+    {0x10, 6, "\\u0010", 1}, {0x11, 6, "\\u0011", 1}, {0x12, 6, "\\u0012", 1}, {0x13, 6, "\\u0013", 1},
+    {0x14, 6, "\\u0014", 1}, {0x15, 6, "\\u0015", 1}, {0x16, 6, "\\u0016", 1}, {0x17, 6, "\\u0017", 1},
+    {0x18, 6, "\\u0018", 1}, {0x19, 6, "\\u0019", 1}, {0x1a, 6, "\\u001a", 1}, {0x1b, 6, "\\u001b", 1},
+    {0x1c, 6, "\\u001c", 1}, {0x1d, 6, "\\u001d", 1}, {0x1e, 6, "\\u001e", 1}, {0x1f, 6, "\\u001f", 1},
 
     /* \x20 - \x2f */
     {' ', 1, " ", 1}, {'!', 1, "!", 1}, {'"', 2, "\\\"", 1}, {'#', 1, "#", 1},
@@ -116,7 +116,7 @@ struct byte2asciistr byte2asciistr[JSON_BYTE_VALUES] = {
     {'p', 1, "p", 1}, {'q', 1, "q", 1}, {'r', 1, "r", 1}, {'s', 1, "s", 1},
     {'t', 1, "t", 1}, {'u', 1, "u", 1}, {'v', 1, "v", 1}, {'w', 1, "w", 1},
     {'x', 1, "x", 1}, {'y', 1, "y", 1}, {'z', 1, "z", 1}, {'{', 1, "{", 1},
-    {'|', 1, "|", 1}, {'}', 1, "}", 1}, {'~', 1, "~", 1}, {0x7f, 6, "\\u007f", 2},
+    {'|', 1, "|", 1}, {'}', 1, "}", 1}, {'~', 1, "~", 1}, {0x7f, 6, "\\u007f", 1},
 
     /* \x80 - \x8f */
     {0x80, 1, "\x80", 1}, {0x81, 1, "\x81", 1}, {0x82, 1, "\x82", 1}, {0x83, 1, "\x83", 1},
@@ -866,7 +866,7 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen, boo
      * decoded string, we already determined that the JSON encoded block of
      * memory is valid.
      */
-    for (i=0, p=offset=ret; i < len; ++i) {
+    for (i=0, p=offset=ret; i < len; ++i, ++offset) {
 	/*
 	 * paranoia
 	 */
@@ -997,9 +997,8 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen, boo
 		    return NULL;
 		}
 		bytes = utf8encode(offset, xa);
-		offset += bytes;
-		*offset = '\0';
-		p += bytes - 1;
+		offset += bytes - 1;
+		p += bytes;
 		i += 5;
 
 		break;
@@ -1043,9 +1042,6 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen, boo
     return ret;
 }
 
-
-
-
 /*
  * json_decode - return the decoding of a JSON encoded block of memory
  *
@@ -1072,6 +1068,7 @@ json_decode(char const *ptr, size_t len, size_t *retlen, bool *has_nul, bool *un
     char c = 0;		    /* character to decode or third hex character after \u */
     char d = 0;		    /* fourth hex character after \u */
     size_t i;
+    size_t bytes = 0;	    /* for count_utf8_bytes() */
 
     /*
      * firewall
@@ -1181,6 +1178,11 @@ json_decode(char const *ptr, size_t len, size_t *retlen, bool *has_nul, bool *un
 	    case 'u':
 
 		/*
+		 * Yes, count_utf8_bytes() also makes the below checks but we
+		 * still do these here.
+		 */
+
+		/*
 		 * there must be at least five more characters beyond \
 		 */
 		if (i+5 >= len) {
@@ -1200,22 +1202,16 @@ json_decode(char const *ptr, size_t len, size_t *retlen, bool *has_nul, bool *un
 		 * the next 4 characters beyond \u must be hex characters
 		 */
 		if (isxdigit(a) && isxdigit(b) && isxdigit(c) && isxdigit(d)) {
-		    /*
-		     * case: \u00xx is 2 bytes
-		     */
-		    if (a == '0' && b == '0') {
-			if (has_nul != NULL) {
-			    *has_nul = true; /* set has_nul to true */
+		    bytes = 0; /* reset bytes */
+		    if (!count_utf8_bytes(ptr + i, &bytes)) {
+			if (retlen != NULL) {
+			    *retlen = 0;
 			}
-			mlen += 2;
-		    } else {
-			/*
-			 * UTF-8 bytes can be between 1 and 4 bytes long so to make it
-			 * easy we just add 4, if it is not \u00xx.
-			 */
-			mlen += 4;
+			/* count_utf8_bytes() already warns */
+			return NULL;
 		    }
-
+		    dbg(DBG_VVHIGH, "bytes: %ju", (uintmax_t)bytes);
+		    mlen += bytes;
 		    i += 5;
 
 		    break;
@@ -1322,7 +1318,7 @@ json_decode_str(char const *str, size_t *retlen)
     } else {
 	dbg(DBG_VVHIGH, "string: <%s> JSON decoded", str);
 	if (retlen != NULL) {
-	    dbg(DBG_VVHIGH, "retlen for <%s> is %ju", str, retlen);
+	    dbg(DBG_VVHIGH, "retlen for <%s> is %ju", str, *retlen);
 	}
     }
 

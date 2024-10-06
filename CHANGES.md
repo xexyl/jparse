@@ -1,5 +1,26 @@
 # Significant changes in the JSON parser repo
 
+## Release 1.0.21 2024-10-06
+
+Fix test cases in `jstr_test.sh`. Extra bytes were being written due to the way
+the size of the decoded string was being calculated. Instead a new function is
+in `json_utf8.c` called `count_utf8_bytes()`. This does the same sanity checks
+(though slightly different) in `json_decode()`. As well the for loop had to be
+fixed (the increment stage and the `\uxxxx` parsing) in `decode_json_string()`.
+With this change the `jstr_test.sh` script now passes all tests.
+
+The above fixes required a modification to `jstr_test.txt` and its change is the
+answer to the above fixes: it had extra bytes in it as all decoding with
+`\uxxxx` did. After that problem was fixed (the `count_utf8_bytes()`) the loop
+had to be fixed so that `offset` is always incremented by 1 (this is why in
+`decode_json_string()` we now have `offset += bytes - 1;` and `p += bytes;`).
+
+The `byte2asciistr` table had to be updated as obviously some size differences
+occurred.
+
+The JSON parser version has been bumped to `"1.1.7 2024-10-06"`.
+
+
 ## Release 1.0.20 2024-10-05
 
 Add to `struct byte2asciistr` a `size_t` for the decoded length in order to
