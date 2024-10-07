@@ -7,6 +7,7 @@ messages (when more than one failure) and don't prefix each file/string with
 `FILE:`/`STRING:` as this is redundant due to how it is displayed. Updated
 script to version `1.0.7 2024-10-07`.
 
+Add `dbg()` calls to `utf8encode()`.
 
 ## Release 1.0.21 2024-10-06
 
