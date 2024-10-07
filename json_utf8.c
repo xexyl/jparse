@@ -203,18 +203,19 @@ utf8encode(char *str, unsigned int val)
     }
 
     if (val < 0x80) {
+	dbg(DBG_MED, "%s: val: %ju < 0x80", __func__, (uintmax_t)val);
 	str[0] = val;
 	len = 1;
-	dbg(DBG_MED, "%s: val: %ju < 0x80", __func__, (uintmax_t)val);
     } else if (val < 0x800) {
+	dbg(DBG_MED, "%s: val: %ju < 0x800", __func__, (uintmax_t)val);
 	str[1] = val & UTF8_V_MASK;
 	str[1] |= UTF8_N_BITS;
 	val >>= UTF8_V_SHIFT;
 	str[0] = val;
 	str[0] |= UTF8_2_BITS;
 	len = 2;
-	dbg(DBG_MED, "%s: val: %ju < 0x800", __func__, (uintmax_t)val);
     } else if (val < 0x10000) {
+	dbg(DBG_MED, "%s: val: %ju < 0x10000", __func__, (uintmax_t)val);
 	str[2] = val & UTF8_V_MASK;
 	str[2] |= UTF8_N_BITS;
 	val >>= UTF8_V_SHIFT;
@@ -224,8 +225,8 @@ utf8encode(char *str, unsigned int val)
 	str[0] = val;
 	str[0] |= UTF8_3_BITS;
 	len = 3;
-	dbg(DBG_MED, "%s: val: %ju < 0x10000", __func__, (uintmax_t)val);
     } else if (val < 0x110000) {
+	dbg(DBG_MED, "%s: val: %ju < 0x110000", __func__, (uintmax_t)val);
 	str[3] = val & UTF8_V_MASK;
 	str[3] |= UTF8_N_BITS;
 	val >>= UTF8_V_SHIFT;
@@ -238,7 +239,6 @@ utf8encode(char *str, unsigned int val)
 	str[0] = val;
 	str[0] |= UTF8_4_BITS;
 	len = 4;
-	dbg(DBG_MED, "%s: val: %ju < 0x110000", __func__, (uintmax_t)val);
     } else {
 	err(11, __func__, "%#x: illegal val\n", val);
 	not_reached();
