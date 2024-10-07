@@ -1,5 +1,13 @@
 # Significant changes in the JSON parser repo
 
+## Release 1.0.22 2024-10-07
+
+Improve `test_jparse/jparse_test.sh`. Don't show blank line at top of failure
+messages (when more than one failure) and don't prefix each file/string with
+`FILE:`/`STRING:` as this is redundant due to how it is displayed. Updated
+script to version `1.0.7 2024-10-07`.
+
+
 ## Release 1.0.21 2024-10-06
 
 Fix test cases in `jstr_test.sh`. Extra bytes were being written due to the way
