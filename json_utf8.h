@@ -166,7 +166,6 @@ typedef struct utf8_info
 #define UNI_SUR_LOW_END     0xDFFF
 
 /* Reject surrogates. */
-
 #define REJECT_SURROGATE(ucs2)						\
     if (ucs2 >= UNI_SUR_HIGH_START && ucs2 <= UNI_SUR_LOW_END) {	\
 	/* Ill-formed. */						\
@@ -183,7 +182,6 @@ typedef struct utf8_info
 #define HALF_BASE 0x0010000UL
 /* 0b1111111111 */
 #define LOW_TEN_BITS 0x3FF
-
 
 /*
  * The maximum number of bytes we need to contain any Unicode code point as

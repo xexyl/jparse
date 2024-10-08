@@ -216,7 +216,7 @@ count_utf8_bytes(const char *str, int32_t surrogate, size_t *bytes)
 int
 utf8encode(char *str, unsigned int val)
 {
-    int len;
+    int len = -1;
 
     /*
      * firewall
@@ -226,12 +226,24 @@ utf8encode(char *str, unsigned int val)
 	not_reached();
     }
 
-    if (val < 0x80) {
-	dbg(DBG_MED, "%s: val: %ju < 0x80", __func__, (uintmax_t)val);
+    if (val >= UNI_NOT_CHAR_MIN && val <= UNI_NOT_CHAR_MAX) {
+	warn(__func__, "invalid codepoint: %X", val);
+	len = UNICODE_NOT_CHARACTER;
+    } else if ((val & 0xFFFF) >= 0xFFFE) {
+	warn(__func__, "codepoint %X: ends in either FFFE or FFFF", val);
+	len = UNICODE_NOT_CHARACTER;
+    } else if (val == 0xFF || val == 0xFE) {
+	warn(__func__, "codepoint: %X: illegal value", val);
+	len = UNICODE_NOT_CHARACTER;
+    } else if (val >= UNI_SUR_HIGH_START && val <= UNI_SUR_LOW_END) {
+	warn(__func__, "codepoint: %X: illegal surrogate");
+	len = UNICODE_SURROGATE_PAIR;
+    } else if (val < 0x80) {
+	dbg(DBG_MED, "%s: val: %X < 0x80", __func__, (uintmax_t)val);
 	str[0] = val;
 	len = 1;
     } else if (val < 0x800) {
-	dbg(DBG_MED, "%s: val: %ju < 0x800", __func__, (uintmax_t)val);
+	dbg(DBG_MED, "%s: val: %X < 0x800", __func__, (uintmax_t)val);
 	str[1] = val & UTF8_V_MASK;
 	str[1] |= UTF8_N_BITS;
 	val >>= UTF8_V_SHIFT;
@@ -239,7 +251,7 @@ utf8encode(char *str, unsigned int val)
 	str[0] |= UTF8_2_BITS;
 	len = 2;
     } else if (val < 0x10000) {
-	dbg(DBG_MED, "%s: val: %ju < 0x10000", __func__, (uintmax_t)val);
+	dbg(DBG_MED, "%s: val: %X < 0x10000", __func__, (uintmax_t)val);
 	str[2] = val & UTF8_V_MASK;
 	str[2] |= UTF8_N_BITS;
 	val >>= UTF8_V_SHIFT;
@@ -250,7 +262,7 @@ utf8encode(char *str, unsigned int val)
 	str[0] |= UTF8_3_BITS;
 	len = 3;
     } else if (val < 0x110000) {
-	dbg(DBG_MED, "%s: val: %ju < 0x110000", __func__, (uintmax_t)val);
+	dbg(DBG_MED, "%s: val: %X < 0x110000", __func__, (uintmax_t)val);
 	str[3] = val & UTF8_V_MASK;
 	str[3] |= UTF8_N_BITS;
 	val >>= UTF8_V_SHIFT;
@@ -264,7 +276,7 @@ utf8encode(char *str, unsigned int val)
 	str[0] |= UTF8_4_BITS;
 	len = 4;
     } else {
-	err(11, __func__, "%#x: illegal val\n", val);
+	err(11, __func__, "%#X: illegal val\n", val);
 	not_reached();
     }
     return len;
@@ -378,6 +390,7 @@ int32_t
 utf8_bytes (uint8_t c)
 {
     int32_t r;
+
     r = utf8_sequence_len[c];
     if (r == 0) {
 	return UTF8_BAD_LEADING_BYTE;

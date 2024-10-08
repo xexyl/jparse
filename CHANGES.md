@@ -45,6 +45,21 @@ know every function we will have to keep.
 
 `^` The above is the line.
 
+Reject certain UTF-8 codepoints. It is believed that issue #13 might be resolved
+fully. Codepoints that were thought to be valid but not displayed might be
+because they are not printable at the console. In a web page the following:
+
+```html
+&#x1e;
+```
+
+shows something but pasting it into this document shows nothing at all.
+
+It is possible that #13 is not completely resolved but it seems in good shape at
+this time, anyway, and unless something comes up, it might be declared good,
+except that the files `json_utf8.[hc]` could be cleaned up to not have what we
+do not need.
+
 
 ## Release 1.0.22 2024-10-07
 

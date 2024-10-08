@@ -997,6 +997,18 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen, boo
 		     * was not another \uxxxx
 		     */
 		    bytes = utf8encode(utf8, xa);
+		    if (bytes < 0) {
+			/* error - clear allocated length and free buffer */
+			if (retlen != NULL) {
+			    *retlen = 0;
+			}
+			if (ret != NULL) {
+			    free(ret);
+			    ret = NULL;
+			}
+			/* utf8encode warns on error */
+			return NULL;
+		    }
 		    /*
 		     * bytes - 1 because we increment utf8 in the increment phase
 		     * of the loop
@@ -1027,6 +1039,19 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen, boo
 		    }
 
 		    bytes = utf8encode(utf8, surrogate);
+		    if (bytes < 0) {
+			/* error - clear allocated length and free buffer */
+			if (retlen != NULL) {
+			    *retlen = 0;
+			}
+			if (ret != NULL) {
+			    free(ret);
+			    ret = NULL;
+			}
+			/* utf8encode warns on error */
+			return NULL;
+		    }
+
 		    /*
 		     * we skip 11 forwards because 5 (like above) +
 		     * LITLEN("\\uxxxx") is 11.
