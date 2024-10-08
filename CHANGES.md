@@ -1,5 +1,40 @@
 # Significant changes in the JSON parser repo
 
+## Release 1.0.23 2024-10-08
+
+Fix surrogate pair decoding in `json_decode()` / `decode_json_string()`. Now one
+can do for example:
+
+```sh
+jstrdecode "\ud834\udd1e"
+```
+
+(which is UTF-16 as `U+1D11E`) and expect to get:
+
+```
+𝄞
+```
+
+or:
+
+```sh
+jstrdecode "\ud834\udd1ef"
+```
+
+and get:
+
+```
+𝄞f
+```
+
+At this time the only issue with JSON decoding that I am aware of is with
+characters that are `!isprint()`. Once that is resolved I believe that #13 will
+be resolved.
+
+Updated versions of `jstrencode`, `jstrdecode` and the JSON parser library for
+this fix.
+
+
 ## Release 1.0.22 2024-10-07
 
 Improve `test_jparse/jparse_test.sh`. Don't show blank line at top of failure

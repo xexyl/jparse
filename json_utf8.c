@@ -27,23 +27,25 @@
  *
  * given:
  *
- *	str	the string to parse
- *	bytes	pointer to the number of bytes
+ *	str	    the string to parse
+ *	surrogate   if str == NULL then use this for the check
+ *	bytes	    pointer to the number of bytes
  *
- * NOTE: if either str or count is NULL we return false. Otherwise we attempt to
+ * NOTE: if count is NULL we return false. Otherwise we attempt to
  * parse the string as %4x and then, assuming we extract a value, we count the
- * number of bytes required for the string and place it in *count. As long as
- * this can be done we return true.
+ * number of bytes required for the string and place it in *count, as long as
+ * str != NULL. If, however str is NULL, we will simply check the value in
+ * surrogate.  As long as this can be done we return true.
  *
  * NOTE: *str should point to the \u!
  */
 bool
-count_utf8_bytes(const char *str, size_t *bytes)
+count_utf8_bytes(const char *str, int32_t surrogate, size_t *bytes)
 {
-    unsigned char xa = 0;    /* first hex digit */
-    unsigned char xb = 0;    /* second hex digit */
-    unsigned char xc = 0;    /* third hex digit */
-    unsigned char xd = 0;    /* fourth hex digit */
+    unsigned char xa = 0;   /* first hex digit */
+    unsigned char xb = 0;   /* second hex digit */
+    unsigned char xc = 0;   /* third hex digit */
+    unsigned char xd = 0;   /* fourth hex digit */
     unsigned int x = 0;	    /* the hex value we attempt to extract */
     size_t len = 0;	    /* the number of bytes which *bytes will be set to */
     int scanned = 0;	    /* how many values read */
@@ -60,14 +62,35 @@ count_utf8_bytes(const char *str, size_t *bytes)
     }
 
     if (str == NULL) {
-	warn(__func__, "str is NULL");
+	x = surrogate;
+	if (x < 0x80) {
+	    len = 1;
+	} else if (x < 0x800) {
+	    len = 2;
+	} else if (x < 0x10000) {
+	    len = 3;
+	} else if (x < 0x110000) {
+	    len = 4;
+	} else {
+	    warn(__func__, "%x: illegal value\n", x);
+
+	    if (bytes != NULL) {
+		*bytes = 0;
+	    }
+
+	    return false;
+	}
 
 	if (bytes != NULL) {
-	    *bytes = 0;
+	    *bytes = len;
 	}
-	return false;
+
+	return true;
     }
 
+    /*
+     * if we get here we know str != NULL
+     */
     scanned = sscanf(str, "\\u%c%c%c%c", &xa, &xb, &xc, &xd);
     if (scanned != 4) {
 	warn(__func__, "did not find \\u followed by four HEX digits: %ju values: <%s>: %x %x %x %x", scanned, str,

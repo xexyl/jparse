@@ -33,7 +33,7 @@
  */
 #include "util.h"
 
-extern bool count_utf8_bytes(const char *str, size_t *bytes);
+extern bool count_utf8_bytes(const char *str, int32_t surrogate, size_t *bytes);
 
 /*
  * NOTE: until the bug documented at https://github.com/xexyl/jparse/issues/13
