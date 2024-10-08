@@ -991,7 +991,7 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen, boo
 
 		    warn(__func__, "reached EOF trying to scan for hex bytes");
 		    return NULL;
-		} else if (scanned == 1) {
+		} else if (scanned == 1 || (scanned == 2 && surrogates_to_unicode(xa, xb) < 0)) {
 		    /*
 		     * no possible surrogate pair found so proceed like there
 		     * was not another \uxxxx
@@ -1248,7 +1248,7 @@ json_decode(char const *ptr, size_t len, size_t *retlen, bool *has_nul, bool *un
 
 		    warn(__func__, "reached EOF trying to scan for hex bytes");
 		    return NULL;
-		} else if (scanned == 1) {
+		} else if (scanned == 1 || (scanned == 2 && surrogates_to_unicode(xa, xb) < 0)) {
 		    surrogate = xa;
 		    bytes = 0; /* reset bytes */
 		    if (!count_utf8_bytes(ptr + i, surrogate, &bytes)) {
@@ -1259,7 +1259,7 @@ json_decode(char const *ptr, size_t len, size_t *retlen, bool *has_nul, bool *un
 			return NULL;
 		    }
 		    dbg(DBG_VVHIGH, "UTF-8 bytes: %ju", (uintmax_t)bytes);
-		    mlen += bytes+1;
+		    mlen += bytes;
 		    i += 5;
 		} else if (scanned == 2) {
 		    /*
