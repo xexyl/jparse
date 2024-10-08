@@ -70,10 +70,11 @@
 
 # setup
 #
-export JPARSE_TEST_VERSION="1.0.7 2024-10-07"	    # version format: major.minor YYYY-MM-DD */
+export JPARSE_TEST_VERSION="1.0.8 2024-10-08"	    # version format: major.minor YYYY-MM-DD */
 export CHK_TEST_FILE="./test_jparse/json_teststr.txt"
 export CHK_INVALID_TEST_FILE="./test_jparse/json_teststr_fail.txt"
 export JPARSE_JSON="./jparse.json"
+export JPARSE_JSON_FOUND=1
 export JPARSE="./jparse"
 export PRINT_TEST="./test_jparse/print_test"
 export JSON_TREE="./test_jparse/test_JSON"
@@ -378,16 +379,13 @@ fi
 # make sure jparse.json exists
 #
 if [[ ! -e "$JPARSE_JSON" ]]; then
-    echo "$0: ERROR: $JPARSE_JSON does not exist" 1>&2
-    exit 7
+    JPARSE_JSON_FOUND=0
 fi
 if [[ ! -f "$JPARSE_JSON" ]]; then
-    echo "$0: ERROR: $JPARSE_JSON not a regular file" 1>&2
-    exit 7
+    JPARSE_JSON_FOUND=0
 fi
 if [[ ! -r "$JPARSE_JSON" ]]; then
-    echo "$0: ERROR: $JPARSE_JSON not a readable file" 1>&2
-    exit 7
+    JPARSE_JSON_FOUND=0
 fi
 
 # We need a file to write the output of jparse to in order to compare it
@@ -942,8 +940,10 @@ if [[ -n "$D_FLAG" ]]; then
     fi
 fi
 
-# run test on jparse.json
-run_file_test "$JPARSE" "$DBG_LEVEL" "$JSON_DBG_LEVEL" "$Q_FLAG" "$JPARSE_JSON" pass
+# run test on jparse.json if found
+if [[ "$JPARSE_JSON_FOUND" -eq 1 ]]; then
+    run_file_test "$JPARSE" "$DBG_LEVEL" "$JSON_DBG_LEVEL" "$Q_FLAG" "$JPARSE_JSON" pass
+fi
 
 # run print_test tool if -p used
 if [[ -n "$PRINT_TEST_FLAG_USED" ]]; then
