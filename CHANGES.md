@@ -62,6 +62,10 @@ do not need.
 
 Add more encode/decode tests to `test_jparse/jstr_test.sh`.
 
+Greatly simplify `json_utf8.[hc]` by removing code/macros not needed. It might
+be possible to further reduce it but that will depend on at least one question
+that still has to be thought out.
+
 
 ## Release 1.0.22 2024-10-07
 
