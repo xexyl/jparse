@@ -34,6 +34,17 @@ be resolved.
 Updated versions of `jstrencode`, `jstrdecode` and the JSON parser library for
 this fix.
 
+Formatted `json_utf8.[hc]` a bit. This includes removing duplicate `#define`s
+and formatting comments. This does not include the changing of `type*` to `type
+*` as much as we want that. A line has to be drawn somewhere, and we don't even
+know every function we will have to keep.
+
+```
+-----------------
+```
+
+`^` The above is the line.
+
 
 ## Release 1.0.22 2024-10-07
 

@@ -125,44 +125,171 @@ extern int utf8encode(char *str, unsigned int val);
  *	Ben Bullock <benkasminbullock@gmail.com>, <bkb@cpan.org>
  */
 
+typedef struct utf8_info
+{
+    int32_t len_read;
+    int32_t runes_read;
+} utf8_info_t;
 
+#define FAIL(x)				\
+    info->len_read = i;			\
+    return x
+/*
+ * This macro converts four bytes of UTF-8 into the corresponding code point.
+ */
+#define FOUR(x)							\
+      (((int32_t) (x[0] & 0x07)) << 18)				\
+    | (((int32_t) (x[1] & 0x3F)) << 12)				\
+    | (((int32_t) (x[2] & 0x3F)) <<  6)				\
+    | (((int32_t) (x[3] & 0x3F)))
+
+/* Reject code points which end in either FFFE or FFFF. */
+#define REJECT_FFFF(x)				\
+    if ((x & 0xFFFF) >= 0xFFFE) {		\
+	return UNICODE_NOT_CHARACTER;		\
+    }
+/* Reject code points in a certain range. */
+#define REJECT_NOT_CHAR(r)					\
+    if (r >= UNI_NOT_CHAR_MIN && r <= UNI_NOT_CHAR_MAX) {	\
+	return UNICODE_NOT_CHARACTER;				\
+    }
+
+#define REJECT_FE_FF(c)				\
+    if (c == 0xFF || c == 0xFE) {		\
+	return UNICODE_NOT_CHARACTER;		\
+    }
+
+/* Surrogate pair zone. */
+#define UNI_SUR_HIGH_START  0xD800
+#define UNI_SUR_HIGH_END    0xDBFF
+#define UNI_SUR_LOW_START   0xDC00
+#define UNI_SUR_LOW_END     0xDFFF
+
+/* Reject surrogates. */
+
+#define REJECT_SURROGATE(ucs2)						\
+    if (ucs2 >= UNI_SUR_HIGH_START && ucs2 <= UNI_SUR_LOW_END) {	\
+	/* Ill-formed. */						\
+	return UNICODE_SURROGATE_PAIR;					\
+    }
+
+/* Start of the "not character" range. */
+#define UNI_NOT_CHAR_MIN    0xFDD0
+/* End of the "not character" range. */
+#define UNI_NOT_CHAR_MAX    0xFDEF
+
+/* For shifting by 10 bits. */
+#define TEN_BITS 10
+#define HALF_BASE 0x0010000UL
+/* 0b1111111111 */
+#define LOW_TEN_BITS 0x3FF
+
+
+/*
+ * The maximum number of bytes we need to contain any Unicode code point as
+ * UTF-8 as a C string. This length includes one trailing nul byte.
+ */
 #define UTF8_MAX_LENGTH 5
+/*
+ * The maximum possible value of a Unicode code point. See
+ * http://www.cl.cam.ac.uk/~mgk25/unicode.html#ucs.
+ */
 #define UNICODE_MAXIMUM 0x10ffff
+/* The maximum possible value which will fit into four bytes of UTF-8. This is
+ * larger than UNICODE_MAXIMUM.
+ */
 #define UNICODE_UTF8_4 0x1fffff
+/*
+ * This return value indicates the successful completion of a routine which
+ * doesn't use the return value to communicate data back to the caller.
+ */
 #define UNICODE_OK 0
+/*
+ * This return value means that the leading byte of a UTF-8 sequence was not
+ * valid.
+ */
 #define UTF8_BAD_LEADING_BYTE -1
+/*
+ * This return value means the caller attempted to turn a code point for a
+ * surrogate pair to or from UTF-8.
+ */
 #define UNICODE_SURROGATE_PAIR -2
+/*
+ * This return value means that code points which did not form a surrogate pair
+ * were tried to be converted into a code point as if they were a surrogate
+ * pair.
+ */
 #define UNICODE_NOT_SURROGATE_PAIR -3
+/*
+ * This return value means that input which was supposed to be UTF-8 encoded
+ * contained an invalid continuation byte. If the leading byte of a UTF-8
+ * sequence is not valid, UTF8_BAD_LEADING_BYTE is returned instead of this.
+ */
 #define UTF8_BAD_CONTINUATION_BYTE -4
+/*
+ * This return value indicates a zero byte was found in a string which was
+ * supposed to contain UTF-8 bytes. It is returned only by the functions which
+ * are documented as not allowing zero bytes.
+ */
 #define UNICODE_EMPTY_INPUT -5
+/*
+ * This return value indicates that UTF-8 bytes were not in the shortest
+ * possible form. See http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8.  This
+ * return value is currently unused. If a character is not in the shortest form,
+ * the error UTF8_BAD_CONTINUATION_BYTE is returned.
+ */
 #define UTF8_NON_SHORTEST -6
+/*
+ * This return value indicates that there was an attempt to convert a code point
+ * which was greater than UNICODE_MAXIMUM or UNICODE_UTF8_4 into UTF-8 bytes.
+ */
 #define UNICODE_TOO_BIG -7
+/*
+ * This return value indicates that the Unicode code-point ended with either
+ * 0xFFFF or 0xFFFE, meaning it cannot be used as a character code point, or it
+ * was in the disallowed range FDD0 to FDEF.
+ */
 #define UNICODE_NOT_CHARACTER -8
+/*
+ * This return value indicates that the UTF-8 is valid. It is only used by
+ * "valid_utf8".
+ */
 #define UTF8_VALID 1
+/*
+ * This return value indicates that the UTF-8 is not valid. It is only used by
+ * "valid_utf8".
+ */
 #define UTF8_INVALID 0
 
 extern const uint8_t utf8_sequence_len[];
 
-int32_t utf8_bytes (uint8_t c);
+/*
+ * All of the functions in this library return an "int32_t". Negative values are
+ * used to indicate errors.
+ */
+extern int32_t utf8_bytes (uint8_t c);
+extern int32_t utf8_no_checks (const uint8_t* input, const uint8_t** end_ptr);
+extern int32_t utf8_to_ucs2 (const uint8_t* input, const uint8_t** end_ptr);
+extern int32_t ucs2_to_utf8 (int32_t ucs2, uint8_t* utf8);
+extern int32_t unicode_to_surrogates (int32_t unicode, int32_t* hi_ptr, int32_t* lo_ptr);
+extern int32_t surrogates_to_unicode (int32_t hi, int32_t lo);
+extern int32_t surrogate_to_utf8 (int32_t hi, int32_t lo, uint8_t* utf8);
+extern int32_t unicode_chars_to_bytes (const uint8_t* utf8, int32_t n_chars);
+extern int32_t unicode_count_chars_fast (const uint8_t* utf8);
+extern int32_t unicode_count_chars (const uint8_t* utf8);
 
-int32_t utf8_no_checks (const uint8_t* input, const uint8_t** end_ptr);
-
-int32_t utf8_to_ucs2 (const uint8_t* input, const uint8_t** end_ptr);
-
-int32_t ucs2_to_utf8 (int32_t ucs2, uint8_t* utf8);
-
-int32_t unicode_to_surrogates (int32_t unicode, int32_t* hi_ptr, int32_t* lo_ptr);
-
-int32_t surrogates_to_unicode (int32_t hi, int32_t lo);
-
-int32_t surrogate_to_utf8 (int32_t hi, int32_t lo, uint8_t* utf8);
-
-int32_t unicode_chars_to_bytes (const uint8_t* utf8, int32_t n_chars);
-
-int32_t unicode_count_chars_fast (const uint8_t* utf8);
-
-int32_t unicode_count_chars (const uint8_t* utf8);
-
+/*
+ * These are intended for use in switch statements, for example:
+ *
+ *	switch (c)
+ *	{
+ *	    case BYTE_80_8F:
+ *	    do_something;
+ *	    break;
+ *	}
+ *
+ * They originally come from the Json3 project.
+ */
 #define BYTE_80_8F							\
     0x80: case 0x81: case 0x82: case 0x83: case 0x84: case 0x85: case 0x86: \
  case 0x87: case 0x88: case 0x89: case 0x8A: case 0x8B: case 0x8C: case 0x8D: \
@@ -238,21 +365,17 @@ int32_t unicode_count_chars (const uint8_t* utf8);
 #define BYTE_F1_F3				\
     0xF1: case 0xF2: case 0xF3
 
-int32_t valid_utf8 (const uint8_t* input, int32_t input_length);
+#define UNICODEADDBYTE i++
+#define UNICODEFAILUTF8(want) return UTF8_INVALID
+#define UNICODENEXTBYTE c = input[i]
 
-typedef struct utf8_info
-{
-    int32_t len_read;
-    int32_t runes_read;
-}
-utf8_info_t;
+extern int32_t valid_utf8 (const uint8_t* input, int32_t input_length);
+
+
 
 int32_t validate_utf8 (const uint8_t* input, int32_t len, utf8_info_t* info);
-
 int32_t trim_to_utf8_start (const uint8_t** ptr);
-
 const char* unicode_code_to_error (int32_t code);
-
 /*
  * The above is from https://github.com/benkasminbullock/unicode-c/, which is 'a
  * Unicode library in the programming language C which deals with conversions to
