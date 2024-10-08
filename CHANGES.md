@@ -60,6 +60,8 @@ this time, anyway, and unless something comes up, it might be declared good,
 except that the files `json_utf8.[hc]` could be cleaned up to not have what we
 do not need.
 
+Add more encode/decode tests to `test_jparse/jstr_test.sh`.
+
 
 ## Release 1.0.22 2024-10-07
 
