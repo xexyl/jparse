@@ -14,6 +14,10 @@ some of the versions and the others could be bumped up to it without any harm.
 Do a final clean up of `json_utf8.[ch]`: removed all unnecessary code and macros
 as well as clean up comments.
 
+Added a `JPARSE_UTF8_VERSION` in order to keep track of the current UTF-8 code.
+Set this version to the same as the other versions at this time: `1.2.0
+2024-10-09`.
+
 
 ## Release 1.0.23 2024-10-08
 

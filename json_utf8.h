@@ -129,4 +129,8 @@ extern int32_t surrogates_to_unicode (int32_t hi, int32_t lo);
  *	Ben Bullock <benkasminbullock@gmail.com>, <bkb@cpan.org>
  */
 
+/*
+ * -=-=-=---=-=-=-=-=-=-=-=-=-=-=-=---=-=-=-=-=-=-=-=-=-=-=-=---=-=-=-=-=-=-=-=-= 
+ */
+
 #endif /* INCLUDE_JSON_UTF8_H */
