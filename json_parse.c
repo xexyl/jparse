@@ -1016,6 +1016,10 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen)
 		     * however, for p we need to update the entire amount
 		     */
 		    p += bytes;
+		    /*
+		     * we increment by 5 because LITLEN("uxxxx") is 5: the for() loop
+		     * increments by 1 at the increment/update phase.
+		     */
 		    i += 5;
 		} else if (scanned == 2) {
 		    /*
@@ -1046,12 +1050,12 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen)
 			    free(ret);
 			    ret = NULL;
 			}
-			/* utf8encode warns on error */
+			/* utf8encode() warns on error */
 			return NULL;
 		    }
 
 		    /*
-		     * we skip 11 forwards because 5 (like above) +
+		     * we increment by 11 because LITLEN("uxxxx") +
 		     * LITLEN("\\uxxxx") is 11.
 		     */
 		    i += 11;
