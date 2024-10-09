@@ -11,6 +11,9 @@ Update all tools and the release to be the same version after issue #13 was
 resolved: `1.2.0 2024-10-09`. `1.2.0` was chosen because it was the first one >
 some of the versions and the others could be bumped up to it without any harm.
 
+Do a final clean up of `json_utf8.[ch]`: removed all unnecessary code and macros
+as well as clean up comments.
+
 
 ## Release 1.0.23 2024-10-08
 
