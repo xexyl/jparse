@@ -17,6 +17,10 @@ jparse UTF-8 version as well as the tool's version and the library version. The
 string format of the library version has been changed too (it now shows:
 `"jparse library version: %s"`).
 
+Improve the way `utf8len()` works. It now returns a `size_t` and the `size_t
+*bytes` was removed from it. Returns `-1` if an error occurs. This better fits
+the name and purpose of the function.
+
 
 ## Release 1.2.0 2024-10-09
 
