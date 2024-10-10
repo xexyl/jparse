@@ -1285,4 +1285,4 @@ jstrdecode.o: jparse.h jparse.tab.h json_parse.h json_sem.h json_utf8.h \
 jstrencode.o: jparse.h jparse.tab.h json_parse.h json_sem.h json_utf8.h \
     json_util.h jstr_util.h jstrencode.c jstrencode.h util.h version.h
 util.o: util.c util.h
-verge.o: util.h verge.c verge.h version.h
+verge.o: json_utf8.h util.h verge.c verge.h version.h

@@ -7,6 +7,16 @@ the command line should be read as actual full JSON documents, rather than JSON
 blobs per line. In this case `stdin` is **NOT** read! The file `jparse.json` is
 now controlled this way.
 
+Added new function `jdecencchk()` to `json_parse.c` which `jstrencode` and
+`jstrdecode` use with the `-t` option. Beware of the dragon!
+
+Changed `JSON_PARSER_VERSION` to `JPARSE_LIBRARY_VERSION`.
+
+The `-V` and `-h` option of all tools (compiled tools, not scripts) now show the
+jparse UTF-8 version as well as the tool's version and the library version. The
+string format of the library version has been changed too (it now shows:
+`"jparse library version: %s"`).
+
 
 ## Release 1.2.0 2024-10-09
 

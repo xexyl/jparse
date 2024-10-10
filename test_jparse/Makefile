@@ -359,7 +359,7 @@ jnum_gen.o: jnum_gen.c jnum_gen.h ../json_utf8.h ../version.h
 jnum_gen: jnum_gen.o ../libjparse.a
 	${CC} ${CFLAGS} $^ -lm -o $@ ${LD_DIR2} -ldyn_array -ldbg
 
-pr_jparse_test.o: pr_jparse_test.c pr_jparse_test.h ../version.h
+pr_jparse_test.o: pr_jparse_test.c pr_jparse_test.h ../json_utf8.h ../version.h
 	${CC} ${CFLAGS} pr_jparse_test.c -c
 
 pr_jparse_test: pr_jparse_test.o ../libjparse.a
