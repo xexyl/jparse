@@ -355,8 +355,6 @@ main(int argc, char **argv)
     bool esc_quotes = false;	/* true ==> escape quotes */
     int ret;			/* libc return code */
     int i;
-    int j;
-    int k;
     struct jstring *jstr = NULL;    /* decoded string */
     char *dup_input = NULL;	/* duplicate of arg string */
 
