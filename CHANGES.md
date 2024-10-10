@@ -1,5 +1,13 @@
 # Significant changes in the JSON parser repo
 
+## Release 1.2.1 2024-10-10
+
+Add option `-F` to `test_jparse/jparse_test.sh` which means that files passed on
+the command line should be read as actual full JSON documents, rather than JSON
+blobs per line. In this case `stdin` is **NOT** read! The file `jparse.json` is
+now controlled this way.
+
+
 ## Release 1.2.0 2024-10-09
 
 Remove `has_nul` in `struct json_string` as UTF-8 should, it is my

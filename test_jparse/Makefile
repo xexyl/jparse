@@ -437,6 +437,16 @@ test:
 		echo "${OUR_NAME}: PASSED: jparse_test.sh"; \
 	    fi; \
 	    echo; \
+	    echo "${OUR_NAME}: RUNNING:  ./jparse_test.sh -v ${VERBOSITY} -j ./jparse -F jparse.json"; \
+	    ./jparse_test.sh -v ${VERBOSITY} -j ./jparse -F jparse.json; \
+	    EXIT_CODE="$$?"; \
+	    if [[ $$EXIT_CODE -ne 0 ]]; then \
+		echo "${OUR_NAME}: ERROR: jparse_test.sh failed, error code: $$EXIT_CODE"; \
+		exit "$$EXIT_CODE"; \
+	    else \
+		echo "${OUR_NAME}: PASSED: jparse_test.sh"; \
+	    fi; \
+	    echo; \
 	    echo "${OUR_NAME}: RUNNING: ./jparse_test.sh -v ${VERBOSITY} -f -j ./jparse test_jparse/json_teststr_fail.txt"; \
 	    ./jparse_test.sh -v ${VERBOSITY} -f -j ./jparse test_jparse/json_teststr_fail.txt >/dev/null 2>&1; \
 	    EXIT_CODE="$$?"; \
