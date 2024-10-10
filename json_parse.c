@@ -412,7 +412,6 @@ jdecencchk(void)
     }
     dbg(DBG_MED, "encoded string: %s (len: %ju)", mstr, mlen);
 
-    msg("%s", mstr);
 
     /*
      * verify that the encoded string matches the original string
@@ -421,7 +420,7 @@ jdecencchk(void)
 	err(149, __func__, "mstr2: %s != decstr: %s", mstr2, mstr);
 	not_reached();
     } else {
-	dbg(DBG_MED, "mstr2 == mstr: %s", mstr2);
+	dbg(DBG_LOW, "%s: %s == %s: true", decstr, mstr, mstr2);
     }
 
     /*
