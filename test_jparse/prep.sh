@@ -404,9 +404,9 @@ make_jparse_bug_report() {
     # announce pre-action
     #
     if [[ -z "$LOGFILE" ]]; then
-	write_echo "=-=-= START: $MAKE jparse_bug_report-txl -L $BUG_REPORT_LOGFILE =-=-="
+	write_echo "=-=-= START: $MAKE bug_report-txl -L $BUG_REPORT_LOGFILE =-=-="
     else
-	write_echo_n "make_action $CODE jparse_bug_report-txl -L $BUG_REPORT_LOGFILE "
+	write_echo_n "make_action $CODE bug_report-txl -L $BUG_REPORT_LOGFILE "
     fi
 
     # perform action
@@ -424,16 +424,16 @@ make_jparse_bug_report() {
 	EXIT_CODE="$CODE"
 
 	FAILURE_SUMMARY="$FAILURE_SUMMARY
-	$MAKE jparse_bug_report-txl $EXIT_CODE: $MAKE jparse_bug_report-txl -L $BUG_REPORT_LOGFILE: non-zero exit code: $status"
+	$MAKE bug_report-txl $EXIT_CODE: ./jparse_bug_report-txl -L $BUG_REPORT_LOGFILE: non-zero exit code: $status"
 	if [[ -z "$LOGFILE" ]]; then
 	    write_echo "$0: Warning: EXIT_CODE is now: $EXIT_CODE" 1>&2
 	fi
 	if [[ -n $E_FLAG ]]; then
 	    if [[ -z "$LOGFILE" ]]; then
 		write_echo
-		write_echo "$0: Warning: $MAKE jparse_bug_report-txl -L $BUG_REPORT_LOGFILE exit status: $status" 1>&2
+		write_echo "$0: Warning: ./jparse_bug_report-txl -L $BUG_REPORT_LOGFILE exit status: $status" 1>&2
 		write_echo
-		write_echo "=-=-= FAIL: $MAKE jparse_bug_report-txl -L $BUG_REPORT_LOGFILE =-=-="
+		write_echo "=-=-= FAIL: ./jparse_bug_report-txl -L $BUG_REPORT_LOGFILE =-=-="
 		write_echo
 	    else
 		write_echo "ERROR exit code $status"
@@ -442,7 +442,7 @@ make_jparse_bug_report() {
 	else
 	    if [[ -z "$LOGFILE" ]]; then
 		write_echo
-		write_echo "$0: Warning: $MAKE jparse_bug_report-txl -L $BUG_REPORT_LOGFILE exit status: $status" 1>&2
+		write_echo "$0: Warning: ./jparse_bug_report-txl -L $BUG_REPORT_LOGFILE exit status: $status" 1>&2
 		write_echo
 		write_echo "=-=-= FAIL: $MAKE $RULE =-=-="
 		write_echo
@@ -455,7 +455,7 @@ make_jparse_bug_report() {
     else
 	if [[ -z "$LOGFILE" ]]; then
 	    write_echo
-	    write_echo "=-=-= PASS: $MAKE jparse_bug_report-txl -L $BUG_REPORT_LOGFILE =-=-="
+	    write_echo "=-=-= PASS: ./jparse_bug_report-txl -L $BUG_REPORT_LOGFILE =-=-="
 	    write_echo
 	else
 	    write_echo "OK"

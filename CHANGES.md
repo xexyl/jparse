@@ -1,5 +1,14 @@
 # Significant changes in the JSON parser repo
 
+## Release 1.2.2 2024-10-11
+
+Add a bit of fun to `jstrencode(1)` and `jstrdecode(1)`.
+
+Fix some man pages (`jstrencode.1`, `jstrdecode.1` and `jparse.1`).
+
+Fix some output problems in `test_jparse/prep.sh` wrt `jparse_bug_report.sh`.
+
+
 ## Release 1.2.1 2024-10-10
 
 Add option `-F` to `test_jparse/jparse_test.sh` which means that files passed on
