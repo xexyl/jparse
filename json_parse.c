@@ -461,6 +461,7 @@ jdecencchk(int entertainment)
 			       decstr, (uintmax_t)mlen2);
 	    not_reached();
 	} else {
+	    dbg(DBG_MED, "%s == %s", decstr, mstr2);
 	    msg(mstr2);
 
 	    free(mstr2);
@@ -482,6 +483,7 @@ jdecencchk(int entertainment)
 			       decstr, (uintmax_t)mlen2);
 	    not_reached();
 	} else {
+	    dbg(DBG_MED, "%s == %s", decstr, mstr2);
 	    msg(mstr2);
 
 	    free(mstr2);
@@ -504,6 +506,7 @@ jdecencchk(int entertainment)
 				   decstr, (uintmax_t)mlen2);
 		not_reached();
 	    } else {
+		dbg(DBG_MED, "%s == %s", decstr, mstr2);
 		msg(mstr2);
 
 		free(mstr2);
@@ -527,6 +530,7 @@ jdecencchk(int entertainment)
 				       decstr, (uintmax_t)mlen2);
 		    not_reached();
 		} else {
+		    dbg(DBG_MED, "%s == %s", decstr, mstr2);
 		    msg(mstr2);
 
 		    free(mstr2);
