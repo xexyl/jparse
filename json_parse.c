@@ -470,7 +470,8 @@ jdecencchk(int entertainment)
 	    dbg(DBG_VVVHIGH, "testing json_encode(mstr2, 1, mlen): %s", mstr2);
 	    mstr = json_encode(mstr2, mlen2, &mlen, false);
 	    if (mstr == NULL) {
-		err(151, __func__, "json_encode(mstr2: %s, mlen2: %ju, mlen: %ju) == NULL", mstr2, (uintmax_t)mlen2, (uintmax_t)mlen);
+		err(151, __func__, "json_encode(mstr2: %s, mlen2: %ju, mlen: %ju) == NULL", mstr2,
+			(uintmax_t)mlen2, (uintmax_t)mlen);
 		not_reached();
 	    }
 	    dbg(DBG_HIGH, "encoded string: %s (len: %ju)", mstr, mlen);
@@ -524,7 +525,8 @@ jdecencchk(int entertainment)
 	    dbg(DBG_VVVHIGH, "testing json_encode(mstr2, 1, mlen): %s", mstr2);
 	    mstr = json_encode(mstr2, mlen2, &mlen, false);
 	    if (mstr == NULL) {
-		err(154, __func__, "json_encode(mstr2: %s, mlen2: %ju, mlen: %ju) == NULL", mstr2, (uintmax_t)mlen2, (uintmax_t)mlen);
+		err(154, __func__, "json_encode(mstr2: %s, mlen2: %ju, mlen: %ju) == NULL", mstr2,
+			(uintmax_t)mlen2, (uintmax_t)mlen);
 		not_reached();
 	    }
 	    dbg(DBG_HIGH, "encoded string: %s (len: %ju)", mstr, mlen);
@@ -580,7 +582,8 @@ jdecencchk(int entertainment)
 		dbg(DBG_VVVHIGH, "testing json_encode(mstr2, 1, mlen): %s", mstr2);
 		mstr = json_encode(mstr2, mlen2, &mlen, false);
 		if (mstr == NULL) {
-		    err(157, __func__, "json_encode(mstr2: %s, mlen2: %ju, mlen: %ju) == NULL", mstr2, (uintmax_t)mlen2, (uintmax_t)mlen);
+		    err(157, __func__, "json_encode(mstr2: %s, mlen2: %ju, mlen: %ju) == NULL", mstr2,
+			    (uintmax_t)mlen2, (uintmax_t)mlen);
 		    not_reached();
 		}
 		dbg(DBG_HIGH, "encoded string: %s (len: %ju)", mstr, mlen);
@@ -637,7 +640,8 @@ jdecencchk(int entertainment)
 		    dbg(DBG_VVVHIGH, "testing json_encode(mstr2, 1, mlen): %s", mstr2);
 		    mstr = json_encode(mstr2, mlen2, &mlen, false);
 		    if (mstr == NULL) {
-			err(160, __func__, "json_encode(mstr2: %s, mlen2: %ju, mlen: %ju) == NULL", mstr2, (uintmax_t)mlen2, (uintmax_t)mlen);
+			err(160, __func__, "json_encode(mstr2: %s, mlen2: %ju, mlen: %ju) == NULL", mstr2,
+				(uintmax_t)mlen2, (uintmax_t)mlen);
 			not_reached();
 		    }
 		    dbg(DBG_HIGH, "encoded string: %s (len: %ju)", mstr, mlen);
