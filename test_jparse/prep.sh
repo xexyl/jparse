@@ -586,9 +586,9 @@ else
 		write_echo "jparse_bug_report.sh issued $NOTICE_COUNT notices."
 	    fi
 	fi
-	if [[ -e test_jparse/test_jparse.log ]]; then
+	if [[ -e test_jparse/jparse_test.log ]]; then
 	    write_echo ""
-	    write_echo "See test_jparse/test_jparse.log for more details."
+	    write_echo "See test_jparse/jparse_test.log for more details."
 	fi
     else
 	if [[ -n "$FAILURE_SUMMARY" ]]; then
@@ -605,9 +605,9 @@ else
 	else
 	    write_echo "One or more tests failed."
 	fi
-	if [[ -e test_jparse/test_jparse.log ]]; then
+	if [[ -e test_jparse/jparse_test.log ]]; then
 	    write_echo ""
-	    write_echo "See test_jparse/test_jparse.log for more details."
+	    write_echo "See test_jparse/jparse_test.log for more details."
 	fi
     fi
 fi

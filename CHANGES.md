@@ -27,6 +27,8 @@ instead writing to `stdout` and `stderr`.
 
 Sequenced exit codes.
 
+Added man page for `pr_jparse_test`.
+
 
 ## Release 1.2.2 2024-10-11
 
