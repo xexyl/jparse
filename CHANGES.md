@@ -31,6 +31,10 @@ Added man page for `pr_jparse_test`.
 
 Fix stray 'OK' lines in build.log after `make prep`.
 
+Improve README.md for `jstrencode(1)` and `jstrdecode(1)` and fix usage synopsis
+of both `jstrencode(1)` and `jstrdecode(1)`.
+
+
 ## Release 1.2.2 2024-10-11
 
 Add a bit of fun to `jstrencode(1)` and `jstrdecode(1)`.
