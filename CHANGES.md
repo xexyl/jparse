@@ -1,5 +1,10 @@
 # Significant changes in the JSON parser repo
 
+## Release 1.2.3 2024-10-12
+
+Add extra sanity check in `sum_and_count()` (see `util.c`).
+
+
 ## Release 1.2.2 2024-10-11
 
 Add a bit of fun to `jstrencode(1)` and `jstrdecode(1)`.
