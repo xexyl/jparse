@@ -29,6 +29,7 @@ Sequenced exit codes.
 
 Added man page for `pr_jparse_test`.
 
+Fix stray 'OK' lines in build.log after `make prep`.
 
 ## Release 1.2.2 2024-10-11
 
