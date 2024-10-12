@@ -21,16 +21,16 @@
 # setup
 #
 export RUN_JPARSE_TESTS_VERSION="1.0.0 2024-10-12"
-export USAGE="usage: $0 [-h] [-v level] [-D level] [-j jparse] [-p pr_jparse_test] [-c jnum_chk] [-J json_level] [-V] [-Z topdir]
+export USAGE="usage: $0 [-h] [-V] [-v level] [-D dbg_level] [-J json_level] [-j jparse] [-p pr_jparse_test] [-c jnum_chk] [-Z topdir]
 
     -h			print help and exit
+    -V			print version and exit
     -v level		set debug level for this script (def: 0)
-    -D level		set debug level for jparse_test.sh (def: 0)
+    -D dbg_level	set debug level for jparse_test.sh (def: 0)
+    -J json_level	set json debug level (def: 0)
     -j jparse		path to jparse
     -p pr_jparse_test	path to pr_jparse_test
     -c jnum_chk		path to jnum_chk
-    -J json_level	set json debug level (def: 0)
-    -V			print version and exit
     -Z topdir		top level build directory (def: try . or ..)
 
 Exit codes:
@@ -38,7 +38,7 @@ Exit codes:
      2   -h and help string printed or -V and version string printed
      3   command line usage error
      4	 could not create a writable log file
-     5   something not found, not the right file type, or not executable
+     5   something not found, not the right file type, or not executable/readable
  >= 20   some test failed
 
 run_jparse_tests.sh version: $RUN_JPARSE_TESTS_VERSION"
@@ -56,7 +56,7 @@ export JNUM_CHK="./test_jparse/jnum_chk"
 
 # parse args
 #
-while getopts :hv:D:j:p:c:J:VZ: flag; do
+while getopts :hVv:D:J:j:p:c:Z: flag; do
     case "$flag" in
     h)	echo "$USAGE" 1>&2
 	exit 2

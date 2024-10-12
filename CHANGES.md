@@ -8,11 +8,14 @@ Greatly improve the test suite with new script
 `test_jparse/run_jparse_tests.sh` and a number of bug fixes and enhancements
 in other places, as described below.
 
-The script, which still needs a man page, does what the `test_jparse/Makefile`
-`test` rule did but allows to specify the path to certain tools (`jparse`,
-`pr_jparse_test`, `jnum_chk`) and it allows for verbosity to be used (as in
-`jparse_test.sh -D`, although when used via `make` it uses the Makefile
-`VERBOSITY` level, which is also used for the `-v` flag), and so on.
+The script does what the `test_jparse/Makefile` `test` rule did but allows to
+specify the path to certain tools (`jparse`, `pr_jparse_test`, `jnum_chk`) and
+it allows for verbosity to be used (as in `jparse_test.sh -D`, although when
+used via `make` it uses the Makefile `VERBOSITY` level, which is also used for
+the `-v` flag), and so on.
+
+A simple man page exists for this tool though there is not much to say as it
+really is just a driver for the other test tools.
 
 The `test_jparse/prep.sh` now sets the `VERBOSITY` variable to the `-v level`
 specified so one can do `make VERBOSITY=2 test` or `make VERBOSITY=3 prep`, for
