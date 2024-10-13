@@ -3,14 +3,20 @@
 ## Release 1.2.4 2024-10-13
 
 Add fix to UTF-8 code: if a codepoint is in the so-called non-character range,
-it is recommended to set it to the replacement character `0xFFFD` which the code
-now does. This character is of (UTF-8) length 3 so in that case an additional 3
-bytes are allocated.
+it is recommended to set it to the replacement character `0xFFFD` (see
+<https://www.unicode.org/versions/Unicode13.0.0/UnicodeStandard-13.0.pdf>) which
+the code now does. This character is of (UTF-8) length 3 so in that case an
+additional 3 bytes are allocated. This fix unfortunately makes us diverge even
+more from the JSON test suite as a file, `n_string_unicode_U+FDD0_nonchar.json`
+had to be moved to the good subdirectory. It was renamed instead to
+`y_string_unicode_U+FDD0_replacement_char.json` to suggest that a replacement is
+made.
 
 Set `JPARSE_UTF8_VERSION` to `"1.2.2 2024-10-13"`.
 
 Bug fix `test_jparse/jparse_test.sh` to show the file that failed in some cases
 (an `$` was left off by accident).
+
 
 ## Release 1.2.3 2024-10-12
 

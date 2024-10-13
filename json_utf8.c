@@ -70,18 +70,18 @@ utf8len(const char *str, int32_t surrogate)
 	x = surrogate;
 	if (x < 0x80) {
 	    len = 1;
-	    dbg(DBG_MED, "x %X length %d", x, len);
+	    dbg(DBG_VVHIGH, "x: %X length %d", x, len);
 	} else if (x < 0x800) {
 	    len = 2;
-	    dbg(DBG_MED, "x %X length %d", x, len);
+	    dbg(DBG_VVHIGH, "x: %X length %d", x, len);
 	} else if (x < 0x10000) {
 	    len = 3;
-	    dbg(DBG_MED, "x %X length %d", x, len);
+	    dbg(DBG_VVHIGH, "x: %X length %d", x, len);
 	} else if (x < 0x110000) {
 	    len = 4;
-	    dbg(DBG_MED, "x %X length %d", x, len);
+	    dbg(DBG_VVHIGH, "x: %X length %d", x, len);
 	} else {
-	    warn(__func__, "%x: illegal value\n", x);
+	    warn(__func__, "%X: illegal value\n", x);
 	    len = -1;
 	}
 
@@ -130,18 +130,18 @@ utf8len(const char *str, int32_t surrogate)
 
 	if (x < 0x80) {
 	    len = 1;
-	    dbg(DBG_MED, "x %X length %d", x, len);
+	    dbg(DBG_VVHIGH, "x: %X length %d", x, len);
 	} else if (x < 0x800) {
 	    len = 2;
-	    dbg(DBG_MED, "x %X length %d", x, len);
+	    dbg(DBG_VVHIGH, "x: %X length %d", x, len);
 	} else if (x < 0x10000) {
 	    len = 3;
-	    dbg(DBG_MED, "x %X length %d", x, len);
+	    dbg(DBG_VVHIGH, "x: %X length %d", x, len);
 	} else if (x < 0x110000) {
 	    len = 4;
-	    dbg(DBG_MED, "x %X length %d", x, len);
+	    dbg(DBG_VVHIGH, "x: %X length %d", x, len);
 	} else {
-	    warn(__func__, "%x: illegal value\n", x);
+	    warn(__func__, "%X: illegal value\n", x);
 	    len = -1;
 	}
     }

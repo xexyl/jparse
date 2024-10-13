@@ -1439,8 +1439,10 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen)
 
 		    /*
 		     * first we check if the range is in the non-character range as
-		     * the spec recommend setting it to the replacement character.
-		     * *sigh*
+		     * the spec recommendation is to set non-characters to the
+		     * replacement character (see
+		     * https://www.unicode.org/versions/Unicode13.0.0/UnicodeStandard-13.0.pdf
+		     * for more details).
 		     */
 		    if (is_unicode_noncharacter(xa)) {
 			dbg(DBG_MED, "%s: %X is non-character, setting to replacement character: U+%X", __func__,
@@ -1730,9 +1732,11 @@ json_decode(char const *ptr, size_t len, size_t *retlen)
 			return NULL;
 		    } else if (bytes == UNICODE_NOT_CHARACTER) {
 			/*
-			 * according to the spec recommendation, a character in
-			 * the non character range should be set to the
-			 * replacement character which is U+FFFD and is 3 bytes.
+			 * according to the spec recommendation (see
+			 * https://www.unicode.org/versions/Unicode13.0.0/UnicodeStandard-13.0.pdf),
+			 * a character in the non character range should be set
+			 * to the replacement character which is U+FFFD, and
+			 * which is in UTF-8 terms 3 bytes.
 			 */
 			bytes = 3;
 		    }
