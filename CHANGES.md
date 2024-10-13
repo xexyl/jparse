@@ -9,6 +9,8 @@ bytes are allocated.
 
 Set `JPARSE_UTF8_VERSION` to `"1.2.2 2024-10-13"`.
 
+Bug fix `test_jparse/jparse_test.sh` to show the file that failed in some cases
+(an `$` was left off by accident).
 
 ## Release 1.2.3 2024-10-12
 
