@@ -1437,19 +1437,6 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen)
 		     * was not another \uxxxx
 		     */
 
-		    /*
-		     * first we check if the range is in the non-character range as
-		     * the spec recommendation is to set non-characters to the
-		     * replacement character (see
-		     * https://www.unicode.org/versions/Unicode13.0.0/UnicodeStandard-13.0.pdf
-		     * for more details).
-		     */
-		    if (is_unicode_noncharacter(xa)) {
-			dbg(DBG_MED, "%s: %X is non-character, setting to replacement character: U+%X", __func__,
-				UNICODE_REPLACEMENT_CHAR);
-			xa = UNICODE_REPLACEMENT_CHAR;
-		    }
-
 		    bytes = utf8encode(utf8, xa);
 		    if (bytes < 0) {
 			/* error - clear allocated length and free buffer */
@@ -1724,21 +1711,12 @@ json_decode(char const *ptr, size_t len, size_t *retlen)
 		} else if (scanned == 1 || (scanned == 2 && surrogates_to_unicode(xa, xb) < 0)) {
 		    surrogate = xa;
 		    bytes = utf8len(ptr + i, surrogate);
-		    if (bytes <= 0 && bytes != UNICODE_NOT_CHARACTER) {
+		    if (bytes <= 0) {
 			if (retlen != NULL) {
 			    *retlen = 0;
 			}
 			/* utf8len() already warns */
 			return NULL;
-		    } else if (bytes == UNICODE_NOT_CHARACTER) {
-			/*
-			 * according to the spec recommendation (see
-			 * https://www.unicode.org/versions/Unicode13.0.0/UnicodeStandard-13.0.pdf),
-			 * a character in the non character range should be set
-			 * to the replacement character which is U+FFFD, and
-			 * which is in UTF-8 terms 3 bytes.
-			 */
-			bytes = 3;
 		    }
 		    dbg(DBG_VVHIGH, "UTF-8 bytes: %ju", (uintmax_t)bytes);
 		    mlen += bytes;

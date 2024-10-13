@@ -217,7 +217,7 @@ utf8encode(char *str, unsigned int val)
     }
 
     if (is_unicode_noncharacter(val)) {
-	warn(__func__, "invalid codepoint: %X, will set to non-character replacement character %d",
+	warn(__func__, "invalid codepoint: %X is non-character",
 		val, UNICODE_REPLACEMENT_CHAR);
 	len = UNICODE_NOT_CHARACTER;
     } else if ((val & 0xFFFF) >= 0xFFFE) {
