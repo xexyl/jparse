@@ -1,5 +1,15 @@
 # Significant changes in the JSON parser repo
 
+## Release 1.2.4 2024-10-13
+
+Add fix to UTF-8 code: if a codepoint is in the so-called non-character range,
+it is recommended to set it to the replacement character `0xFFFD` which the code
+now does. This character is of (UTF-8) length 3 so in that case an additional 3
+bytes are allocated.
+
+Set `JPARSE_UTF8_VERSION` to `"1.2.2 2024-10-13"`.
+
+
 ## Release 1.2.3 2024-10-12
 
 Add extra sanity check in `sum_and_count()` (see `util.c`).
