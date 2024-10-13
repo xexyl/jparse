@@ -12,6 +12,12 @@ had to be moved to the good subdirectory. It was renamed instead to
 `y_string_unicode_U+FDD0_replacement_char.json` to suggest that a replacement is
 made.
 
+Also, the codepoints `0xFF` and `0xFE` are valid where `0xFF` is [Latin small
+letter y with
+diaeresis](https://www.fileformat.info/info/unicode/char/00ff/index.htm) and
+`0xFE` is [Latin small letter
+thorn](https://www.fileformat.info/info/unicode/char/fe/index.htm).
+
 Set `JPARSE_UTF8_VERSION` to `"1.2.2 2024-10-13"`.
 
 Bug fix `test_jparse/jparse_test.sh` to show the file that failed in some cases

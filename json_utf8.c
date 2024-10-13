@@ -70,16 +70,16 @@ utf8len(const char *str, int32_t surrogate)
 	x = surrogate;
 	if (x < 0x80) {
 	    len = 1;
-	    dbg(DBG_VVHIGH, "x: %X length %d", x, len);
+	    dbg(DBG_VVHIGH, "%X length %d", x, len);
 	} else if (x < 0x800) {
 	    len = 2;
-	    dbg(DBG_VVHIGH, "x: %X length %d", x, len);
+	    dbg(DBG_VVHIGH, "%X length %d", x, len);
 	} else if (x < 0x10000) {
 	    len = 3;
-	    dbg(DBG_VVHIGH, "x: %X length %d", x, len);
+	    dbg(DBG_VVHIGH, "%X length %d", x, len);
 	} else if (x < 0x110000) {
 	    len = 4;
-	    dbg(DBG_VVHIGH, "x: %X length %d", x, len);
+	    dbg(DBG_VVHIGH, "%X length %d", x, len);
 	} else {
 	    warn(__func__, "%X: illegal value\n", x);
 	    len = -1;
@@ -130,16 +130,16 @@ utf8len(const char *str, int32_t surrogate)
 
 	if (x < 0x80) {
 	    len = 1;
-	    dbg(DBG_VVHIGH, "x: %X length %d", x, len);
+	    dbg(DBG_VVHIGH, "%X length %d", x, len);
 	} else if (x < 0x800) {
 	    len = 2;
-	    dbg(DBG_VVHIGH, "x: %X length %d", x, len);
+	    dbg(DBG_VVHIGH, "%X length %d", x, len);
 	} else if (x < 0x10000) {
 	    len = 3;
-	    dbg(DBG_VVHIGH, "x: %X length %d", x, len);
+	    dbg(DBG_VVHIGH, "%X length %d", x, len);
 	} else if (x < 0x110000) {
 	    len = 4;
-	    dbg(DBG_VVHIGH, "x: %X length %d", x, len);
+	    dbg(DBG_VVHIGH, "%X length %d", x, len);
 	} else {
 	    warn(__func__, "%X: illegal value\n", x);
 	    len = -1;
@@ -222,9 +222,6 @@ utf8encode(char *str, unsigned int val)
 	len = UNICODE_NOT_CHARACTER;
     } else if ((val & 0xFFFF) >= 0xFFFE) {
 	warn(__func__, "codepoint %X: ends in either FFFE or FFFF", val);
-	len = UNICODE_NOT_CHARACTER;
-    } else if (val == 0xFF || val == 0xFE) {
-	warn(__func__, "codepoint: %X: illegal value", val);
 	len = UNICODE_NOT_CHARACTER;
     } else if (val >= UNI_SUR_HIGH_START && val <= UNI_SUR_LOW_END) {
 	warn(__func__, "codepoint: %X: illegal surrogate", val);
