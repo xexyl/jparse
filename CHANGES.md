@@ -1,5 +1,12 @@
 # Significant changes in the JSON parser repo
 
+## Release 1.2.5 2024-10-20
+
+Fix comments in `json_utf8.c` that were an artefact of the previous way the
+function `utf8len()` worked and check `bytes <= 0` in `json_parse.c` from
+function `utf8len()` and `utf8encode()`.
+
+
 ## Release 1.2.4 2024-10-13
 
 The codepoints `0xFF` and `0xFE` are valid where `0xFF` is [Latin small

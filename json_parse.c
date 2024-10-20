@@ -1438,7 +1438,7 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen)
 		     */
 
 		    bytes = utf8encode(utf8, xa);
-		    if (bytes < 0) {
+		    if (bytes <= 0) {
 			/* error - clear allocated length and free buffer */
 			if (retlen != NULL) {
 			    *retlen = 0;
@@ -1484,7 +1484,7 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen)
 		    }
 
 		    bytes = utf8encode(utf8, surrogate);
-		    if (bytes < 0) {
+		    if (bytes <= 0) {
 			/* error - clear allocated length and free buffer */
 			if (retlen != NULL) {
 			    *retlen = 0;

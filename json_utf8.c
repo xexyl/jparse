@@ -63,7 +63,7 @@ utf8len(const char *str, int32_t surrogate)
     unsigned char xc = 0;   /* third hex digit */
     unsigned char xd = 0;   /* fourth hex digit */
     unsigned int x = 0;	    /* the hex value we attempt to extract */
-    size_t len = 0;	    /* the number of bytes which *bytes will be set to */
+    size_t len = 0;	    /* the number of bytes to return */
     int scanned = 0;	    /* how many values read */
 
     if (str == NULL) {
@@ -125,9 +125,8 @@ utf8len(const char *str, int32_t surrogate)
     } else {
 	/*
 	 * now that we have a SINGLE HEX number, we need to check the number of
-	 * bytes required, setting it in *bytes.
+	 * bytes required, setting it in len.
 	 */
-
 	if (x < 0x80) {
 	    len = 1;
 	    dbg(DBG_VVHIGH, "%X length %d", x, len);
