@@ -377,7 +377,32 @@ which will show:
 🦖🦕
 ```
 
-assuming your system supports displaying such emojis.
+whereas fantasy lovers might like:
+
+```sh
+jstrdecode "\uD83D\uDC09\uD83E\uDE84\uD83E\uDDD9"
+```
+
+which will show:
+
+```
+🐉🪄🧙
+```
+
+whereas volcanologists might like:
+
+```sh
+jstrdecode "\uD83C\uDF0B"
+```
+
+which will show:
+
+
+```
+🌋
+```
+
+assuming, in all cases, your system supports displaying such emojis.
 
 
 For more information and examples, see the man page:
