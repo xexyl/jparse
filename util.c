@@ -46,12 +46,12 @@
 /*
  * util - common utility functions for the JSON parser
  */
+#if !defined(UTIL_TEST)
 #include "util.h"
-
+#else
 /*
  * util_test - part of the test suite
  */
-#if defined(UTIL_TEST)
 #include <getopt.h>
 #include <dbg.h>
 #include <dyn_array.h>
