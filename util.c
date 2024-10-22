@@ -40,11 +40,14 @@
 #if defined(INTERNAL_INCLUDE)
 # if defined(UTIL_TEST)
 # include "../../dbg/dbg.h"
+# include "../../dyn_array/dyn_array.h"
 # else
 # include "../dbg/dbg.h"
+# include "../dyn_array/dyn_array.h"
 # endif
 #else
 #include <dbg.h>
+#include <dyn_array.h>
 #endif
 
 /*
@@ -57,8 +60,6 @@
  * util_test - part of the test suite
  */
 #include <getopt.h>
-#include <dbg.h>
-#include <dyn_array.h>
 #include "../util.h"
 #include "../version.h"
 /*
