@@ -14,6 +14,9 @@ Fixed exit codes in `test_jparse/run_jparse_tests.sh`.
 
 Add extra test to `jdecencchk()` in `json_parse.c`.
 
+Add inclusion of `dbg.h` in `util.h`. This allows `make test` to work in the
+rare case where jparse/ is a subdirectory, at least with one level deep.
+
 
 ## Release 1.2.5 2024-10-20
 
