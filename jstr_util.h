@@ -73,6 +73,6 @@ struct jstring
  * function prototypes
  */
 extern struct jstring *alloc_jstr(char *string, size_t bufsiz);
-extern void free_jstring(struct jstring *jstr);
+extern void free_jstring(struct jstring **jstr);
 
 #endif /* INCLUDE_JSTR_UTIL_H */

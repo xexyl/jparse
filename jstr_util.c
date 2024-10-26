@@ -89,25 +89,23 @@ alloc_jstr(char *string, size_t bufsiz)
  *
  * NOTE: as the strings CAN have NUL bytes it is entirely possible that there
  * might be a memory leak in some cases.
- *
- * NOTE: we do NOT take a struct jstring ** so as to set the pointer to NULL in
- * the calling function.
  */
 void
-free_jstring(struct jstring *jstr)
+free_jstring(struct jstring **jstr)
 {
     /*
      * firewall
      */
-    if (jstr != NULL) {
+    if (jstr != NULL && *jstr != NULL) {
 	/* free the string if not NULL */
-	if (jstr->jstr != NULL) {
-	    free(jstr->jstr);
-	    jstr->jstr = NULL;
+	if ((*jstr)->jstr != NULL) {
+	    free((*jstr)->jstr);
+	    (*jstr)->jstr = NULL;
 	}
 	/* free the struct itself */
-	free(jstr);
-	jstr = NULL;
+	free(*jstr);
+	*jstr = NULL;
+	jstr = NULL; /* not really needed unless for some reason extra code was added below */
     }
 
     return;

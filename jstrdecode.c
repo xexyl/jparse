@@ -170,7 +170,7 @@ free_json_decoded_strings(void)
 	jstr_next = jstr->next;		/* get next in list before we free the current */
 
 	/* free current json decoded string */
-	free_jstring(jstr);
+	free_jstring(&jstr);
 	jstr = NULL;
     }
 }

@@ -174,7 +174,7 @@ free_json_encoded_strings(void)
 	jstr_next = jstr->next;		/* get next in list before we free the current */
 
 	/* free current json encoded string */
-	free_jstring(jstr);
+	free_jstring(&jstr);
 	jstr = NULL;
     }
 }
@@ -325,6 +325,10 @@ jstrencode_stream(FILE *in_stream, bool skip_enclosing, bool ignore_first, bool 
 	 * remove both the leading and a trailing double quotes
 	 */
 	dbg(DBG_HIGH, "removing leading and trailing double quotes from stream");
+	/*
+	 * NOTE: we don't do input[0] = '\0' because of the ++input
+	 * below.
+	 */
 	input[inputlen-1] = '\0';
 	--inputlen;
 	++input;
@@ -591,6 +595,10 @@ main(int argc, char **argv)
 		 */
 		if (input[0] == '"' && input[inputlen-1] == '"') {
 		    dbg(DBG_HIGH, "removing leading and trailing double quotes from arg[%d]", i-optind);
+		    /*
+		     * NOTE: we don't do input[0] = '\0' because of the ++input
+		     * below.
+		     */
 		    input[inputlen-1] = '\0';
 		    --inputlen;
 		    ++input;
