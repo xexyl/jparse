@@ -1,5 +1,18 @@
 # Significant changes in the JSON parser repo
 
+## Release 1.2.8 2024-10-27
+
+Remove duplicate code from jstrencode.c and jstrdecode.c as follows:
+
+- The `parse_entertainment()` function is now in `jstr_util.c` as the purpose of
+the file is for both jstrencode and jstrdecode.
+- Added function `free_jstring_list()` in `jstr_util.c` and use that instead of
+the unique functions (that do the same thing) in jstrencode.c and jstrdecode.c
+(`free_json_encoded_strings` and `free_json_decoded_strings`).
+
+Updated version of both tools to `"1.2.5 2024-10-27"`.
+
+
 ## Release 1.2.7 2024-10-26
 
 Update `free_jstring()` to take a `struct jstring **jstr` rather than a `struct
