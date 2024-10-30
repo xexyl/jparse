@@ -53,5 +53,7 @@ jobs:
       run: make VERBOSITY=3 test
     - name: make VERBOSITY=3 slow_release
       run: make VERBOSITY=3 slow_release
+    - name: make bug_report
+      run: make bug_report
     - name: run make check_man
       run: make check_man
