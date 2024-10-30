@@ -13,6 +13,9 @@ Updated `JPARSE_UTF8_VERSION` to `"1.2.3 2024-10-30"`.
 
 Fix `make install` to install `json_utf8.h`.
 
+Improve `jparse_bug_report.sh` to test compile with `jparse/jparse.h` to try and
+determine if the `dbg`, `dyn_array` and `jparse` libraries are installed.
+
 
 ## Release 1.2.8 2024-10-27
 
