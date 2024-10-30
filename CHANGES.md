@@ -16,6 +16,9 @@ Fix `make install` to install `json_utf8.h`.
 Improve `jparse_bug_report.sh` to test compile with `jparse/jparse.h` to try and
 determine if the `dbg`, `dyn_array` and `jparse` libraries are installed.
 
+Typo fix in `test_jparse/prep.sh`. A missing `G` in `LOGFILE`. This was a
+carry-over from the mkiocccentry repo script.
+
 
 ## Release 1.2.8 2024-10-27
 
