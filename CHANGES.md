@@ -11,6 +11,8 @@ Make the updates of pointers `p` and `utf8` and the `int32_t` bytes in
 
 Updated `JPARSE_UTF8_VERSION` to `"1.2.3 2024-10-30"`.
 
+Fix `make install` to install `json_utf8.h`.
+
 
 ## Release 1.2.8 2024-10-27
 
