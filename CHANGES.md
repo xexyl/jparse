@@ -20,6 +20,8 @@ Improve `jparse_bug_report.sh` for easier parsing. The script now quotes what is
 about to be executed / what was executed. A few other changes were made and the
 TOOLS variable was sorted as it should have been.
 
+Fix segfault in `jparse -J level` when acting on strings.
+
 
 ## Release 1.2.9 2024-10-30
 

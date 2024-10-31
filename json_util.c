@@ -1662,7 +1662,7 @@ vjson_fprint(struct json *node, unsigned int depth, va_list ap)
 		/*
 		 * print string preamble
 		 */
-		fprint(stream, "\tlen{%s%s%s%s%s%s%s%s%s%s}: %ju\tvalue:\t",
+		fprint(stream, "\tlen{%s%s%s%s%s%s%s%s%s}: %ju\tvalue:\t",
 				PARSED_JSON_NODE(item)?"p":"",
 				CONVERTED_PARSED_JSON_NODE(item)?",":":",
 				CONVERTED_PARSED_JSON_NODE(item)?"c:":"",
