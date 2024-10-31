@@ -1,5 +1,12 @@
 # Significant changes in the JSON parser repo
 
+## Release 1.2.10 2024-10-31
+
+Improve `jparse_bug_report.sh` for easier parsing. The script now quotes what is
+about to be executed / what was executed. A few other changes were made and the
+TOOLS variable was sorted as it should have been.
+
+
 ## Release 1.2.9 2024-10-30
 
 Add function `utf8decode()` (from the same location as the `utf8encode()` but
