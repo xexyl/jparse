@@ -27,6 +27,11 @@ Fixed comments in some tools.
 
 Fix format/display issue in `jstrdecode -h`.
 
+Add missing `const char *const jparse_utf8_version` (assigned to
+`JPARSE_UTF8_VERSION`) and rename `json_parser_version` to
+`jparse_library_version` to match the `#define`d macro name, which was changed a
+while back.
+
 
 ## Release 2.0.0 2024-10-31
 
