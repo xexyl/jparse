@@ -57,7 +57,7 @@ static const char * const usage_msg =
     "\t-N\t\tignore all newline characters\n"
     "\t-Q\t\tdo not decode double quotes that enclose the concatenation of args (def: do decode)\n"
     "\t-e\t\tdo not output double quotes that enclose each arg (def: do not remove)\n"
-    "\t-E level\t\tentertainment mode\n"
+    "\t-E level\tentertainment mode\n"
     "\n"
     "\t[string ...]\tdecode the concatenation of string args (def: decode stdin)\n"
     "\t\t\tNOTE: - means read from stdin\n"

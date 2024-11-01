@@ -25,6 +25,8 @@ subdirectories and the tools/directories under that (in other words under
 
 Fixed comments in some tools.
 
+Fix format/display issue in `jstrdecode -h`.
+
 
 ## Release 2.0.0 2024-10-31
 
