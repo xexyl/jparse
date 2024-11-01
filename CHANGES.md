@@ -32,6 +32,11 @@ Add missing `const char *const jparse_utf8_version` (assigned to
 `jparse_library_version` to match the `#define`d macro name, which was changed a
 while back.
 
+Improve comments in `jparse.l`, at least for those who are forced to read the
+generated code, perhaps in a torture chamber or something like that, or for
+those who want hallucinations or nightmares :-) or simply those who are really
+curious what flex does.
+
 
 ## Release 2.0.0 2024-10-31
 
