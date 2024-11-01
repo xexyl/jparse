@@ -703,7 +703,8 @@ main(int argc, char **argv)
     /*
      * free list of decoded strings
      */
-    free_jstring_list(json_decoded_strings);
+    free_jstring_list(&json_decoded_strings);
+    json_decoded_strings = NULL;
 
     /*
      * All Done!!! All Done!!! -- Jessica Noll, Age 2

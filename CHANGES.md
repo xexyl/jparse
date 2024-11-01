@@ -37,6 +37,12 @@ generated code, perhaps in a torture chamber or something like that, or for
 those who want hallucinations or nightmares :-) or simply those who are really
 curious what flex does.
 
+Add extra sanity checks to `jstrencode(1)` and `jstrdecode(1)` when freeing the
+lists. The function `free_jstring_list()` now takes a `struct jstring
+**jstring_list` and if not NULL it will set `*jstring_list` to NULL, after
+freeing the list, in case the caller does something silly. Even so, the two
+tools now set the list to NULL after calling the free function.
+
 
 ## Release 2.0.0 2024-10-31
 
