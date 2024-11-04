@@ -40,7 +40,7 @@ document to better understand the JSON terms used in this repo.
 - [jparse library](#jparse-library)
 - [jstrdecode: a tool to decode JSON encoded strings](#jstrdecode)
 - [jstrencode: a tool to encode JSON decoded strings](#jstrencode)
-- [Testing suite](#test-suite)
+- [Testing suite](#testing-suite)
 - [Reporting bugs](#reporting-bugs)
 - [See also](#see-also)
 - [History](#history)
