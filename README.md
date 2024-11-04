@@ -47,6 +47,7 @@ document to better understand the JSON terms used in this repo.
 
 
 <div id="dependencies"></div>
+
 # Dependencies
 
 In order to compile and use `jparse` (the applications and the library) you will
@@ -87,6 +88,7 @@ please open an issue in the respective repo.
 
 
 <div id="compiling"></div>
+
 # Compiling
 
 The parser uses both `flex(1)` and `bison(1)` but we determine if you have a
@@ -101,6 +103,7 @@ make all
 ```
 
 <div id="installing"></div>
+
 # Installing
 
 If you wish to install this, which is **highly** recommended, especially if you
@@ -122,6 +125,7 @@ Of course, you can specify a different `PREFIX` than `/usr` if you wish.
 
 
 <div id="uninstalling"></div>
+
 # Uninstalling
 
 If you wish to deobfuscate your system a bit :-), you can uninstall the programs,
@@ -141,6 +145,7 @@ make PREFIX=/usr uninstall
 
 
 <div id="jparse-tool"></div>
+
 # jparse stand-alone tool
 
 As a tool by itself `jparse` takes a block of memory from either a file (stdin
@@ -148,7 +153,8 @@ or a text file) or a string (via `-s` option) and parses it as JSON, reporting
 if it is validly formed JSON or not.
 
 <div id="jparse-synopsis"></div>
-## `jparse` synopsis
+
+## jparse synopsis
 
 
 ```sh
@@ -167,13 +173,15 @@ string, respectively.
 
 
 <div id="jparse-exit-codes"></div>
-## `jparse` exit codes
+
+## jparse exit codes
 
 If the JSON is valid the exit status of `jparse` is 0. Different non-zero values
 are for different error conditions, or help or version string printed.
 
 <div id="jparse-examples"></div>
-## `jparse` examples
+
+## jparse examples
 
 Parse the JSON string `{ "test_mode" : false }`:
 
@@ -202,6 +210,7 @@ jparse .info.json
 ```
 
 <div id="jparse-library"></div>
+
 # jparse library
 
 As a library, `jparse` is much more useful as it allows one to parse JSON in
@@ -212,7 +221,8 @@ files and then link in the libraries, the dependencies and the `jparse` library
 itself.
 
 <div id="jparse-library-example"></div>
-## `jparse` library example
+
+## jparse library example
 
 For a relatively simple example program that uses the library, take a look at
 [jparse_main.c](https://github.com/xexyl/jparse/blob/master/jparse_main.c). As
@@ -234,7 +244,8 @@ We explain these details next.
 
 
 <div id="jparse-header-files"></div>
-## `jparse` header files
+
+## jparse header files
 
 As far as using them, there are two ways to go about it. If you install the
 library, which again we recommend, you can include them like:
@@ -257,7 +268,8 @@ code in this repo uses the repo's copy, for obvious reasons.
 
 
 <div id="linking-jparse">
-## Linking in the `jparse` library
+
+## Linking in the jparse library
 
 In order to use the library you will have to link the static libraries (the
 `jparse(3)` library as well as the `dbg` and `dyn_array` libraries) into your
@@ -291,7 +303,8 @@ good to go, although it naturally will obfuscate your code a bit! :-)
 
 
 <div id="jparse-api-overview"></div>
-## `jparse` API overview
+
+## jparse API overview
 
 To get an overview of the API, try from the repo directory:
 
@@ -310,6 +323,7 @@ which gives more information about the most important functions.
 
 <div id="re-entrancy"></div>
 <div id="reentrancy"></div>
+
 ## Re-entrancy
 
 Although the scanner and parser are both re-entrant, only one parse at one time
@@ -324,14 +338,16 @@ might be some issues that have yet to be discovered.
 
 
 <div id="jstrdecode"></div>
-# `jstrdecode`: a tool to decode JSON encoded strings
+
+# jstrdecode: a tool to decode JSON encoded strings
 
 This tool converts data into JSON decoded strings according to the so-called
 [JSON data interchange syntax - ECMA-404](https://www.ecma-international.org/publications-and-standards/standards/ecma-404/).
 
 
 <div id="jstrdecode-synopsis"></div>
-## `jstrdecode` synopsis
+
+## jstrdecode synopsis
 
 
 ```sh
@@ -367,7 +383,8 @@ If no string is given on the command line it expects you to type something on
 
 
 <div id="jstrdecode-exit-codes"></div>
-## `jstrdecode` exit codes
+
+## jstrdecode exit codes
 
 If the decoding is successful the exit status of `jstrdecode` is 0, otherwise 1.
 Different non-zero values are for different error conditions, or help or version
@@ -375,7 +392,8 @@ string printed.
 
 
 <div id="jstrdecode-examples"></div>
-## `jstrdecode` examples
+
+## jstrdecode examples
 
 Decode an empty string (`""`):
 
@@ -440,7 +458,8 @@ If you run `make install` (as root or via sudo) you can just do: `jstrdecode`.
 
 
 <div id="jstrencode"></div>
-# `jstrencode`: a tool to encode JSON decoded strings
+
+# jstrencode: a tool to encode JSON decoded strings
 
 
 This tool converts JSON decoded strings to their original data according to the so-called
@@ -448,7 +467,8 @@ This tool converts JSON decoded strings to their original data according to the 
 
 
 <div id="jstrencode-synopsis"></div>
-## `jstrencode` synopsis
+
+## jstrencode synopsis
 
 
 ```sh
@@ -502,7 +522,8 @@ If no string is given on the command line it expects you to type something on
 
 
 <div id="jstrencode-exit-codes"></div>
-## `jstrencode` exit codes
+
+## jstrencode exit codes
 
 If the encoding is successful the exit status of `jstrencode` is 0, otherwise 1.
 Different non-zero values are for different error conditions, or help or version
@@ -510,7 +531,8 @@ string printed.
 
 
 <div id="jstrencode-examples"></div>
-## `jstrencode` examples
+
+## jstrencode examples
 
 Encode `\"\"`:
 
@@ -612,6 +634,7 @@ If you run `make install` (as root or via sudo) you can just do: `jstrencode`.
 
 
 <div id="testing-suite"></div>
+
 # Testing suite:
 
 In the
@@ -644,6 +667,7 @@ make clobber all test
 <div id="bug-reporting"></div>
 <div id="reporting-bugs"></div>
 <div id="bugs"></div>
+
 # Reporting bugs
 
 If you have a problem with this repo in some form, for example you cannot
@@ -671,6 +695,7 @@ of, shall we say, 'issues', but this is not an issue here but rather
 [there](https://www.json.org/json-en.html). :-)
 
 <div id="see-also"></div>
+
 # See also
 
 For more information, try from the repo directory:
@@ -701,6 +726,7 @@ described earlier).
 <hr>
 
 <div id="history"></div>
+
 # History
 
 It was way back in 1692 when Landon decided that the **IOCCC** ([International
