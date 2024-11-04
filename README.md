@@ -1,5 +1,6 @@
 # jparse -  JSON parser, library and tools written in C
 
+
 `jparse` is a JSON parser (a stand-alone tool and a library) written in C with
 the help of `flex(1)` and `bison(1)`. The library, and the additional tools,
 were co-developed in 2022 by:
@@ -11,7 +12,6 @@ and:
 
 *chongo* (**Landon Curt Noll**, [http://www.isthe.com/chongo/index.html](http://www.isthe.com/chongo/index.htm)) /\oo/\
 
-
 in support of the **IOCCC** ([International Obfuscated C Code
 Contest](https://www.ioccc.org)), originally in the [mkiocccentry
 repo](https://github.com/ioccc-src/mkiocccentry), but we provide it here so that
@@ -21,7 +21,7 @@ As a stand-alone tool, `jparse` itself is less useful, except for validating JSO
 documents/strings, and to see how it works. The library is much more useful
 because you can integrate it into your own applications and work with the parsed
 tree(s). More details (beyond the man page) on the library will be documented at
-a later date, depending on need, although we do give a bit of information below.
+a later date, depending on need, although we do give a fair bit of information below.
 
 We also have some additional tools, some of which will be documented later and
 some of which are documented below, namely `jstrdecode` and `jstrencode`.
@@ -30,7 +30,23 @@ We recommend that you read the
 [json_README.md](https://github.com/xexyl/jparse/blob/master/json_README.md)
 document to better understand the JSON terms used in this repo.
 
+# Table of Contents
 
+- [Dependencies](#dependencies)
+- [Compiling](#compiling)
+- [Installing](#installing)
+- [Uninstalling](#uninstalling)
+- [jparse stand-alone tool](#jparse-tool)
+- [jparse library](#jparse-library)
+- [jstrdecode: a tool to decode JSON encoded strings](#jstrdecode)
+- [jstrencode: a tool to encode JSON decoded strings](#jstrencode)
+- [Testing suite](#test-suite)
+- [Reporting bugs](#reporting-bugs)
+- [See also](#see-also)
+- [History](#history)
+
+
+<div id="dependencies"></div>
 # Dependencies
 
 In order to compile and use `jparse` (the applications and the library) you will
@@ -70,6 +86,7 @@ If there are any issues with compiling or installing either of these, then
 please open an issue in the respective repo.
 
 
+<div id="compiling"></div>
 # Compiling
 
 The parser uses both `flex(1)` and `bison(1)` but we determine if you have a
@@ -83,6 +100,7 @@ Either way, to compile you need only run:
 make all
 ```
 
+<div id="installing"></div>
 # Installing
 
 If you wish to install this, which is **highly** recommended, especially if you
@@ -103,6 +121,7 @@ make PREFIX=/usr install
 Of course, you can specify a different `PREFIX` than `/usr` if you wish.
 
 
+<div id="uninstalling"></div>
 # Uninstalling
 
 If you wish to deobfuscate your system a bit :-), you can uninstall the programs,
@@ -121,13 +140,15 @@ make PREFIX=/usr uninstall
 ```
 
 
-# `jparse`: a stand-alone tool to validate JSON
+<div id="jparse-tool"></div>
+# jparse stand-alone tool
 
 As a tool by itself `jparse` takes a block of memory from either a file (stdin
 or a text file) or a string (via `-s` option) and parses it as JSON, reporting
 if it is validly formed JSON or not.
 
-## Synopsis
+<div id="jparse-synopsis"></div>
+## `jparse` synopsis
 
 
 ```sh
@@ -145,12 +166,14 @@ The options `-V` and `-h` show the version of the parser and the help or usage
 string, respectively.
 
 
-## Exit status
+<div id="jparse-exit-codes"></div>
+## `jparse` exit codes
 
 If the JSON is valid the exit status of `jparse` is 0. Different non-zero values
 are for different error conditions, or help or version string printed.
 
-## Examples
+<div id="jparse-examples"></div>
+## `jparse` examples
 
 Parse the JSON string `{ "test_mode" : false }`:
 
@@ -178,14 +201,137 @@ Parse .info.json file:
 jparse .info.json
 ```
 
+<div id="jparse-library"></div>
+# jparse library
 
-## `jstrdecode`
+As a library, `jparse` is much more useful as it allows one to parse JSON in
+their application and then interact with the parsed tree.
+
+In order to use the library, you will need to `#include` the necessary header
+files and then link in the libraries, the dependencies and the `jparse` library
+itself.
+
+<div id="jparse-library-example"></div>
+## `jparse` library example
+
+For a relatively simple example program that uses the library, take a look at
+[jparse_main.c](https://github.com/xexyl/jparse/blob/master/jparse_main.c). As
+we already gave details on how to use it, we will not do that here. It is,
+however, a nice example program to give you a basic idea of how to use the
+library, especially as it is commented nicely.
+
+As you will see, in the case of this tool, we include
+[jparse_main.h](https://github.com/xexyl/jparse/blob/master/jparse_main.h),
+which includes the two most useful header files,
+[jparse.h](https://github.com/xexyl/jparse/blob/master/jparse.h) and
+[util.h](https://github.com/xexyl/jparse/blob/master/util.h), the former of
+which is required (in actuality, `jparse.h` includes it, but it does not hurt to
+include it anyway due to inclusion guards).
+
+We must also link in the libraries.
+
+We explain these details next.
+
+
+<div id="jparse-header-files"></div>
+## `jparse` header files
+
+As far as using them, there are two ways to go about it. If you install the
+library, which again we recommend, you can include them like:
+
+```c
+#include <jparse/jparse.h>
+#include <jparse/util.h>
+```
+
+or you can instead do:
+
+```c
+#include <jparse.h>
+#include <util.h>
+```
+
+and add to your Makefile or compiler line the option
+`-I/usr/local/include/jparse`. Naturally the easiest way is the first but the
+code in this repo uses the repo's copy, for obvious reasons.
+
+
+<div id="linking-jparse">
+## Linking in the `jparse` library
+
+In order to use the library you will have to link the static libraries (the
+`jparse(3)` library as well as the `dbg` and `dyn_array` libraries) into your
+program.
+
+To do this you should pass to the compiler `-ljparse -ldbg -ldyn_array`. For
+instance to compile
+[json_main.c](https://github.com/xexyl/jparse/blob/master/jparse_main.c), with
+the `#include` lines changed to:
+
+```c
+#include <jparse/jparse.h>
+#include <jparse/util.h>
+```
+
+we can compile it like:
+
+```sh
+cc jparse_main.c -o jparse -ljparse -ldbg -ldyn_array
+```
+
+and expect to find `jparse` in the current working directory.
+
+If you need an example for a Makefile, take a look at the
+[Makefile](https://github.com/xexyl/jparse/blob/master/Makefile)'s
+`jparse_main.o` and `jparse` rules, to give you an idea.
+
+
+Once your code has been compiled and linked into an executable, you should be
+good to go, although it naturally will obfuscate your code a bit! :-)
+
+
+<div id="jparse-api-overview"></div>
+## `jparse` API overview
+
+To get an overview of the API, try from the repo directory:
+
+```sh
+man ./man/man3/jparse.3
+```
+
+or if installed:
+
+```sh
+man 3 jparse
+```
+
+which gives more information about the most important functions.
+
+
+<div id="re-entrancy"></div>
+<div id="reentrancy"></div>
+## Re-entrancy
+
+Although the scanner and parser are both re-entrant, only one parse at one time
+in a process has been tested. The testing of more than one parse at the same
+time might be done at a later time but that will likely only happen if a tool
+requires it.
+
+If it's not clear this means that having more than one parse active in the same
+process at the same time is not tested so even though it should be okay there
+might be some issues that have yet to be discovered.
+
+
+
+<div id="jstrdecode"></div>
+# `jstrdecode`: a tool to decode JSON encoded strings
 
 This tool converts data into JSON decoded strings according to the so-called
 [JSON data interchange syntax - ECMA-404](https://www.ecma-international.org/publications-and-standards/standards/ecma-404/).
 
 
-## Synopsis
+<div id="jstrdecode-synopsis"></div>
+## `jstrdecode` synopsis
 
 
 ```sh
@@ -220,14 +366,16 @@ If no string is given on the command line it expects you to type something on
 `stdin`, ending it with EOF.
 
 
-## Exit status
+<div id="jstrdecode-exit-codes"></div>
+## `jstrdecode` exit codes
 
 If the decoding is successful the exit status of `jstrdecode` is 0, otherwise 1.
 Different non-zero values are for different error conditions, or help or version
 string printed.
 
 
-## Examples
+<div id="jstrdecode-examples"></div>
+## `jstrdecode` examples
 
 Decode an empty string (`""`):
 
@@ -242,17 +390,37 @@ This will show:
 \"\"
 ```
 
-Decode a negative number:
+Decode `"\"`
 
 ```sh
-jstrdecode -- -5
+jstrdecode '"\"'
 ```
 
-This will show:
+That will show:
 
 ```
--5
+\"\\\"
 ```
+
+If you need to ignore newlines in input, use the `-N` option. For example, here
+is the same command with and without the `-N` option:
+
+```sh
+$ echo '"\"' | jstrdecode -N
+\"\\\"
+
+$ echo '"\"' | jstrdecode
+\"\\\"\n
+```
+
+Something to note is that this command will not convert an emoji or Unicode
+character to its `\uxxxx` form. In fact, for reasons we do not comprehend, this
+is perfectly valid JSON:
+
+```json
+{ "🔥" "🐉" }
+```
+
 
 For more information and examples, see the man page:
 
@@ -271,13 +439,16 @@ man jstrdecode
 If you run `make install` (as root or via sudo) you can just do: `jstrdecode`.
 
 
-### `jstrencode`
+<div id="jstrencode"></div>
+# `jstrencode`: a tool to encode JSON decoded strings
+
 
 This tool converts JSON decoded strings to their original data according to the so-called
 [JSON data interchange syntax - ECMA-404](https://www.ecma-international.org/publications-and-standards/standards/ecma-404/).
 
 
-## Synopsis
+<div id="jstrencode-synopsis"></div>
+## `jstrencode` synopsis
 
 
 ```sh
@@ -316,7 +487,6 @@ Instead you might see:
 
 ```sh
 $ printf "foo\nbar" | jstrencode -N
-
 foobar
 ```
 
@@ -331,14 +501,16 @@ If no string is given on the command line it expects you to type something on
 `stdin`, ending it with EOF.
 
 
-## Exit status
+<div id="jstrencode-exit-codes"></div>
+## `jstrencode` exit codes
 
 If the encoding is successful the exit status of `jstrencode` is 0, otherwise 1.
 Different non-zero values are for different error conditions, or help or version
 string printed.
 
 
-## Examples
+<div id="jstrencode-examples"></div>
+## `jstrencode` examples
 
 Encode `\"\"`:
 
@@ -365,44 +537,60 @@ This will show:
 -5
 ```
 
-Palaeontologists might like to try:
+Palaeontologists might like to try `U+1F996` and `U+F995`:
 
 ```sh
 jstrencode "\uD83E\uDD96\uD83E\uDD95"
 ```
 
-which will show:
+which will show a T-Rex and a Sauropod (includes Brontosaurus, Diplodocus,
+Brachiosaurus):
 
 ```
 🦖🦕
 ```
 
-whereas fantasy lovers might like:
+whereas fantasy lovers might like to try `U+1F409`, `U+1FA84` and `U+1F9D9`:
 
 ```sh
 jstrencode "\uD83D\uDC09\uD83E\uDE84\uD83E\uDDD9"
 ```
 
-which will show:
+which will show a dragon, a wand and a mage:
 
 ```
 🐉🪄🧙
 ```
 
-whereas volcanologists might like:
+whereas volcanologists might like to try `U+1F30B`:
 
 ```sh
 jstrencode "\uD83C\uDF0B"
 ```
 
-which will show:
+which will show a volcano:
 
 
 ```
 🌋
 ```
 
+whereas alcoholics :-) might like to try `U+1F37B`:
+
+```sh
+jstrencode "\uD83C\uDF7B"
+```
+
+which will show clinking beer mugs:
+
+```
+🍻
+```
+
 assuming, in all cases, your system supports displaying such emojis.
+
+Of course you may also use this program to encode diacritics and characters from
+other languages.
 
 
 For more information and examples, see the man page:
@@ -421,148 +609,10 @@ man jstrencode
 If you run `make install` (as root or via sudo) you can just do: `jstrencode`.
 
 
-# The jparse library
-
-As a library, `jparse` is much more useful as it allows one to parse JSON in
-their application and then interact with the parsed tree.
-
-In order to use the library, you will need to `#include` the necessary header
-files and then link in the libraries, the dependencies and the `jparse` library
-itself.
-
-## Example
-
-For a relatively simple example program that uses the library, take a look at
-[jparse_main.c](https://github.com/xexyl/jparse/blob/master/jparse_main.c). As
-we already gave details on how to use it, we will not do that here. It is,
-however, a nice example program to give you a basic idea of how to use the
-library, especially as it is commented nicely.
-
-As you will see, in the case of this tool, we include
-[jparse_main.h](https://github.com/xexyl/jparse/blob/master/jparse_main.h),
-which includes the two most useful header files,
-[jparse.h](https://github.com/xexyl/jparse/blob/master/jparse.h) and
-[util.h](https://github.com/xexyl/jparse/blob/master/util.h), the former of
-which is required (in actuality, `jparse.h` includes it, but it does not hurt to
-include it anyway due to inclusion guards).
-
-We must also link in the libraries.
-
-We explain these details next.
 
 
-### Header files
-
-As far as using them, there are two ways to go about it. If you install the
-library, which again we recommend, you can include them like:
-
-```c
-#include <jparse/jparse.h>
-#include <jparse/util.h>
-```
-
-or you can instead do:
-
-```c
-#include <jparse.h>
-#include <util.h>
-```
-
-and add to your Makefile or compiler line the option
-`-I/usr/local/include/jparse`. Naturally the easiest way is the first but the
-code in this repo uses the repo's copy, for obvious reasons.
-
-
-### Linking in the library
-
-In order to use the library you will have to link the static libraries (the
-`jparse(3)` library as well as the `dbg` and `dyn_array` libraries) into your
-program.
-
-To do this you should pass to the compiler `-ljparse -ldbg -ldyn_array`. For
-instance to compile
-[json_main.c](https://github.com/xexyl/jparse/blob/master/jparse_main.c), with
-the `#include` lines changed to:
-
-```c
-#include <jparse/jparse.h>
-#include <jparse/util.h>
-```
-
-we can compile it like:
-
-```sh
-cc jparse_main.c -o jparse -ljparse -ldbg -ldyn_array
-```
-
-and expect to find `jparse` in the current working directory.
-
-If you need an example for a Makefile, take a look at the
-[Makefile](https://github.com/xexyl/jparse/blob/master/Makefile)'s
-`jparse_main.o` and `jparse` rules, to give you an idea.
-
-
-Once your code has been compiled and linked into an executable, you should be
-good to go, although it naturally will obfuscate your code a bit! :-)
-
-
-## API overview
-
-To get an overview of the API, try from the repo directory:
-
-```sh
-man ./man/man3/jparse.3
-```
-
-or if installed:
-
-```sh
-man 3 jparse
-```
-
-which gives more information about the most important functions.
-
-
-## Re-entrancy
-
-Although the scanner and parser are both re-entrant, only one parse at one time
-in a process has been tested. The testing of more than one parse at the same
-time might be done at a later time but that will likely only happen if a tool
-requires it.
-
-If it's not clear this means that having more than one parse active in the same
-process at the same time is not tested so even though it should be okay there
-might be some issues that have yet to be discovered.
-
-
-# See also
-
-For more information, try from the repo directory:
-
-```sh
-man ./man/man1/jparse.1
-man ./man/man3/jparse.3
-man ./man/man1/jstrdecode.1
-man ./man/man1/jstrencode.1
-```
-
-or if you have installed everything (i.e. you ran `make install` as root or via
-`sudo(1)`) then you can do:
-
-```
-man 1 jparse
-man 3 jparse
-man jstrdecode
-man jstrencode
-```
-
-**NOTE**: the library man page currently has no example but you can always look
-at [jparse_main.c](https://github.com/xexyl/jparse/blob/master/jparse_main.c)
-for a relatively simple example (the source code for `jparse(1)` itself, as
-described earlier).
-
-
-# Our testing suite:
+<div id="testing-suite"></div>
+# Testing suite:
 
 In the
 [jparse/test_jparse](https://github.com/xexyl/jparse/blob/master/test_jparse/README.md)
@@ -591,7 +641,10 @@ If you wish to run this test-suite, try from the repo directory:
 make clobber all test
 ```
 
-# Bug reporting
+<div id="bug-reporting"></div>
+<div id="reporting-bugs"></div>
+<div id="bugs"></div>
+# Reporting bugs
 
 If you have a problem with this repo in some form, for example you cannot
 compile it in your system, or if you think there is a bug of some kind, please
@@ -617,19 +670,55 @@ Please do **NOT** report a problem with JSON: we know that there are a number
 of, shall we say, 'issues', but this is not an issue here but rather
 [there](https://www.json.org/json-en.html). :-)
 
+<div id="see-also"></div>
+# See also
+
+For more information, try from the repo directory:
+
+```sh
+man ./man/man1/jparse.1
+man ./man/man3/jparse.3
+man ./man/man1/jstrdecode.1
+man ./man/man1/jstrencode.1
+```
+
+or if you have installed everything (i.e. you ran `make install` as root or via
+`sudo(1)`) then you can do:
+
+```
+man 1 jparse
+man 3 jparse
+man jstrdecode
+man jstrencode
+```
+
+**NOTE**: the library man page currently has no example but you can always look
+at [jparse_main.c](https://github.com/xexyl/jparse/blob/master/jparse_main.c)
+for a relatively simple example (the source code for `jparse(1)` itself, as
+described earlier).
+
 
 <hr>
 
+<div id="history"></div>
 # History
 
-For more detailed history that goes beyond this humble document we recommend you
-check `jparse(1)` man page and the `CHANGES.md` file here and at the
-[mkiocccentry repo](https://github.com/ioccc-src/mkiocccentry).
+It was way back in 1692 when Landon decided that the **IOCCC** ([International
+Obfuscated C Code Contest](https://www.ioccc.org)) should use JSON for data
+files. Initially a rudimentary parser was in the works but it was decided that a
+real parser would be needed and Cody volunteered to help (actually he was
+helping before this). We decided to use `flex` and `bison` but we still had to
+write thousands of lines of code ourselves. In the end it came to be a solid
+parser, both a tool and a library, along with other useful tools.
 
-If you wish to go further than that you can read the GitHub git log in the
-`mkiocccentry` repo under the `jparse/` subdirectory as well as reading the
-source code. There is a lot to read, however, so you probably will not want to
-do that.
+If you need or just want more details on what happened, and how it progressed,
+we suggest you check out the `CHANGES.md` file here and at the [mkiocccentry
+repo](https://github.com/ioccc-src/mkiocccentry).
+
+If you really wish to go further than that you can read the GitHub git log in
+the `mkiocccentry` repo under the `jparse/` subdirectory, plus the git log at
+this jparse repo,  as well as reading the source code. There is a lot to read,
+however, so you probably will not want to do that.
 
 If you do read the source code we **STRONGLY** recommend you read the `jparse.l`
 and `jparse.y` files and **NOT** the bison or flex generated code! This is
@@ -638,3 +727,6 @@ symptoms. :-) See
 [sorry.tm.ca.h](https://github.com/xexyl/jparse/blob/master/sorry.tm.ca.h) for
 more details on this. Of course if you're brave enough to read the generated
 code you're welcome to but don't say we did not warn you! :-)
+
+Of course, the code we wrote is well commented and might or might not be worth
+reading.
