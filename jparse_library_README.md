@@ -5,6 +5,18 @@ how to use it in a C application that needs to parse and process valid JSON
 documents, whether in a file (on disk or stdin, or even over a network) or a
 string.
 
+For information on the `jparse` repo, see the [jparse repo
+README.md](https://github.com/xexyl/jparse/blob/master/README.md).
+
+For information on the `jparse` utilities see
+[jparse_util_README.md](https://github.com/xexyl/jparse/blob/master/jparse_util_README.md).
+
+For information on the testing suite see
+[test_jparse/README.md](https://github.com/xexyl/jparse/blob/master/test_jparse/README.md).
+
+We also do recommend that you read the
+[json_README.md](https://github.com/xexyl/jparse/blob/master/json_README.md)
+document to better understand the JSON terms used in this repo.
 
 # Table of Contents
 

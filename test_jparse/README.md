@@ -4,6 +4,21 @@ Here we briefly describe for you our testing suite, for those who are
 interested, though some of it is only relevant to repo maintainers (that is put
 at the end of the file for that reason).
 
+If you are looking for information on the `jparse` repo, see the [jparse repo
+README.md](https://github.com/xexyl/jparse/blob/master/README.md).
+
+For information on the `jparse` utilities see
+[jparse_util_README.md](https://github.com/xexyl/jparse/blob/master/jparse_util_README.md).
+
+For information on the `jparse` library, see
+[jparse_library_README.md](https://github.com/xexyl/jparse/blob/master/jparse_library_README.md).
+
+We also do recommend that you read the
+[json_README.md](https://github.com/xexyl/jparse/blob/master/json_README.md)
+document to better understand the JSON terms used in this repo.
+
+
+
 # [test_jparse](https://github.com/xexyl/jparse/tree/master/test_jparse)
 
 In this directory we have a [subdirectory with test JSON

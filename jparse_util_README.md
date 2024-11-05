@@ -1,5 +1,21 @@
 # Command line utilities that parse, read and process JSON in different ways
 
+We provide a number of utilities that work with JSON, which we describe below.
+Others are in the pipeline and when they are developed this file will document
+them as well. These utilities are described below.
+
+If you want more information on the `jparse` repo, see the [jparse repo
+README.md](https://github.com/xexyl/jparse/blob/master/README.md).
+
+For information on the `jparse` library, see
+[jparse_library_README.md](https://github.com/xexyl/jparse/blob/master/jparse_library_README.md).
+
+For information on the testing suite see
+[test_jparse/README.md](https://github.com/xexyl/jparse/blob/master/test_jparse/README.md).
+
+We also do recommend that you read the
+[json_README.md](https://github.com/xexyl/jparse/blob/master/json_README.md)
+document to better understand the JSON terms used in this repo.
 
 # Table of Contents
 

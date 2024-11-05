@@ -17,28 +17,29 @@ Contest](https://www.ioccc.org)), originally in the [mkiocccentry
 repo](https://github.com/ioccc-src/mkiocccentry), but we provide it here so that
 anyone can use it.
 
-As a stand-alone tool, `jparse` itself is less useful, except for validating
-JSON documents (as a file on disk or stdin or even over a network, or as a
-string), and as a simple example that uses the library. On the other hand, the
-`jparse` library is much more useful because you can integrate it into your own
-applications and work with the parsed tree(s).
+This document discusses the dependencies (and how to obtain, compile and install
+them), how to compile and install (as well as uninstall, should you need to deobfuscate
+your system :-) ) the `jparse` tools and library, how to report bugs and a brief
+history on `jparse` as a whole.
 
 For information on our utilities, including `jparse(1)` but also tools to
-encode/decode JSON decoded/encoded strings, we refer you to the
+encode/decode JSON decoded/encoded strings (others of different applications are
+in the pipeline as well), we refer you to the
 [jparse_util_README.md](https://github.com/xexyl/jparse/blob/master/jparse_util_README.md)
 file.
 
-For information on using the `jparse` library, we refer you to the file
+As a stand-alone tool, `jparse` itself is less useful, except for validating
+JSON documents (as a file on disk or stdin or even over a network, or as a
+string), and as a simple example that uses the library.
+
+The `jparse` library is much more useful for C programmers because you can
+integrate it into your own applications and work with the parsed tree(s). For
+information on using the `jparse` library, we refer you to the file
 [jparse_library_README.md](https://github.com/xexyl/jparse/blob/master/jparse_library_README.md).
 
 We also do recommend that you read the
 [json_README.md](https://github.com/xexyl/jparse/blob/master/json_README.md)
 document to better understand the JSON terms used in this repo.
-
-This document discusses the dependencies (and how to obtain, compile and install
-them), how to compile and install (as well as uninstall, should you need to deobfuscate
-your system :-) ) the tools and library, in order to use it, how to report bugs
-and a brief history on `jparse` as a whole.
 
 For information on our testing suite, we refer you to the
 [test_jparse/README.md](https://github.com/xexyl/jparse/blob/master/test_jparse/README.md),
