@@ -11,7 +11,7 @@ string.
 - [jparse library](#jparse-library)
 - [jparse library example](#jparse-library-example)
 - [jparse header files](#jparse-header-files)
-- [Linking in the jparse library](linking-jparse)
+- [Linking in the jparse library](#linking-jparse)
 - [Re-entrancy](#re-entrancy)
 - [jparse API overview](#jparse-api-overview)
 
