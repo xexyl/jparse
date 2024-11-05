@@ -1,5 +1,14 @@
 # Significant changes in the JSON parser repo
 
+## Release 2.0.3 2024-11-05
+
+Fixed `jparse_bug_report.sh` to not refer to the IOCCC except in the top
+comment, and remove tool checks that are not needed for this repo. Because the
+exit code `42` was by mere chance the `make all` the exit code sequence has been
+kept the same by not updating the exit code sequence after removing tools not
+needed here.
+
+
 ## Release 2.0.2 2024-11-03
 
 Remove unused macro from `json_utf8.h`. Updated `JPARSE_UTF8_VERSION`.
