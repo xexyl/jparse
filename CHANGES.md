@@ -15,6 +15,8 @@ never happen).
 
 Updated `JPARSE_UTF8_VERSION` to `"2.0.3 2024-11-07"`.
 
+Further improvements to `jparse_bug_report.sh`.
+
 
 ## Release 2.0.3 2024-11-05
 
