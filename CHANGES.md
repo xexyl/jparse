@@ -12,6 +12,11 @@ The return value error fix was kept in place and as an extra sanity check before
 checking `isprint()` check `isascii(c)`, though this might not matter in some or
 maybe most cases.
 
+Improve man page for `jstrencode` and `jstrdecode` with more examples, more
+details and also reword what the programs do. The `jparse_utils_README.md` has
+had the same sort of improvements. The source code and header files for these
+two tools have also had the update (the summary of what the tool does).
+
 
 ## Release 2.0.5 2024-11-08
 
