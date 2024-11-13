@@ -37,7 +37,7 @@
 #include "util.h"
 
 /*
- * json_utf8.h - JSON UTF-8 encoder
+ * json_utf8.h - JSON UTF-8 decoder
  */
 #include "json_utf8.h"
 

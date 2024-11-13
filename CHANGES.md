@@ -1,5 +1,19 @@
 # Significant changes in the JSON parser repo
 
+## Release 2.0.7 2024-11-13
+
+Swap encode/decode terminology again. This is because it refers to **JSON**
+encoding/decoding. This issue arose when working on correcting converting a
+codepoint to a Unicode symbol. It has been discovered that encoding **AND**
+decoding `\uxxxx` should, according to the JavaScript `JSON` library(?), convert
+it to the unicode symbol.
+
+The above is the next step but it means that for now the
+encoding/decoding of codepoints to unicode does NOT work for now. New
+version for jstrencode(1), jstrdecode(1), jparse UTF-8 library, jparse
+library and jstr_test.sh.
+
+
 ## Release 2.0.6 2024-11-09
 
 After some discussion, part of the change to `fprint_line_buf()` from  yesterday

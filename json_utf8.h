@@ -1,5 +1,5 @@
 /*
- * json_utf8 - JSON UTF-8 decoder
+ * json_utf8 - JSON UTF-8 encoder/decoder
  *
  * "Because specs w/o version numbers are forced to commit to their original design flaws." :-)
  *
@@ -36,7 +36,7 @@
 /*
  * official jparse UTF-8 version
  */
-#define JPARSE_UTF8_VERSION "2.0.3 2024-11-07"	/* format: major.minor YYYY-MM-DD */
+#define JPARSE_UTF8_VERSION "2.0.4 2024-11-13"	/* format: major.minor YYYY-MM-DD */
 
 
 extern size_t utf8len(const char *str, int32_t surrogate);
