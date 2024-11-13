@@ -200,6 +200,8 @@ struct byte2asciistr byte2asciistr[JSON_BYTE_VALUES] = {
  *	len		length of block to encode in bytes
  *	retlen		address of where to store allocated length,
  *			    if retlen != NULL
+ *	skip_quote	true ==> ignore any double quotes if they are both
+ *				 at the start and end of the memory block
  * returns:
  *	allocated JSON encoding of a block, or NULL ==> error
  *	NOTE: retlen, if non-NULL, is set to 0 on error
@@ -1629,8 +1631,6 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen)
  *	len	length of block to decode in bytes
  *	retlen	address of where to store allocated length, if retlen != NULL
  *
- *	skip_quote	true ==> ignore any double quotes if they are both
- *				 at the start and end of the memory block
  *
  * returns:
  *	allocated JSON decoding of a block, or NULL ==> error
