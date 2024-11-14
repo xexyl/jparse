@@ -110,7 +110,7 @@ struct byte2asciistr byte2asciistr[JSON_BYTE_VALUES] = {
     {'P', 1, "P", 1}, {'Q', 1, "Q", 1},    {'R', 1, "R", 1}, {'S', 1, "S", 1},
     {'T', 1, "T", 1}, {'U', 1, "U", 1},    {'V', 1, "V", 1}, {'W', 1, "W", 1},
     {'X', 1, "X", 1}, {'Y', 1, "Y", 1},    {'Z', 1, "Z", 1}, {'[', 1, "[", 1},
-    {'\\', 2, "\\\\", 1}, {']', 1, "]",1}, {'^', 1, "^", 1}, {'_', 1, "_", 1},
+    {'\\', 1, "\\\\", 1}, {']', 1, "]",1}, {'^', 1, "^", 1}, {'_', 1, "_", 1},
 
     /* \x60 - \x6f */
     {'`', 1, "`", 1}, {'a', 1, "a", 1}, {'b', 1, "b", 1}, {'c', 1, "c", 1},
@@ -209,7 +209,8 @@ struct byte2asciistr byte2asciistr[JSON_BYTE_VALUES] = {
 char *
 json_encode(char const *ptr, size_t len, size_t *retlen, bool skip_quote)
 {
-    char *ret = NULL;	    /* allocated encoding string or NULL */
+    char *ret = NULL;       /* return value */
+    char *str = NULL;	    /* allocated encoding string or NULL */
     char *beyond = NULL;    /* beyond the end of the allocated encoding string */
     ssize_t mlen = 0;	    /* length of allocated encoded string */
     char *p;		    /* next place to encode */
@@ -245,8 +246,8 @@ json_encode(char const *ptr, size_t len, size_t *retlen, bool skip_quote)
     /*
      * malloc the encoded string
      */
-    ret = malloc((size_t)mlen + 1 + 1);
-    if (ret == NULL) {
+    str = malloc((size_t)mlen + 1 + 1);
+    if (str == NULL) {
 	/* error - clear allocated length */
 	if (retlen != NULL) {
 	    *retlen = 0;
@@ -254,9 +255,9 @@ json_encode(char const *ptr, size_t len, size_t *retlen, bool skip_quote)
 	warn(__func__, "malloc of %ju bytes failed", (uintmax_t)(mlen + 1 + 1));
 	return NULL;
     }
-    ret[mlen] = '\0';   /* terminate string */
-    ret[mlen + 1] = '\0';   /* paranoia */
-    beyond = &(ret[mlen]);
+    str[mlen] = '\0';   /* terminate string */
+    str[mlen + 1] = '\0';   /* paranoia */
+    beyond = &(str[mlen]);
 
     /*
      * skip any enclosing quotes if requested
@@ -275,15 +276,15 @@ json_encode(char const *ptr, size_t len, size_t *retlen, bool skip_quote)
     /*
      * JSON encode each byte
      */
-    for (p=ret; i < len; ++i) {
+    for (p=str; i < len; ++i) {
 	if (p+byte2asciistr[(uint8_t)(ptr[i])].len > beyond) {
 	    /* error - clear allocated length */
 	    if (retlen != NULL) {
 		*retlen = 0;
 	    }
-	    if (ret != NULL) {
-		free(ret);
-		ret = NULL;
+	    if (str != NULL) {
+		free(str);
+		str = NULL;
 	    }
 	    warn(__func__, "encoding ran beyond end of allocated encoded string");
 	    return NULL;
@@ -292,24 +293,49 @@ json_encode(char const *ptr, size_t len, size_t *retlen, bool skip_quote)
 	p += byte2asciistr[(uint8_t)(ptr[i])].len;
     }
     *p = '\0';	/* paranoia */
-    mlen = p - ret; /* paranoia */
+    mlen = p - str; /* paranoia */
     if (mlen < 0) { /* paranoia */
 	warn(__func__, "mlen #1: %ju < 0", (uintmax_t)mlen);
-	if (ret != NULL) {
-	    free(ret);
-	    ret = NULL;
+	if (str != NULL) {
+	    free(str);
+	    str = NULL;
 	}
 	return NULL;
     }
 
     /*
+     * we now have to decode the \uxxxx code points
+     */
+    ret = json_decode(str, mlen, retlen);
+    if (ret == NULL) {
+        if (retlen != NULL) { /* should never be NULL but we check anyway */
+            *retlen = 0;
+        }
+        if (str != NULL) {
+            /*
+             * str should never be NULL but we check as an extra sanity check
+             */
+            free(str);
+            str = NULL;
+        }
+        warn(__func__, "post encoding failed");
+        return NULL;
+    }
+
+    if (str != NULL) {
+        /*
+         * str should always be non NULL at this point but we check as an extra
+         * sanity check
+         */
+        free(str);
+        str = NULL;
+    }
+
+    /*
      * return result
      */
-    dbg(DBG_VVVHIGH, "returning from json_encode(ptr, %ju, *%ju, %s)",
-		     (uintmax_t)len, (uintmax_t)mlen, booltostr(skip_quote));
-    if (retlen != NULL) {
-	*retlen = (size_t)mlen;
-    }
+    dbg(DBG_VVVHIGH, "returning from json_encode(ptr, %ju, *%ju, %s): %s",
+		     (uintmax_t)len, (uintmax_t)mlen, booltostr(skip_quote), ret);
     return ret;
 }
 
@@ -1502,7 +1528,7 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen)
 		     * was not another \uxxxx
 		     */
 
-		    bytes = utf8encode(utf8, xa);
+		    bytes = utf8_to_unicode(utf8, xa);
 		    if (bytes <= 0) {
 			/* error - clear allocated length and free buffer */
 			if (retlen != NULL) {
@@ -1512,7 +1538,7 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen)
 			    free(ret);
 			    ret = NULL;
 			}
-			/* utf8encode warns on error */
+			/* utf8_to_unicode warns on error */
 			return NULL;
 		    }
 		    /*
@@ -1548,7 +1574,7 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen)
 			return NULL;
 		    }
 
-		    bytes = utf8encode(utf8, surrogate);
+		    bytes = utf8_to_unicode(utf8, surrogate);
 		    if (bytes <= 0) {
 			/* error - clear allocated length and free buffer */
 			if (retlen != NULL) {
@@ -1558,7 +1584,7 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen)
 			    free(ret);
 			    ret = NULL;
 			}
-			/* utf8encode() warns on error */
+			/* utf8_to_unicode() warns on error */
 			return NULL;
 		    }
 

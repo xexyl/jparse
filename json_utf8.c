@@ -138,6 +138,13 @@ utf8len(const char *str, int32_t surrogate)
  */
 
 /*
+ * NOTE: the following comment describes the function utf8encode() but we have
+ * renamed it because in JSON in BOTH encoding and decoding it should convert
+ * \uxxxx to unicode. This is by all sources seen called encoding but since this
+ * is a JSON library, to be less confusing, we call it utf8_to_unicode().
+ *
+ * --
+ *
  * UTF8 valid ranges.
  *
  * The UTF-8 decoding spreads the bits of a 32bit word over several
@@ -186,7 +193,7 @@ utf8len(const char *str, int32_t surrogate)
  *
  */
 int
-utf8encode(char *str, unsigned int val)
+utf8_to_unicode(char *str, unsigned int val)
 {
     int len = -1;
 

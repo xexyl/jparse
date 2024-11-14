@@ -9,7 +9,7 @@
 .\" "Share and Enjoy!"
 .\"     --  Sirius Cybernetics Corporation Complaints Division, JSON spec department. :-)
 .\"
-.TH jstrdecode 1 "09 November 2024" "jstrdecode" "jparse tools"
+.TH jstrdecode 1 "14 November 2024" "jstrdecode" "jparse tools"
 .SH NAME
 .B jstrdecode
 \- JSON decode command line strings
@@ -121,7 +121,20 @@ command line error
 internal error
 .SH BUGS
 .PP
-A known problem, at least with some terminal applications, is that one has to hit ctrl\-d (or whatever one has
+A number of issues are known when it comes to encoding, amongst them:
+.PP
+It does not convert code points to unicode symbols.
+.PP
+It duplicates
+.BR \e
+when it should be singular, according to JavaScript encoding of JSON with
+.BR \e .
+.PP
+It does not handle invalid 
+.BR \e\-
+escaped characters in the same way as JavaScript does, and in very wrong ways.
+.PP
+Otherwise, a known problem when reading from stdin (in the case that the input does not come from the pipe), at least with some terminal applications, is that one has to hit ctrl\-d (or whatever one has
 .B EOF
 configured as) twice in order for it to properly send
 .B EOF
