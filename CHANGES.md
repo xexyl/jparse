@@ -24,7 +24,7 @@ Updated `jstrdecode(1)` man page according to the above.
 
 The new version of `test_jparse/jstr_test.sh` is now "1.2.3 2024-11-17".
 
-Added new JSON util function `open_dir_json_file()` in `json_util.c` that uses
+Added new JSON util function `open_json_dir_file()` in `json_util.c` that uses
 `open_dir_file()`, which if that function returns non-NULL, it will attempt to
 parse as a JSON file. If the file is valid JSON, it'll return a `struct json *`
 tree, otherwise NULL. Any error condition in `open_dir_file()` will result in an
@@ -34,6 +34,11 @@ close the `FILE *` as the parse function does this, as long as it is not NULL.
 The way the function checks if it is valid JSON, is by using the
 `parse_json_stream()` function (see `jparse.l`). That parse function will close
 the stream or `clearerr()` as long as no error occurs.
+
+Added `UTIL_TEST_VERSION` to the `util_test.c` file (comes from util.c). Added new
+test to test the new function `open_json_dir_file()` which now tests
+`jparse.json`. If it fails it will be an error and workflows/make test will
+fail. Can be run from both `test_jparse/` and the top level directory.
 
 
 ## Release 2.1.1 2024-11-16

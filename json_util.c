@@ -1003,12 +1003,14 @@ json_get_type_str(struct json *node, bool encoded)
 
 
 /*
- * open_dir_json_file - open a readable file in a given directory
+ * open_json_dir_file - open a FILE * and parse as JSON
  *
- * Temporarily chdir to the directory, if non-NULL, try to open the file,
- * and then chdir back to the current directory. Then, parse it as a JSON file,
- * returning a struct json * if valid JSON, otherwise NULL. Will close the file
- * in either case.
+ * Using open_dir_file(), attempt to open dir/filename (or if dir == NULL then
+ * just filename), and if it can be opened for reading, parse it as JSON (or try
+ * to) and return the tree (struct json *) if valid JSON, otherwise return NULL.
+ * If open_dir_file() has an error that function will not return; if filename is
+ * NULL here we will not return. If invalid JSON it is not an error but we do
+ * warn about it.
  *
  * If dir == NULL, just try to open the file without a chdir.
  *
@@ -1020,14 +1022,14 @@ json_get_type_str(struct json *node, bool encoded)
  * returns:
  *	a struct json *tree, if file is a valid JSON, otherwise NULL
  *
- * NOTE: this function uses open_dir_file() so any error conditions that occur
- *       there will result in an error.
- *
  * NOTE: if the file is invalid JSON then NULL will be returned but if the file
  *       cannot be opened it is an error.
+ *
+ * NOTE: it is the responsibility of the caller to free the JSON tree after they
+ *       have used it.
  */
 struct json *
-open_dir_json_file(char const *dir, char const *filename)
+open_json_dir_file(char const *dir, char const *filename)
 {
     FILE *stream = NULL;	/* file stream to try and read as a JSON file */
     struct json *tree = NULL;   /* if we can open the file we will try and parse it as JSON */
