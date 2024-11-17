@@ -1273,15 +1273,17 @@ jparse_main.o: jparse.h jparse.tab.h jparse_main.c jparse_main.h \
     json_parse.h json_sem.h json_utf8.h json_util.h util.h version.h
 jsemtblgen.o: jparse.h jparse.tab.h jsemtblgen.c jsemtblgen.h json_parse.h \
     json_sem.h json_utf8.h json_util.h util.h version.h
-json_parse.o: json_parse.c json_parse.h json_utf8.h json_util.h util.h
-json_sem.o: json_parse.h json_sem.c json_sem.h json_utf8.h json_util.h \
-    util.h
-json_util.o: json_parse.h json_utf8.h json_util.c json_util.h util.h
+json_parse.o: jparse.h jparse.tab.h json_parse.c json_parse.h json_sem.h \
+    json_utf8.h json_util.h util.h
+json_sem.o: jparse.h jparse.tab.h json_parse.h json_sem.c json_sem.h \
+    json_utf8.h json_util.h util.h
+json_util.o: jparse.h jparse.tab.h json_parse.h json_sem.h json_utf8.h \
+    json_util.c json_util.h util.h
 jstr_util.o: jparse.h jparse.tab.h json_parse.h json_sem.h json_utf8.h \
     json_util.h jstr_util.c jstr_util.h util.h
-jstrencode.o: jparse.h jparse.tab.h json_parse.h json_sem.h json_utf8.h \
-    json_util.h jstr_util.h jstrencode.c jstrencode.h util.h version.h
 jstrdecode.o: jparse.h jparse.tab.h json_parse.h json_sem.h json_utf8.h \
     json_util.h jstr_util.h jstrdecode.c jstrdecode.h util.h version.h
+jstrencode.o: jparse.h jparse.tab.h json_parse.h json_sem.h json_utf8.h \
+    json_util.h jstr_util.h jstrencode.c jstrencode.h util.h version.h
 util.o: util.c util.h
 verge.o: json_utf8.h util.h verge.c verge.h version.h

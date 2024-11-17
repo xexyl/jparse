@@ -666,7 +666,7 @@ chk_stdio_printf_err(FILE *stream, int ret)
 
 
 /*
- * fd_is_ready - test of a file descriptor is ready for I/O
+ * fd_is_ready - test if a file descriptor is ready for I/O
  *
  * Perform a non-blocking test to determine of a given file descriptor is ready
  * for I/O (reading or writing).  If the file descriptor is NOT open, return false.
@@ -4596,8 +4596,6 @@ open_dir_file(char const *dir, char const *file)
      */
     return ret_stream;
 }
-
-
 
 
 /*
