@@ -577,7 +577,8 @@ low_byte_scan(char const *data, size_t len, size_t *low_bytes, size_t *nul_bytes
  *
  *	ptr	    - pointer to start of JSON blob
  *	len	    - length of the JSON blob
- *	filename    - filename, NULL for stdin or empty for a string
+ *	filename    - filename, empty string or "-" for stdin or NULL to
+ *	              indicate it is a string
  *	is_valid    - non-NULL pointer to boolean to set depending on JSON validity
  *
  * return:
@@ -618,8 +619,7 @@ parse_json(char const *ptr, size_t len, char const *filename, bool *is_valid)
 	*is_valid = true;
     }
 
-    if (filename == NULL) {
-        warn(__func__, "filename is NULL, forcing it to be \"-\" for stdin");
+    if (filename != NULL && *filename == '-') {
         filename = "-";
     }
 
@@ -777,12 +777,12 @@ parse_json(char const *ptr, size_t len, char const *filename, bool *is_valid)
  * is valid or not.
  *
  * This function assumes that the JSON is a string, rather than a file to be
- * read, and it uses parse_json() with an empty filename. Thus it can be seen as
+ * read, and it uses parse_json() with a NULL filename. Thus it can be seen as
  * a simplified interface to parse_json() in the case of a string rather than a
  * file. The error function checks if the filename is != NULL and if *filename
- * != '\0' before claiming it is a file. But by using an empty string there is
- * never a problem of a NULL pointer. Note that the function parse_json() will
- * set a NULL filename to "-" to indicate stdin.
+ * != '\0' before claiming it is a file. The function parse_json() will, if
+ * filename != NULL && *filename == '-', set filename to "-", indicating the
+ * input comes from stdin.
  *
  * given:
  *
@@ -842,7 +842,7 @@ parse_json_str(char const *ptr, size_t len, bool *is_valid)
     /*
      * return a call to parse_json() with NULL filename
      */
-    return parse_json(ptr, len, "", is_valid);
+    return parse_json(ptr, len, NULL, is_valid);
 }
 
 
@@ -1049,7 +1049,7 @@ parse_json_stream(FILE *stream, char const *filename, bool *is_valid)
 
 
 /*
- * parse_json_file	    - parse a JSON file
+ * parse_json_file	    - parse a JSON file in a given filename
  *
  * given:
  *	filename    - filename of file to parse
