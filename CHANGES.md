@@ -26,6 +26,21 @@ conversion and allocation functions in name format.
 Fixed `jparse.3` man page and added a new file (also a symlink like the others)
 for `parse_json_str()`.
 
+Fixed at least one issue with `jstrdecode(1)` by first using the jparse parser
+on the string prior to decoding. This will solve the problem of input like
+`'"foo\"'` not reporting an error (previously it would throw a warning but not
+an error but it is NOT valid JSON). Furthermore something like `'"\"\"\""\'`
+will now report an error:
+
+```
+syntax error node type JTYPE_STRING at line 1 column 9: <\>
+ERROR[15]: main: invalid JSON
+```
+
+In the case that one needs to or wants to not validate the JSON first, they can
+use the `-j` option. The `-J level` sets the JSON debug level.
+
+Updated the version of `jstrdecode` to: "2.1.3 2024-11-18".
 Updated version of the jparse library to: `"2.2.0 2024-11-18"`.
 Updated version of `jparse(1)` to: `"1.2.4 2024-11-18"`.
 
