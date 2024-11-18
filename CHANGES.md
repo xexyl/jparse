@@ -40,6 +40,9 @@ ERROR[15]: main: invalid JSON
 In the case that one needs to or wants to not validate the JSON first, they can
 use the `-j` option. The `-J level` sets the JSON debug level.
 
+Fix compilation error in linux for `util_test` - add missing `-lm` to
+`test_jparse/Makefile`.
+
 Updated the version of `jstrdecode` to: "2.1.3 2024-11-18".
 Updated version of the jparse library to: `"2.2.0 2024-11-18"`.
 Updated version of `jparse(1)` to: `"1.2.4 2024-11-18"`.
