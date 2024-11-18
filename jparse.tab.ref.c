@@ -2492,7 +2492,7 @@ yyerror(JPARSE_LTYPE *yyltype, struct json **node, yyscan_t scanner, char const 
 	fprint(stderr, " node type %s", json_item_type_name(*node));
     }
     if (yyltype != NULL) {
-	    if (yyltype->filename != NULL) {
+	    if (yyltype->filename != NULL && *yyltype->filename != '\0') {
 		fprint(stderr, " in file %s", yyltype->filename);
 	    }
 	    fprint(stderr, " at line %d column %d: ", yyltype->first_line, yyltype->first_column);

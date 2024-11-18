@@ -1,6 +1,25 @@
 # Significant changes in the JSON parser repo
 
 
+## Release 2.1.3 2024-11-18
+
+Improve function `parse_json_str()` and `parse_json()` by allowing for empty
+strings in the following way: `parse_json_str()` will pass an empty string
+(`""`) to `parse_json()` which will keep the filename as empty. Then in error
+handling if the filename is empty (or as before, NULL), the suggestion that it
+is in a file will not be shown (the difference is that it now checks for an
+empty string). Thus to parse a string rather than a file, one can use either
+`parse_json_str()` (a simplified version) or else `parse_json()` with an empty
+string. Using a NULL filename in the latter function will set it to `"-"` for
+stdin, though it's important to realise that the function `parse_json()` acts on
+a `char *`. If one needs to read in a file, they should instead use
+`parse_json_file()` (if they have only a filename) or else `parse_json_stream()`
+if they have a `FILE *`.
+
+Updated version of the jparse library to: `"2.1.2 2024-11-18"`.
+Updated version of `jparse(1)` to: `"1.2.4 2024-11-18"`.
+
+
 ## Release 2.1.2 2024-11-17
 
 The `-e` for `jstrdecode(1)`, only encloses each decoded arg in escaped
