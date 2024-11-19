@@ -303,24 +303,6 @@ ALL_OTHER_TARGETS= ${SH_TARGETS} extern_everything
 #
 TARGETS= ${PROG_TARGETS}
 
-
-############################################################
-# User specific configurations - override Makefile values  #
-############################################################
-
-# The directive below retrieves any user specific configurations from makefile.local.
-#
-# The - before include means it's not an error if the file does not exist.
-#
-# We put this directive just before the first all rule so that you may override
-# or modify any of the above Makefile variables.  To override a value, use := symbols.
-# For example:
-#
-#       CC:= gcc
-#
--include makefile.local
-
-
 ######################################
 # all - default rule - must be first #
 ######################################

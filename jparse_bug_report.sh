@@ -62,9 +62,8 @@ export TOOLS="
     verge
     "
 
-# we need this to find overriding makefile.local in all directories to see if
-# the user is overriding any Makefile. As well, we check if the directory even
-# is searchable and has a Makefile.
+# We need to verify that certain subdirectories, in particular
+# test_jparse/, are searchable and have a readable Makefile.
 export SUBDIRS="
     test_jparse
     "
@@ -80,7 +79,7 @@ if [[ -z "$MAKE" ]]; then
 fi
 export MAKE
 export MAKE_FLAGS="V=@ S=@ Q= E=@ I= Q_V_OPTION=1 INSTALL_V='-v' MAKE_CD_Q="
-export BUG_REPORT_VERSION="2.0.1 2024-11-16"
+export BUG_REPORT_VERSION="2.0.2 2024-11-19"
 export FAILURE_SUMMARY=
 export NOTICE_SUMMARY=
 export DBG_LEVEL="0"
@@ -1468,7 +1467,7 @@ if [[ -z "$T_FLAG" ]]; then
     # ...and yes, this actually happened by chance, not deliberately, at least
     # in the mkiocccentry repo. Later on, after this script in jparse was
     # updated to be correct, the numbers were kept the same even after the tools
-    # that were unneeded were removed.
+    # that were unneeded were removed, due to the 'significance' of 42.
     run_check 42 "$MAKE $MAKE_FLAGS all"
 
     # make test: run the jparse test suite
@@ -1637,56 +1636,6 @@ for d in $SUBDIRS; do
     fi
 done
 write_echo ""
-
-# check for makefile.local files to see if user is overriding any rules or variables.
-#
-# NOTE: we don't use run_check for this because it's not an actual error whether
-# or not the user has a makefile.local file. What matters is the contents of it
-# if they do have one.
-#
-write_echo "## CHECKING IF \"makefile.local\" EXISTS"
-if [[ -e "./makefile.local" ]]; then
-    if [[ -r "./makefile.local" ]]; then
-	write_echo "### Warning: found \"Makefile\" overriding file \"makefile.local\":"
-	write_echo "RUNNING: \"cat ./makefile.local\""
-	write_echo "--"
-	if [[ -z "$L_FLAG" ]]; then
-	    # tee -a -- "$LOGFILE" < makefile.local
-	    < makefile.local tee -a -- "$LOGFILE"
-	else
-	    cat makefile.local >> "$LOGFILE"
-	fi
-	write_echo "--"
-    else
-	write_echo "### Warning: found unreadable \"makefile.local\""
-    fi
-else
-    write_echo "# \"Makefile\" has no overriding \"makefile.local\""
-fi
-write_echo ""
-
-# now do the same for subdirectories
-for d in $SUBDIRS; do
-    if [[ -e "$d/makefile.local" ]]; then
-	if [[ -r "$d/makefile.local" ]]; then
-	    write_echo "### Warning: found \"$d/Makefile\" overriding file \"$d/makefile.local\":"
-	    write_echo "--"
-	    if [[ -z "$L_FLAG" ]]; then
-		# tee -a -- "$LOGFILE" < makefile.local
-		< "$d/makefile.local" tee -a -- "$LOGFILE"
-	    else
-		cat "$d/makefile.local" >> "$LOGFILE"
-	    fi
-	    write_echo "--"
-	else
-	    write_echo "### Warning: found unreadable \"$d/makefile.local\""
-	fi
-    else
-	write_echo "# \"$d/Makefile\" has no overriding \"$d/makefile.local\""
-    fi
-done
-write_echo ""
-
 
 # check if there are any local modifications to the code
 #

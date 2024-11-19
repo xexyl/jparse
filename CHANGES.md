@@ -1,6 +1,18 @@
 # Significant changes in the JSON parser repo
 
 
+## Release 2.1.4 2024-11-19
+
+Remove `makefile.local` functionality in the Makefiles as this can cause
+compilation problems and the purpose of the file is no longer needed. Should one
+really want to override things they can pass it at the command line manually.
+This change means that the `jparse_bug_report.sh` script has been updated as
+well. This problem actually caused the mess of commits
+bcb793e7d996da45fa9d47ae70084c9294eb1f2c and the commit that rolled it back,
+bcb793e7d996da45fa9d47ae70084c9294eb1f2c, as when trying to fix a mess in
+another repo that used it, by accident it was pushed to this repo, undoing fixes
+from yesterday.
+
 ## Release 2.1.3 2024-11-18
 
 Improve function `parse_json_str()` and `parse_json()` by allowing for empty or
