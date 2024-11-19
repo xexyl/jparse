@@ -13,6 +13,12 @@ bcb793e7d996da45fa9d47ae70084c9294eb1f2c, as when trying to fix a mess in
 another repo that used it, by accident it was pushed to this repo, undoing fixes
 from yesterday.
 
+Added to `jparse.3` man page details about freeing a JSON parse tree (the
+`json_tree_free()` function) and a new file (symlink) for it. Made some minor
+improvements to the man page as well.
+
+Removed unused macro `JSON_DBG_LEVEL` from `json_util.h`.
+
 ## Release 2.1.3 2024-11-18
 
 Improve function `parse_json_str()` and `parse_json()` by allowing for empty or

@@ -15,6 +15,7 @@
 .BR parse_json_str() \|,
 .BR parse_json_stream() \|,
 .BR parse_json_file() \|,
+.BR json_tree_free(tree() \|,
 .BR json_dbg_allowed() \|,
 .BR json_warn_allowed() \|,
 .BR json_err_allowed() \|,
@@ -22,6 +23,12 @@
 \- JSON parsing library
 .SH SYNOPSIS
 \fB#include <jparse/jparse.h>\fP
+.sp
+.B "extern const char *const jparse_library_version;	/* jparse library version format: major.minor YYYY-MM-DD */"
+.br
+.B "extern const char *const jparse_utf8_version;	/* jparse utf8 version format: major.minor YYYY-MM-DD */"
+.br
+.B "extern const char *const jparse_version;		/* jparse tool version format: major.minor YYYY-MM-DD */"
 .sp
 \fB#define VALID_JSON_NODE(item) ((item) != NULL && (((item)->parsed == true) || ((item)->converted == true)))\fP
 .br
@@ -31,12 +38,6 @@
 .br
 \fB#define CONVERTED_JSON_NODE(item) ((item) != NULL && (item)->converted == true)\fP
 .sp
-.B "extern const char *const jparse_library_version;	/* jparse library version format: major.minor YYYY-MM-DD */"
-.br
-.B "extern const char *const jparse_utf8_version;	/* jparse utf8 version format: major.minor YYYY-MM-DD */"
-.sp
-.B "extern const char *const jparse_version;		/* jparse tool version format: major.minor YYYY-MM-DD */"
-.br
 .B "extern struct json *parse_json(char const *ptr, size_t len, char const *filename, bool *is_valid);"
 .br
 .B "extern struct json *parse_json_str(char const *ptr, size_t len, bool *is_valid);"
@@ -44,6 +45,8 @@
 .B "extern struct json *parse_json_stream(FILE *stream, char const *filename, bool *is_valid);"
 .br
 .B "extern struct json *parse_json_file(char const *filename, bool *is_valid);"
+.sp
+.B "extern void json_tree_free(struct json *node, unsigned int max_depth, ...);"
 .sp
 .B "extern char const *json_get_type_str(struct json *node, bool encoded);"
 .sp
@@ -62,7 +65,7 @@ library provides a way for C applications to parse JSON in a file (including std
 \c tree)
 of the parsed JSON that one may then traverse or manipulate in many ways.
 The functions to actually parse the JSON, as well as debug output functions (although not in great detail but rather just what they are), are described in this man page.
-.PP
+.SS Parsing functions
 The function
 .BR parse_json ()
 parses a JSON string
@@ -150,6 +153,21 @@ and then, as long as it can be opened, pass the
 .B FILE *
 to
 .BR parse_json_stream ().
+.SS Freeing the struct json * tree
+.PP
+After you are done with working with the tree, you should free it, using the
+.BR json_tree_free ()
+function, which takes a
+.B struct json *
+and a maximum depth to descend.
+The macro
+.BR JSON_DEFAULT_MAX_DEPTH ,
+which is defined as 256, is a good value to use; on the other hand, if you do need an infinite depth, you can use
+.BR JSON_INFINITE_DEPTH ,
+which is 0.
+After you use this function, you should still free the tree with
+.BR free (3),
+and then set the pointer to NULL.
 .SS Matching functions
 The
 .BR json_get_type_str ()
@@ -335,7 +353,10 @@ See the apology at the top of the generated files or look directly at
 instead.
 .SS Valid JSON
 In the case that a value cannot be converted but it is valid JSON the parser will still successfully validate the JSON.
-This might happen if, for example, a number is too big for the C types but as long as the JSON itself is valid the parse tree will be considered valid and not NULL.
+This might happen if, for example, a number is too big for the C types, but it is still valid JSON; in this case the parse tree is valid and not NULL.
+See the macros in the
+.B Checking for converted and/or parsed JSON nodes
+section above for details.
 .PP
 .SH BUGS
 Although error reporting does have locations it is only line numbers and columns.
