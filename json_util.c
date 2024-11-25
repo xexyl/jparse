@@ -30,15 +30,6 @@
 #include <fcntl.h>  /* for open(2) */
 
 /*
- * dbg - info, debug, warning, error, and usage message facility
- */
-#if defined(INTERNAL_INCLUDE)
-#include "../dbg/dbg.h"
-#else
-#include <dbg.h>
-#endif
-
-/*
  * json_parse - JSON parser support code
  */
 #include "json_parse.h"

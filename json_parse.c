@@ -32,15 +32,6 @@
 #include <string.h>
 
 /*
- * dbg - info, debug, warning, error, and usage message facility
- */
-#if defined(INTERNAL_INCLUDE)
-#include "../dbg/dbg.h"
-#else
-#include <dbg.h>
-#endif
-
-/*
  * util - common utility functions for the JSON parser
  */
 #include "util.h"

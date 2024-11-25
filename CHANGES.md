@@ -1,6 +1,27 @@
 # Significant changes in the JSON parser repo
 
 
+## Release 2.1.5 2024-11-25
+
+Add another internal include possibility where one could (though this is
+not recommended as it is recommended to install the `dbg` and
+`dyn_array` libraries) include both `jparse` in their project which also
+have `dbg/` and `dyn_array/` subdirectories (under `jparse/`).
+
+More importantly, and this is why the change above is being committed
+(it was done on a whim at the console when I had nothing better to do,
+at the console, where I was for a few minutes, but it really has no
+practical use), some of the checks for the internal include macros were
+in source files rather than header files, and these have been moved to
+the header files.
+
+No functional changes were made and it is quite possible that no real changes
+will be made for some time, though as they say 'time will tell'. There are some
+changes in the pipeline, however, and that includes fixing some (possible) bugs
+that were uncovered; it would also be ideal if `jstrencode` were to encode code
+points to Unicode symbols.
+
+
 ## Release 2.1.4 2024-11-19
 
 Remove `makefile.local` functionality in the Makefiles as this can cause
