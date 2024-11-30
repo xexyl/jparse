@@ -2761,10 +2761,12 @@ is_floating_notation(char const *str, size_t len)
 		      __func__, str);
 	    return false;	/* processing failed */
 	}
+
+        return true;
     }
 
 
-    return true;
+    return false;
 }
 
 

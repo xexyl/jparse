@@ -1,6 +1,14 @@
 # Significant changes in the JSON parser repo
 
 
+## Release 2.1.5 2024-11-30
+
+Bug fix in JSON debug output for numbers. Due to a flow control problem, the
+floating notation flag was always set to true if no errors were found and a `.`
+was found in the string. This meant that the F flag was always present even for
+non-floating point numbers.
+
+
 ## Release 2.1.5 2024-11-25
 
 Add another internal include possibility where one could (though this is
