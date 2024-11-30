@@ -13,6 +13,12 @@ Fix make clobber - add missing `jstr_util.o`.
 Removed the `jstr_util.o` from compilation of `jstrdecode` and `jstrencode` as
 it's not properly in the library.
 
+Add back inclusion (in Makefiles) local Makefiles except it's now called
+`Makefile.local`. This must be used with care and another change is pending
+(though down the road) where the `make test` will first move any local
+modification Makefiles to a temporary file to make sure tests can go okay
+without any modified Makefiles interfering. The `jparse_bug_report.sh` now
+checks for these files and cats them to the log/stdout in the case they exist.
 
 ## Release 2.1.5 2024-11-25
 
