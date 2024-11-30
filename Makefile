@@ -489,7 +489,7 @@ jstr_util.o: jstr_util.c jstr_util.h
 jstrencode.o: jstrencode.c jstrencode.h json_util.h json_util.c json_utf8.h version.h
 	${CC} ${CFLAGS} jstrencode.c -c
 
-jstrencode: jstrencode.o libjparse.a jstr_util.o
+jstrencode: jstrencode.o libjparse.a
 	${CC} ${CFLAGS} $^ -lm -o $@ ${LD_DIR} -ldbg -ldyn_array
 
 json_utf8.o: json_utf8.c json_utf8.h
@@ -498,7 +498,7 @@ json_utf8.o: json_utf8.c json_utf8.h
 jstrdecode.o: jstrdecode.c jstrdecode.h json_util.h json_parse.h json_utf8.h version.h
 	${CC} ${CFLAGS} jstrdecode.c -c
 
-jstrdecode: jstrdecode.o libjparse.a jstr_util.o
+jstrdecode: jstrdecode.o libjparse.a
 	${CC} ${CFLAGS} $^ -lm -o $@ ${LD_DIR} -ldbg -ldyn_array
 
 json_parse.o: json_parse.c

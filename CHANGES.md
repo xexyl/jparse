@@ -10,6 +10,9 @@ non-floating point numbers.
 
 Fix make clobber - add missing `jstr_util.o`.
 
+Removed the `jstr_util.o` from compilation of `jstrdecode` and `jstrencode` as
+it's not properly in the library.
+
 
 ## Release 2.1.5 2024-11-25
 
