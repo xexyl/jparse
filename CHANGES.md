@@ -8,6 +8,8 @@ floating notation flag was always set to true if no errors were found and a `.`
 was found in the string. This meant that the F flag was always present even for
 non-floating point numbers.
 
+Fix make clobber - add missing `jstr_util.o`.
+
 
 ## Release 2.1.5 2024-11-25
 
