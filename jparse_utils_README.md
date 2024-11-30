@@ -86,6 +86,14 @@ The `-J` option increases the verbosity of the JSON parser.
 If `-s` is passed the arg is expected to be a string; otherwise it is expected
 to be a file.
 
+You may pipe output of one command into `jparse` if you wish.
+
+The `-q` option will silence some output if `-v 0` (the default); `-v level`
+changes the verbosity of the tool itself but not the JSON debug output.
+
+For details on some of the JSON debug output flags, see the [`jparse` JSON debug
+output section](#jparse-json-debug) below.
+
 
 <div id="jparse-examples"></div>
 
@@ -141,6 +149,146 @@ This would work, however:
 ```sh
 jparse -s '"\n"'
 ```
+
+<div id="jparse-json-debug">
+## `jparse` JSON debug output
+</div>
+
+Although some of the JSON debug output (`-J level` option) might be clear, some
+does not make sense unless you read the code, and even that can be more complex
+to understand. The below discusses some of the details, though there might be
+some left to be desired.
+
+The code comes from a number of functions found in
+[json_util.c](https://github.com/xexyl/jparse/blob/master/json_util.c).
+
+We will try and simplify this as much as possible, without sacrificing details
+(as much as possible) but this might not be that easy to do.
+
+In all cases, if you see `p` it means the data was parsed successfully. If you
+see `c` it means the data was converted. It is possible for JSON to be parsed
+successfully but not be converted, for instance if the number is so big it does
+not fit in a C type.
+
+
+<div id="jparse-json-number-debug">
+### `jparse` JSON number debug output
+</div>
+
+This code comes from the `fprnumber()` function.
+
+The output in general is in the form of:
+
+```
+JSON tree[3]:	lvl: 0	type: JTYPE_NUMBER	{p,c:-I8163264illlSSomffiddildldi}: value:	-5
+```
+
+where `tree[3]` indicates debug level of `3`, `lvl` indicates the depth in the
+JSON document, `type` indicates the type of data, and the rest indicates the
+flags.
+
+The rest are the flags and the `value` is the value of the member. The example
+above are the flags for a `JTYPE_NUMBER`, which will be described below.
+
+The flags after the parsed and converted flags (as described above), if present,
+are in the following order:
+
+0. `-`: a negative number.
+
+1. `F`: the number is a floating point number.
+
+2. `E`: the number is in E notation (e.g. `1e10`).
+
+3. `I`: the number was converted to some integer type (see below).
+
+4. `8`: the number was converted to `int8_t`.
+
+5. `u8`: the number was converted to `uint8_t`.
+
+6. `16`: the number was converted to `int16_t`.
+
+7. `u16`: the number was converted to `uint16_t`.
+
+8. `32`: the number was converted to `int32_t`.
+
+9. `u32`: the number was converted to `uint32_t`.
+
+10. `64`: the number was converted to `int64_t`.
+
+11. `u64`: the number was converted to `uint64_t`.
+
+12. `i`: the number was converted to `signed int`.
+
+13. `ui`: the number was converted to `unsigned int` (cannot be < 0).
+
+14. `l`: the number was converted to `long int`.
+
+15. `ul`: the number was converted to `unsigned long int`.
+
+16. `ll`: the number was converted to `long long int`.
+
+17. `ull`: the number was converted to `unsigned long long int`.
+
+18. `SS`: the number was converted to `ssize_t`.
+
+19. `s`: the number was converted to `size_t`.
+
+20. `o`: the number was converted to `off_t`.
+
+21. `m`: the number was converted to `intmax_t`.
+
+22. `um`: the number was converted to `uintmax_t`.
+
+23. `f`: the number was converted to `float`.
+
+24. `d`: the number was converted to `double`.
+
+25. `di`: if `double_sized` (flag `d`, JSON float converted to `double`) set,
+then `as_double` is an integer.
+
+26. `ld`: the number was converted to `long double`.
+
+27. `ldi`: if `longdouble_sized` (flag `ld`, JSON float converted to `long
+double)` set, then `as_longdouble` is an integer.
+
+<div id="jparse-json-string-debug">
+### `jparse` JSON string debug output
+</div>
+
+The general form is:
+
+```
+JSON tree[5]:	lvl: 0	type: JTYPE_STRING	len{p,c:qPa}: 3	value:	"foo"
+```
+
+where `tree[5]` indicates the JSON debug level is 5, `lvl: 0` indicates the
+depth is 0, the `len{...}: 3` indicates a length of 3 with the flags described
+below, and the value is the string `"foo"`.
+
+The following flags, if present, mean the below, in the following order:
+
+0. `q`: the original string JSON string included surrounding double quotes (`"`s)
+
+1. `=`: the encoded string is identical to the decoded string (JSON decoding was
+not required).
+
+2. `/`: `/` was found after decoding.
+
+3. `p`: all chars are POSIX portable safe plus `+` and maybe `/` after decoding
+
+4. `a`: first char is alphanumeric after decoding
+
+5. `U`: UPPER case chars found after decoding.
+
+
+<div id="jparse-json-other-debug">
+### `jparse` other JSON debug output
+</div>
+
+The other types should not, we believe, require an explanation. If you see `len`
+it indicates the length, as an example, but if you need help deciphering it, we
+recommend you take a look at the function `vjson_fprint()` in
+[json_util](https://github.com/xexyl/jparse/blob/master/json_util.c).
 
 
 <div id="jparse-exit-codes"></div>

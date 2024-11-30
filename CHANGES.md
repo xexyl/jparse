@@ -20,6 +20,12 @@ modification Makefiles to a temporary file to make sure tests can go okay
 without any modified Makefiles interfering. The `jparse_bug_report.sh` now
 checks for these files and cats them to the log/stdout in the case they exist.
 
+Add details about JSON debug output flags (in other words if `-J level` used and
+high enough level) for `JTYPE_NUMBER` and `JTYPE_STRING`, the types that have a
+lot of flags that might mean very little to anyone who has not looked at the
+code.
+
+
 ## Release 2.1.5 2024-11-25
 
 Add another internal include possibility where one could (though this is
