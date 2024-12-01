@@ -1,5 +1,18 @@
 # Significant changes in the JSON parser repo
 
+## Release 2.1.6 2024-12-01
+
+Modularise the `vjson_fprint()` function (for `-J level` of the parser) by
+breaking each `JTYPE_` into its own function. The `JTYPE_NUMBER` already had
+this and now the others do too, though the most important one is for
+`JTYPE_STRING`.
+
+Moved debug documentation from `jparse_utils_README.md` to
+`jparse_library_README.md` as it is not limited to tool found here.
+
+Also, the library documentation has been greatly expanded, in
+`jparse_library_README.md`, although there certainly could be more done.
+
 
 ## Release 2.1.5 2024-11-30
 

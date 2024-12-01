@@ -381,7 +381,7 @@ struct json_object
 /*
  * JSON ordered array of values
  *
- * When parsed == false, then all other fields in this structure may be invalid.
+ * When parsed == false, then all other fields in this structure might be invalid.
  * So you must check the boolean of parsed and only use values if parsed == true.
  *
  * A JSON array is of the form:
@@ -393,7 +393,7 @@ struct json_object
  *
  *	foo.set[i-1]
  *
- * IMPORTANT: The struct json_array must be identical to struct json_elements because
+ * IMPORTANT: The struct json_array MUST be identical to struct json_elements because
  *	      json_parse_array() converts by just changing the JSON item type.
  */
 struct json_array
@@ -411,7 +411,7 @@ struct json_array
 /*
  * JSON elements
  *
- * When parsed == false, then all other fields in this structure may be invalid.
+ * When parsed == false, then all other fields in this structure might be invalid.
  * So you must check the boolean of parsed and only use values if parsed == true.
  *
  * A JSON elements is zero or more JSON values.
@@ -420,7 +420,7 @@ struct json_array
  *
  *	foo.set[i-1]
  *
- * IMPORTANT: The struct json_array must be identical to struct json_elements because
+ * IMPORTANT: The struct json_array MUST be identical to struct json_elements because
  *	      json_parse_array() converts by just changing the JSON item type.
  */
 struct json_elements
