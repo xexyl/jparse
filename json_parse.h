@@ -78,7 +78,7 @@ struct byte2asciistr
 /*
  * parsed JSON number
  *
- * When parsed == false, then all other fields in this structure may be invalid.
+ * When parsed == false, then all other fields in this structure might be invalid.
  * So you must check the boolean of parsed and only use values if parsed == true.
  *
  * If converted == false, then the JSON number string was not able to be
@@ -222,16 +222,18 @@ struct json_number
 /*
  * parsed JSON string
  *
- * When parsed == false, then all other fields in this structure may be invalid.
+ * When parsed == false, then all other fields in this structure might be invalid.
  * So you must check the boolean of parsed and only use values if parsed == true.
  *
  * If the allocation of as_str fails, then as_str == NULL and parsed == false.
  *
  * The non-NULL as_str allocated will be NUL byte terminated.
  *
- * A JSON string is of the form:
+ * The scanner has the regex:
  *
- *	"([^\n"]|\\")*"
+ *	"([^"\x01-\x1f]|\\\")*"
+ *
+ * where the unescaped '"' is a literal double quote.
  *
  * NOTE: We let the conversion function decide whether the string is actually
  * invalid according to the JSON standard so the regex above is for the parser
@@ -262,7 +264,7 @@ struct json_string
 /*
  * parsed JSON boolean
  *
- * When parsed == false, then all other fields in this structure may be invalid.
+ * When parsed == false, then all other fields in this structure might be invalid.
  * So you must check the boolean of parsed and only use values if parsed == true.
  *
  * A JSON boolean is of the form:
@@ -285,7 +287,7 @@ struct json_boolean
 /*
  * parsed JSON null
  *
- * When parsed == false, then all other fields in this structure may be invalid.
+ * When parsed == false, then all other fields in this structure might be invalid.
  * So you must check the boolean of parsed and only use values if parsed == true.
  *
  * A JSON null is of the form:
@@ -307,16 +309,14 @@ struct json_null
 /*
  * JSON member
  *
- * When parsed == false, then all other fields in this structure may be invalid.
+ * When parsed == false, then all other fields in this structure might be invalid.
  * So you must check the boolean of parsed and only use values if parsed == true.
  *
  * A JSON member is of the form:
  *
  *	name : value
  *
- * where name is a JSON string of the form:
- *
- *	"([^\n"]|\\")*"
+ * where name is a valid JSON string.
  *
  * and where value is any JSON value such as a:
  *
@@ -328,7 +328,7 @@ struct json_null
  *	JSON null
  *
  * These 4 items are copies of information from the JSON string name
- * and serve as a convenience for accessing JSON member name information.
+ * and serve as a convenience for accessing JSON member name information:
  *
  * The name_as_str is a pointer copy of name->item.string.as_str pointer.
  * The name_str is a pointer copy of name->item.string.str pointer.
@@ -354,7 +354,7 @@ struct json_member
 /*
  * JSON object
  *
- * When parsed == false, then all other fields in this structure may be invalid.
+ * When parsed == false, then all other fields in this structure might be invalid.
  * So you must check the boolean of parsed and only use values if parsed == true.
  *
  * JSON object is one of:
@@ -420,7 +420,7 @@ struct json_array
  *
  *	foo.set[i-1]
  *
- * IMPORTANT: The struct json_array MUST be identical to struct json_elements because
+ * IMPORTANT: The struct json_elements MUST be identical to struct json_array because
  *	      json_parse_array() converts by just changing the JSON item type.
  */
 struct json_elements

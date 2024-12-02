@@ -1,5 +1,13 @@
 # Significant changes in the JSON parser repo
 
+## Release 2.1.7 2024-12-02
+
+Add more documentation about each `json_` struct and added some details to
+`json_README.md` for JSON numbers.
+
+Fixed some comments in `json_parse.h`.
+
+
 ## Release 2.1.6 2024-12-01
 
 Modularise the `vjson_fprint()` function (for `-J level` of the parser) by

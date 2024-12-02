@@ -29,6 +29,14 @@ document to better understand the JSON terms used in this repo.
     - [struct json: the core struct](#struct-json)
     - [enum item_type: the different JSON types](#enum-item-type)
     - [JSON structs](#json-structs)
+        - [`struct json_number`: JSON numbers](#struct-json-number)
+        - [`struct json_string`: JSON strings](#struct-json-string)
+        - [`struct json_boolean`: JSON booleans](#struct-json-boolean)
+        - [`struct json_null`: JSON `null`](#struct-json-null)
+        - [`struct json_member`: JSON members](#struct-json-member)
+        - [`struct json_object`: JSON objects](#struct-json-object)
+        - [`struct json_array`: JSON arrays](#struct-json-array)
+        - [`struct json_elements`: JSON elements](#struct-json-elements)
 - [JSON debug output](#json-debug-output)
     - [JTYPE_NUMBER: JSON number debug output](#jtype-number-debug-output)
     - [JTYPE_STRING: JSON string debug output](#jtype-string-debug-output)
@@ -225,6 +233,24 @@ types. These structures each correspond to a `JTYPE_` of the enum `item_type`,
 found above, defined in
 [json_parse.h](https://github.com/xexyl/jparse/blob/master/json_parse.h).
 
+Every struct has the booleans `parsed` and `converted`, indicating,
+respectively, whether or not the JSON was parsed successfully and if the data
+could be converted. An example where it might be parsed successfully but it
+could not be converted is if the number is so large it does not fit in a C type.
+
+Please be advised that when `parsed == false` the fields in the struct might be
+invalid. Thus you must check the boolean of parsed and only use values if
+`parsed == true`. We provide the following convenience macros:
+
+```c
+#define VALID_JSON_NODE(item) ((item) != NULL && (((item)->parsed == true) || ((item)->converted == true)))
+#define PARSED_JSON_NODE(item) ((item) != NULL && ((item)->parsed == true))
+#define CONVERTED_PARSED_JSON_NODE(item) ((item) != NULL && (((item)->parsed == true) && ((item)->converted == true)))
+#define CONVERTED_JSON_NODE(item) ((item) != NULL && (item)->converted == true)
+```
+
+to help you here.
+
 For now (at least), there are no details about the structures; that might come
 later but you are invited to look at the header file
 [json_parse.h](https://github.com/xexyl/jparse/blob/master/json_parse.h) as well
@@ -232,24 +258,315 @@ as how they are used in the various source files, especially
 [json_parse.c](https://github.com/xexyl/jparse/blob/master/json_parse.c), for
 more details.
 
-Here are the structures:
+The structures are documented next.
 
-- `json_number`: for JSON numbers (all kinds)
-- `json_string`: for JSON strings
-- `json_boolean`: for JSON booleans (`true`, `false`)
-- `json_null`: for the JSON null (`null`, not a string)
-- `json_member`: for JSON members
-- `json_object`: for JSON objects
-- `json_array`: for JSON arrays (this **MUST** be the same as `json_elements`!)
-- `json_elements`: for JSON elements (this **MUST** be the same as `json_array`!)
+<div id="struct-json-number"></div>
 
-In the case of `struct json_object`, `struct json_array` and `struct
-json_elements`, the pointer to the i-th JSON value in the JSON type, if i < len,
-is `foo.set[i-1]`.
+### `struct json_number`: JSON numbers
 
-For now, please see the comments for each struct in
-[json_parse.h](https://github.com/xexyl/jparse/blob/master/json_parse.h) for
-details on what the struct members are and what they are for.
+This structure is for JSON numbers, where a JSON number is:
+
+```
+({JSON_INTEGER}|{JSON_INTEGER}{JSON_FRACTION}|{JSON_INTEGER}{JSON_FRACTION}{JSON_EXPONENT})
+```
+
+where `{JSON_INTEGER}` is the regex:
+
+```regex
+-?([1-9][0-9]*|0)
+```
+
+and `{JSON_FRACTION}` is the regex:
+
+```regex
+\.[0-9]+
+```
+
+and `{JSON_EXPONENT}` is the regex:
+
+```regex
+[Ee][-+]?[0-9]+
+```
+
+This structure is quite complicated but we believe that the comments for each
+member will help you in determining how the structure is used and how you can
+use it as well:
+
+
+```c
+char *as_str;		/* allocated copy of the original allocated JSON number, NUL terminated */
+char *first;		/* first whitespace character */
+
+size_t as_str_len;		/* length of as_str */
+size_t number_len;		/* length of JSON number, w/o leading or trailing whitespace and NUL bytes */
+
+bool is_negative;		/* true ==> value < 0 */
+
+bool is_floating;		/* true ==> as_str had a '.' in it such as 1.234, false ==> no '.' found */
+bool is_e_notation;		/* true ==> e notation used such as 1e10, false ==> no e notation found */
+bool is_integer;		/* true ==> converted to some integer type below */
+
+/* integer values */
+
+bool int8_sized;		/* true ==> converted JSON integer to C int8_t */
+int8_t as_int8;		/* JSON integer value in int8_t form, if int8_sized == true */
+
+bool uint8_sized;		/* true ==> converted JSON integer to C uint8_t */
+uint8_t as_uint8;		/* JSON integer value in uint8_t form, if uint8_sized == true */
+
+bool int16_sized;		/* true ==> converted JSON integer to C int16_t */
+int16_t as_int16;		/* JSON integer value in int16_t form, if int16_sized == true */
+
+bool uint16_sized;		/* true ==> converted JSON integer to C uint16_t */
+uint16_t as_uint16;		/* JSON integer value in uint16_t form, if uint16_sized == true */
+
+bool int32_sized;		/* true ==> converted JSON integer to C int32_t */
+int32_t as_int32;		/* JSON integer value in int32_t form, if int32_sized == true */
+
+bool uint32_sized;		/* true ==> converted JSON integer to C uint32_t */
+uint32_t as_uint32;		/* JSON integer value in uint32_t form, if uint32_sized == true */
+
+bool int64_sized;		/* true ==> converted JSON integer to C int64_t */
+int64_t as_int64;		/* JSON integer value in int64_t form, if int64_sized == true */
+
+bool uint64_sized;		/* true ==> converted JSON integer to C uint64_t */
+uint64_t as_uint64;		/* JSON integer value in uint64_t form, if uint64_sized == true */
+
+bool int_sized;		/* true ==> converted JSON integer to C int */
+int as_int;			/* JSON integer value in int form, if int_sized == true */
+
+bool uint_sized;		/* true ==> converted JSON integer to C unsigned int */
+unsigned int as_uint;	/* JSON integer value in unsigned int form, if uint_sized == true */
+
+bool long_sized;		/* true ==> converted JSON integer to C long */
+long as_long;		/* JSON integer value in long form, if long_sized == true */
+
+bool ulong_sized;		/* true ==> converted JSON integer to C unsigned long */
+unsigned long as_ulong;	/* JSON integer value in unsigned long form, if long_sized == true */
+
+bool longlong_sized;	/* true ==> converted JSON integer to C long long */
+long long as_longlong;	/* JSON integer value in long long form, if longlong_sized longlong_sized == true */
+
+bool ulonglong_sized;	/* true ==> converted JSON integer to C unsigned long long */
+unsigned long long as_ulonglong;	/* JSON integer value in unsigned long long form, if ulonglong_sized a== true */
+
+bool ssize_sized;		/* true ==> converted JSON integer to C ssize_t */
+ssize_t as_ssize;		/* JSON integer value in ssize_t form, if ssize_sized == true */
+
+bool size_sized;		/* true ==> converted JSON integer to C size_t */
+size_t as_size;		/* JSON integer value in size_t form, if size_sized == true */
+
+bool off_sized;		/* true ==> converted JSON integer to C off_t */
+off_t as_off;		/* JSON integer value in off_t form, if off_sized == true */
+
+bool maxint_sized;		/* true ==> converted JSON integer to C maxint_t */
+intmax_t as_maxint;		/* JSON integer value in as_maxint form, if maxint_sized == true */
+
+bool umaxint_sized;		/* true ==> converted JSON integer to C umaxint_t */
+uintmax_t as_umaxint;	/* JSON integer value in as_umaxint form, if umaxint_sized == true */
+
+/* floating point values */
+
+bool float_sized;		/* true ==> converted JSON float to C float */
+float as_float;		/* JSON floating point value in float form, if float_sized  == true */
+bool as_float_int;		/* if float_sized == true, true ==> as_float is an integer */
+
+bool double_sized;		/* true ==> converted JSON float to C double */
+double as_double;		/* JSON floating point value in double form, if double_sized  == true */
+bool as_double_int;		/* if double_sized == true, true ==> as_double is an integer */
+
+bool longdouble_sized;	/* true ==> converted JSON float to C long double */
+long double as_longdouble;	/* JSON floating point value in long double form, if longdouble_sized  == true */
+bool as_longdouble_int;	/* if longdouble_sized == true, true ==> as_longdouble is an integer */
+```
+
+<div id="struct-json-string"></div>
+
+### `struct json_string`: JSON strings
+
+This struct is for JSON strings which we have as the regex:
+
+```regex
+\"([^"\x01-\x1f]|\\\")*\"
+```
+
+Now some might claim this is not quite correct for JSON strings but this is to
+simplify the lexer. The parse routines do impose further restrictions. This is
+done in the complicated function `json_decode()` found in
+[json_parse.c](https://github.com/xexyl/jparse/blob/master/json_parse.c), which
+calls the function `decode_json_string()`; `json_decode()` is called by the
+function `json_conv_string()`; a simplified interface to `json_decode()` is
+`json_decode_str()`.
+
+For more details on a valid JSON string, please see the section [JSON encoded
+string in json_README.md](json_README.md#json-encoded-string).
+
+The `struct json_string` is also quite complicated but we believe the comments
+should be enough to understand the struct and its members:
+
+
+```c
+char *as_str;		/* allocated non-decoded JSON string, NUL terminated (perhaps sans JSON '"'s) */
+char *str;			/* allocated decoded JSON string, NUL terminated */
+
+size_t as_str_len;		/* length of as_str, not including final NUL */
+size_t str_len;		/* length of str, not including final NUL */
+
+bool quote;			/* The original JSON string included surrounding '"'s */
+
+bool same;			/* true => as_str same as str, JSON decoding not required */
+
+bool slash;			/* true ==> / was found after decoding */
+bool posix_safe;		/* true ==> all chars are POSIX portable safe plus + and maybe / after decoding */
+bool first_alphanum;	/* true ==> first char is alphanumeric after decoding */
+bool upper;			/* true ==> UPPER case chars found after decoding */
+```
+
+<div id="codepoints"></div>
+
+#### On encoding/decoding UTF-8/UTF-16 codepoints:
+
+A note on encoding/decoding UTF-8/UTF-16 codepoints is in order. The
+`json_decode()` function decodes a JSON string according to the so-called JSON
+spec and that function has the **encoding** of UTF-8/UTF-16 codepoints. The
+`json_encode()` function encodes a JSON string according to the so-called JSON
+spec and the function does **NOT** encode UTF-8/UTF-16 codepoints, but it
+should. We might call this a mis-feature that should be corrected, but for now
+this is not the case. The [documentation on
+jstrdecode](jparse_utils_README.md#jstrdecode) and the [documentation on
+jstrencode](jparse_utils_README.md#jstrencode) give more details on this.
+
+
+<div id="struct-json-boolean"></div>
+
+### `struct json_boolean`: JSON booleans
+
+This struct is, as the name implies, for JSON booleans: that is `false` or
+`true` (**NOT** `"false"` or `"true"`!). This struct is very simple.
+
+The most important member is probably `value`, which is `true` or `false`, but
+like with others, we do have:
+
+```c
+char *as_str;		/* allocated JSON boolean string, NUL terminated */
+size_t as_str_len;		/* length of as_str */
+```
+
+<div id="struct-json-null"></div>
+
+### `struct json_null`: JSON `null`
+
+This struct is for the JSON `null` (**NOT** `"null"`) and it is also quite
+simple. The `value` is actually a NULL (void) pointer. The struct also does have
+the usual:
+
+```c
+char *as_str;		/* allocated JSON null string, NUL terminated */
+size_t as_str_len;		/* length of as_str */
+```
+
+<div id="struct-json-member"></div>
+
+### `struct json_member`: JSON members
+
+Now we get to something more complicated, in that JSON members have more than
+one component.
+
+A JSON member is in the form of:
+
+```json
+"name" : value
+```
+
+<div id="json-value"></div>
+
+where `name` is a valid JSON string and where `value` is any JSON value such as:
+
+* JSON object
+* JSON array
+* JSON string
+* JSON number
+* JSON boolean
+* JSON null
+
+The struct has the following members, as a convenience for accessing JSON member
+name information:
+
+ * The `name_as_str` is a pointer copy of `name->item.string.as_str` pointer.
+ * The `name_str` is a pointer copy of `name->item.string.str` pointer.
+ * The `name_as_str_len` is a copy of `name->item.string.as_str_len`.
+ * The `name_str_len` is a copy of `name->item.string.str_len`.
+
+The `name` and `value` are each a `struct json *`.
+
+
+<div id="struct-json-object"></div>
+
+### `struct json_object`: JSON objects
+
+A JSON object is one of:
+
+```
+{ }
+```
+
+or
+
+```
+{ members }
+```
+
+The pointer to the i-th JSON member in the JSON object, if `i < len`, is:
+
+```c
+foo.set[i-1]
+```
+
+The number of JSON members in the JSON object is, as hinted at above, the
+`intmax_t` called `len`. The member `set`, a `struct json **`, is the set of
+JSON members in the object. The member `s`, which is a `struct dyn_array *`, is
+the dynamic array managed storage for the JSON object.
+
+<div id="struct-json-array"></div>
+
+### `struct json_array`: JSON arrays
+
+**PLEASE NOTE**: this struct **MUST** be the same as `struct json_elements`!
+
+A JSON array is of the form:
+
+```
+[ ]
+```
+
+or
+
+```
+[ values ]
+```
+
+Like a JSON object, the pointer to the i-th JSON value in the JSON array, if `i
+< len`, is:
+
+```c
+foo.set[i-1]
+```
+
+And just like a JSON object, the length is an `intmax_t` called `len`, the set
+of JSON values belonging to the array is a `struct json **` called `set` and the
+dynamic array managed storage of the array is a `struct dyn_array *` called `s`.
+
+<div id="struct-json-elements"></div>
+
+### `struct json_elements`: JSON elements
+
+**IMPORTANT NOTE**: the `struct json_elements` **MUST** be identical to `struct
+json_array`!
+
+A JSON element is 0 or more [JSON values](#json-value).
+
+Given that the struct is identical to the `struct json_array`, we refer you to
+the details on the [struct json_array](#struct-json-array).
 
 
 <div id="re-entrancy"></div>
