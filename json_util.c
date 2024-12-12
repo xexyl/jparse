@@ -2047,7 +2047,7 @@ void
 vjson_fprint(struct json *node, unsigned int depth, va_list ap)
 {
     FILE *stream = NULL;	/* stream to print on */
-    int json_dbg_lvl = JSON_DBG_DEFAULT;	/* JSON debug level if json_dbg_used == true */
+    int json_dbg_lvl = JSON_DBG_DEFAULT;	/* JSON debug level */
     char const *tname = NULL;	/* name of the node type */
     va_list ap2;		/* copy of va_list ap */
 
@@ -2064,7 +2064,7 @@ vjson_fprint(struct json *node, unsigned int depth, va_list ap)
     va_copy(ap2, ap);
 
     /*
-     * obtain the stream, json_dbg_used, and json_dbg args
+     * obtain the stream and json_dbg_lvl args
      */
     stream = va_arg(ap2, FILE *);
     if (stream == NULL) {
@@ -2074,7 +2074,7 @@ vjson_fprint(struct json *node, unsigned int depth, va_list ap)
     json_dbg_lvl = va_arg(ap2, int);
 
     /*
-     * check JSON debug level if allowed
+     * check if JSON debug output is allowed
      */
     if (!dbg_output_allowed || (json_dbg_lvl != JSON_DBG_FORCED &&
         json_dbg_lvl > json_verbosity_level)) {
