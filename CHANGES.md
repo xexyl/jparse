@@ -1,5 +1,26 @@
 # Significant changes in the JSON parser repo
 
+## Release 2.1.8 2024-12-22
+
+Bug fixes in both `jstrdecode(1)` and `jparse(1)`.
+
+There was a missing arg in `usage()` in `jstrdecode(1)` which caused a memory
+error causing invalid output when `-h` was used.
+
+In `jparse(1)` the `usage()` function referred to `json_verbosity_level` rather
+than the default value of `JSON_DBG_DEFAULT`. What that means is that if one
+were to have done `-J 5 -h` it the default would have been shown as 5 when in
+fact it's 0.
+
+Updated version of `jparse(1)` to `"1.2.7 2024-12-22"`.
+Updated version of `jstrdecode(1)` to `"2.1.4 2024-12-22"`.
+
+A note about why the repo release version only had the date changed: it's
+because when updating documentation on 2 December 2024 I updated it but did not
+document it here. But since it's not really necessary to note this (though it's
+been done sometimes) it did not seem useful to add another entry in this file.
+
+
 ## Release 2.1.7 2024-12-02
 
 Add more documentation about each `json_` struct and added some details to

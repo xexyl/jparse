@@ -714,7 +714,8 @@ usage(int exitcode, char const *prog, char const *str)
 	fprintf_usage(DO_NOT_EXIT, stderr, "%s\n", str);
     }
 
-    fprintf_usage(exitcode, stderr, usage_msg, prog, DBG_DEFAULT, JSTRDECODE_BASENAME, JSTRDECODE_VERSION,
+
+    fprintf_usage(exitcode, stderr, usage_msg, prog, DBG_DEFAULT, JSON_DBG_DEFAULT, JSTRDECODE_BASENAME, JSTRDECODE_VERSION,
 	    JPARSE_UTF8_VERSION, JPARSE_LIBRARY_VERSION);
     exit(exitcode); /*ooo*/
     not_reached();
