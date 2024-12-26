@@ -51,6 +51,7 @@ static const char * const usage_msg =
     "\t-h\t\tprint help message and exit\n"
     "\t-v level\tset verbosity level (def level: %d)\n"
     "\t-j\t\tenable parsing of encoded JSON before decoding (def: don't parse)\n"
+    "\t\t\t\tNOTE: use of -j and -d is an error\n"
     "\t-J level\tset JSON verbosity level (def level: %d)\n"
     "\t-q\t\tquiet mode: silence msg(), warn(), warnp() if -v 0 (def: loud :-) )\n"
     "\t-V\t\tprint version string and exit\n"
@@ -60,6 +61,7 @@ static const char * const usage_msg =
     "\t-Q\t\tenclose output in double quotes (def: do not)\n"
     "\t-e\t\tfor multiple args, enclose each decoded arg in escaped double quotes (def: do not)\n"
     "\t-d\t\tdo not require a leading and trailing double quote (def: do require)\n"
+    "\t\t\t\tNOTE: use of -d and -j is an error\n"
     "\t-E level\tentertainment mode\n"
     "\n"
     "\t[arg ...]\tJSON decode args on command line (def: read stdin)\n"
@@ -457,6 +459,15 @@ main(int argc, char **argv)
 	    not_reached();
 	    break;
 	}
+    }
+
+    /*
+     * -j and -d cannot be used together because -j requires surrounding quotes
+     * and -d requires that there are no surrounding quotes.
+     */
+    if (json_parse && !quote) {
+        usage(3, program, "-j and -d cannot be used together"); /*ooo*/
+        not_reached();
     }
     dbg(DBG_LOW, "argc: %d", argc);
     dbg(DBG_LOW, "optind: %d", optind);

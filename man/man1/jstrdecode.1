@@ -83,6 +83,11 @@ If you use the
 option and you use the
 .BI \-j\  level
 option, it will set the JSON debug level.
+Note that the use of
+.B \-j
+and
+.B \-d
+together is an error.
 .PP
 If given the
 .B \-t
@@ -99,6 +104,8 @@ Set verbosity level to
 .TP
 .B \-j
 Enable parsing (as JSON) each string before decoding.
+Cannot be used with
+.BR \-d .
 .TP
 .BI \-J\  level
 Set the JSON debug level.
@@ -127,6 +134,8 @@ if any only if more than one string is given on the command line.
 .TP
 .B \-d
 Don't require input to be surrounded by double quotes ("s).
+Cannot be used with
+.BR \-j .
 .TP
 .BI \-E\  level
 Entertainment mode at level
