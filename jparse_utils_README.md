@@ -186,9 +186,8 @@ will enclose each decoded string with escaped double quotes. Use of `-Q` and
 decoded arg will be surrounded with escaped (backslashed) quotes. To not require
 surrounding the input strings with double quotes (`"`s), use the `-d` option.
 
-Before attempting to decode the string, it will use the JSON parser on the
-string, to make sure it is valid JSON. If you need to disable this, use the `-j`
-option. The `-J level` option will set the jparse debug level, assuming `-j` is
+If you need the input to be valid JSON, use the `-j` option to enable JSON
+parsing. The `-J level` option will set the jparse debug level, assuming `-j` is
 not used.
 
 If you use `-N` it ignores all newlines in input. This does not mean that the

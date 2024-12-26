@@ -1,5 +1,18 @@
 # Significant changes in the JSON parser repo
 
+## Release 2.1.9 2024-12-26
+
+Invert the meaning of `jstrdecode -j`.
+
+Now by default the tool will not validate the input as JSON. If that is needed
+one should use the `-j` option (previously it disabled the check). This is
+because it is not always needed, it can cause problems and it also is annoying
+to have to always double quote the input (forcing something like `jstrdecode
+'"foo"'`).
+
+`jstrdecode(1)` version is now `"2.1.5 2024-12-26"`.
+
+
 ## Release 2.1.8 2024-12-22
 
 Bug fixes in both `jstrdecode(1)` and `jparse(1)`.

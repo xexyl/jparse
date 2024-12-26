@@ -73,7 +73,7 @@
 /*
  * official jstrdecode version
  */
-#define JSTRDECODE_VERSION "2.1.4 2024-12-22"	/* format: major.minor YYYY-MM-DD */
+#define JSTRDECODE_VERSION "2.1.5 2024-12-26"	/* format: major.minor YYYY-MM-DD */
 
 
 /*
