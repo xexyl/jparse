@@ -50,7 +50,7 @@ static const char * const usage_msg =
     "\n"
     "\t-h\t\tprint help message and exit\n"
     "\t-v level\tset verbosity level (def level: %d)\n"
-    "\t-j\t\tenable parsing of encoded JSON before decoding (def: parse)\n"
+    "\t-j\t\tenable parsing of encoded JSON before decoding (def: don't parse)\n"
     "\t-J level\tset JSON verbosity level (def level: %d)\n"
     "\t-q\t\tquiet mode: silence msg(), warn(), warnp() if -v 0 (def: loud :-) )\n"
     "\t-V\t\tprint version string and exit\n"
