@@ -379,8 +379,10 @@ dir_name(char const *path, int level)
  * count_comps       - count comp delimited components in a string
  *
  * given:
- *      str     - string to test
- *      comp    - component delimiting character
+ *      str             - string to test
+ *      comp            - component delimiting character
+ *      remove_all      - true ==> remove all trailing delimiter chars,
+ *                        false ==> remove all but last trailing delimiter char
  *
  * returns:
  *      0 ==> empty string,
@@ -399,7 +401,7 @@ dir_name(char const *path, int level)
  * not component!
  */
 size_t
-count_comps(char const *str, char comp)
+count_comps(char const *str, char comp, bool remove_all)
 {
     size_t count = 0;       /* number of components */
     char *copy;             /* to simplify counting */
@@ -426,14 +428,15 @@ count_comps(char const *str, char comp)
 	not_reached();
     }
 
-    dbg(DBG_VVVHIGH, "#0: count_comps(\"%s\", %c)", str, comp);
+    dbg(DBG_VVVHIGH, "#0: count_comps(\"%s\", %c, %s)", str, comp, booltostr(remove_all));
 
     /*
      * case: empty string is 0
      */
     len = strlen(copy);
     if (len <= 0) {
-	dbg(DBG_VVHIGH, "#1: count_comps(\"%s\", %c): \"%s\" is an empty string", str, comp, str);
+	dbg(DBG_VVHIGH, "#1: count_comps(\"%s\", %c, %s): \"%s\" is an empty string", str, comp, str,
+                booltostr(remove_all));
 	return 0;
     }
     dbg(DBG_HIGH, "#2: string before removing successive '%c's: %s", comp, copy);
@@ -443,12 +446,12 @@ count_comps(char const *str, char comp)
      */
     for (i = len - 1; i > 0; --i) {
 	if (copy[i] == comp) {
-            if (i > 0 && copy[i-1] != comp) {
+            if ((i > 0 && copy[i-1] != comp) || !remove_all) {
                 /*
                  * if we get here it means that there are no more successive
                  * delimiting characters so we do not want to remove this one
                  */
-                dbg(DBG_HIGH, "#3: string after removing all but one trailing '%c': %s", comp, copy);
+                dbg(DBG_HIGH, "#3: string after removing trailing '%c's: %s", comp, copy);
                 break;
             } else {
                 /* trim the trailing / */
@@ -456,13 +459,12 @@ count_comps(char const *str, char comp)
             }
 	} else {
 	    /*
-             * no more than one of the delimiter character is (now) at the end
-             * of the string
+             * no more than one trailing delimiter char exist (now)
              */
 	    break;
 	}
     }
-    dbg(DBG_HIGH, "#4: string after removing all but one trailing '%c's: %s", comp, copy);
+    dbg(DBG_HIGH, "#4: string after removing trailing '%c's: %s", comp, copy);
 
     /*
      * now copy has no successive trailing delimiting characters
@@ -475,7 +477,7 @@ count_comps(char const *str, char comp)
         /*
          * string is empty
          */
-	dbg(DBG_VHIGH, "#5: count_comps(\"%s\", '%c') == 0", str, comp);
+	dbg(DBG_VHIGH, "#5: count_comps(\"%s\", '%c', %s) == 0", str, comp, booltostr(remove_all));
         if (copy != NULL) {
             free(copy);
             copy = NULL;
@@ -497,7 +499,7 @@ count_comps(char const *str, char comp)
              * We know this because we have removed all successive component chars
              * at the end of the string.
              */
-            dbg(DBG_VHIGH, "#6: count_comps(\"%s\", '%c') == 1", str, comp);
+            dbg(DBG_VHIGH, "#6: count_comps(\"%s\", '%c', %s) == 1", str, comp, booltostr(remove_all));
             return 1;
         } else {
             /*
@@ -521,7 +523,7 @@ count_comps(char const *str, char comp)
 	/*
 	 * str does not have the component, return 1
 	 */
-	dbg(DBG_VVHIGH, "#3: count_comps(\"%s\", %c) == 1", str, comp);
+	dbg(DBG_VVHIGH, "#3: count_comps(\"%s\", %c, %s) == 1", str, comp, booltostr(remove_all));
         return 0;
     } else {
         while (p != NULL) {
@@ -551,7 +553,7 @@ count_comps(char const *str, char comp)
     /*
      * return the total components
      */
-    dbg(DBG_VVHIGH, "#4: count_comps(\"%s\", %c) == %ju", str, comp, (uintmax_t)count);
+    dbg(DBG_VVHIGH, "#4: count_comps(\"%s\", %c, %s) == %ju", str, comp, booltostr(remove_all), (uintmax_t)count);
     return count;
 }
 
@@ -583,7 +585,7 @@ count_dirs(char const *path)
     /*
      * return the number of components in the path
      */
-    return count_comps(path, '/');
+    return count_comps(path, '/', false);
 }
 
 /*
@@ -6271,6 +6273,22 @@ main(int argc, char **argv)
         not_reached();
     } else {
         fdbg(stderr, DBG_MED, "count_dirs(\"%s\") == 3", relpath);
+    }
+
+    /*
+     * test count_comps() by removing all trailing delimiters
+     */
+
+    /*
+     * "foo/bar,,," should count as 2
+     */
+    relpath = "foo,bar,,,";
+    comps = count_comps(relpath, ',', true);
+    if (comps != 2) {
+        err(228, __func__, "count_comps(\"%s\", ',', true): %ju != 2", relpath, comps);
+        not_reached();
+    } else {
+        fdbg(stderr, DBG_MED, "count_comps(\"%s\", ',', true) == 2", relpath);
     }
 }
 #endif
