@@ -80,6 +80,7 @@ static char const * const usage =
 "\t-q\t\tquiet mode: silence msg(), warn(), warnp() if -v 0 (def: loud :-) )\n"
 "\n"
 "jparse util test version: %s\n"
+"jparse utils version: %s\n"
 "jparse UTF-8 version: %s\n"
 "jparse library version: %s";
 #endif /* UTIL_TEST */
@@ -5613,7 +5614,8 @@ main(int argc, char **argv)
     while ((i = getopt(argc, argv, ":hv:J:Vqe:")) != -1) {
 	switch (i) {
 	case 'h':	/* -h - write help, to stderr and exit 0 */
-	    fprintf_usage(0, stderr, usage, program, UTIL_TEST_VERSION, JPARSE_UTF8_VERSION, JPARSE_LIBRARY_VERSION); /*ooo*/
+	    fprintf_usage(0, stderr, usage, program, UTIL_TEST_VERSION, JPARSE_UTILS_VERSION, JPARSE_UTF8_VERSION,
+                    JPARSE_LIBRARY_VERSION); /*ooo*/
 	    not_reached();
 	    break;
 	case 'v':	/* -v verbosity */
@@ -5639,26 +5641,38 @@ main(int argc, char **argv)
 	    break;
 	case 'V':		/* -V - write version and exit */
 	    errno = 0;		/* pre-clear errno for warnp() */
-	    ret = printf("%s\n", JPARSE_LIBRARY_VERSION);
+	    ret = printf("util_test version: %s\n", UTIL_TEST_VERSION);
 	    if (ret <= 0) {
-		warnp(__func__, "printf error writing version string: %s", JPARSE_LIBRARY_VERSION);
+		warnp(__func__, "printf error writing util_test version string: %s", UTIL_TEST_VERSION);
+	    }
+	    ret = printf("jparse utils version: %s\n", JPARSE_UTILS_VERSION);
+	    if (ret <= 0) {
+		warnp(__func__, "printf error writing jparse utils version string: %s", JPARSE_UTILS_VERSION);
+	    }
+            errno = 0;          /* pre-clear errno for warnp() */
+	    ret = printf("jparse library version: %s\n", JPARSE_LIBRARY_VERSION);
+	    if (ret <= 0) {
+		warnp(__func__, "printf error writing jparse library version string: %s", JPARSE_LIBRARY_VERSION);
 	    }
 	    exit(0); /*ooo*/
 	    not_reached();
 	    break;
 	case ':':
 	    (void) fprintf(stderr, "%s: requires an argument -- %c\n\n", program, optopt);
-	    fprintf_usage(3, stderr, usage, program, UTIL_TEST_VERSION, JPARSE_UTF8_VERSION, JPARSE_LIBRARY_VERSION); /*ooo*/
+	    fprintf_usage(3, stderr, usage, program, UTIL_TEST_VERSION, JPARSE_UTILS_VERSION, JPARSE_UTF8_VERSION,
+                    JPARSE_LIBRARY_VERSION); /*ooo*/
 	    not_reached();
 	    break;
 	case '?':
 	    (void) fprintf(stderr, "%s: illegal option -- %c\n\n", program, optopt);
-	    fprintf_usage(3, stderr, usage, program, UTIL_TEST_VERSION, JPARSE_UTF8_VERSION, JPARSE_LIBRARY_VERSION); /*ooo*/
+	    fprintf_usage(3, stderr, usage, program, UTIL_TEST_VERSION, JPARSE_UTILS_VERSION, JPARSE_UTF8_VERSION,
+                    JPARSE_LIBRARY_VERSION); /*ooo*/
 	    not_reached();
 	    break;
 	default:
 	    fprintf_usage(DO_NOT_EXIT, stderr, "invalid -flag");
-	    fprintf_usage(3, stderr, usage, program, UTIL_TEST_VERSION, JPARSE_UTF8_VERSION, JPARSE_LIBRARY_VERSION); /*ooo*/
+	    fprintf_usage(3, stderr, usage, program, UTIL_TEST_VERSION, JPARSE_UTILS_VERSION,
+                    JPARSE_UTF8_VERSION, JPARSE_LIBRARY_VERSION); /*ooo*/
 	    not_reached();
 	}
     }
