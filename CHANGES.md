@@ -23,6 +23,10 @@ Updated `JSEMTBLGEN_VERSION` to `"1.2.1 2025-01-18"` from `"1.2.0 2024-10-09"`.
 Added `verge` to `jparse_utils_README.md`. Other tools should also be documented
 but more pressing matters delay will delay this further for some time.
 
+Fixed `jparse_bug_report.sh` variable `TOOLS`. Each one was missing a `./` which
+meant the tools had to be installed which makes that part of the script almost
+useless.
+
 
 ## Release 2.2.7 2025-01-17
 
