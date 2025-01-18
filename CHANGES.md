@@ -27,6 +27,8 @@ Fixed `jparse_bug_report.sh` variable `TOOLS`. Each one was missing a `./` which
 meant the tools had to be installed which makes that part of the script almost
 useless.
 
+Sequenced exit codes in util.c.
+
 
 ## Release 2.2.7 2025-01-17
 
