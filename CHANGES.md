@@ -1,5 +1,14 @@
 # Significant changes in the JSON parser repo
 
+## Release 2.2.8 2025-01-18
+
+Fix warnings about args to `%x` specifier in `sscanf(3)` being `unsigned int
+*`s, not `int *`s and explicitly added `-Wformat` to Makefiles.
+
+Updated `JPARSE_LIBRARY_VERSION` to `"2.2.7 2025-01-18"` from `"2.2.6
+2025-01-17"`.
+
+
 ## Release 2.2.7 2025-01-17
 
 Update `count_comps()` to have a boolean `remove_all` which will, if true,
