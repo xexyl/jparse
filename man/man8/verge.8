@@ -12,7 +12,7 @@
 .TH verge 8 "18 January 2025" "verge" "jparse tools"
 .SH NAME
 .B verge
-\- determine if first version arg >= second version arg
+\- determine if first version (major.minor.patch) arg is \(>= or less than the second version (major.minor.patch) arg
 .SH SYNOPSIS
 .B verge
 .RB [\| \-h \|]
@@ -24,7 +24,7 @@
 .SH DESCRIPTION
 .B verge
 (short for
-"version greater than or equal") compares the two versions specified, determining if they're equal or if one is >= the other.
+"version greater than or equal") compares the two versions specified, determining if they're the first is greater than or equal to the second or if the first is < the second.
 .PP
 This program requires two arguments but accepts several options.
 .SH OPTIONS
@@ -38,22 +38,27 @@ Set verbosity level to
 (def: 0).
 .TP
 .B \-V
-Print (\c
-.BR verge )
-version strings and exit.
+Print version (of
+.BR verge ,
+.B jparse
+utils,
+.B jparse
+UTF\-8 library and the
+.B jparse
+library itself) strings and exit.
 .SH EXIT STATUS
 .TP
 0
-first version \(>= second version
+first version arg \(>= second version arg
 .TQ
 1
-first version < second version
+first version arg < second version arg
 .TQ
 2
 .B \-h
 and help string printed or
 .B \-V
-and version string printed
+and version strings (see above) printed
 .TQ
 3
 command line error
