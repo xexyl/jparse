@@ -8,6 +8,17 @@ Fix warnings about args to `%x` specifier in `sscanf(3)` being `unsigned int
 Updated `JPARSE_LIBRARY_VERSION` to `"2.2.7 2025-01-18"` from `"2.2.6
 2025-01-17"`.
 
+Add missing `JPARSE_UTILS_VERSION` to various tools.
+
+Updated man pages and code to show `version strings` (when referring to `-V` and
+exit codes) as each tool has more than one version string. Minor detail but
+worth noting. For `verge` when showing this it talks about the verge version
+strings as the tool takes two args which are versions as a string. This is not
+very important but done to be more correct.
+
+Split usage message for `jsemtblgen` into two strings as it was quite long.
+Updated `JSEMTBLGEN_VERSION` to `"1.2.1 2025-01-18"` from `"1.2.0 2024-10-09"`.
+
 
 ## Release 2.2.7 2025-01-17
 
