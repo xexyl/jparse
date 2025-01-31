@@ -6478,7 +6478,7 @@ main(int argc, char **argv)
     /*
      * check if "foo//bar/.git//" has component ".git"
      */
-    relpath = "foo//bar/.git";
+    relpath = "foo//bar/.git//";
     if (!path_has_component(relpath, ".git")) {
         err(244, __func__, "path_has_component(\"%s\", \".git\") returned false: expected true", relpath);
         not_reached();
