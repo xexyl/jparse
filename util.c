@@ -7215,6 +7215,7 @@ main(int argc, char **argv)
     FTSENT *ent = NULL;                 /* to test read_fts() */
     char const *fname = NULL;           /* to test find_file() */
     int cwd = -1;                       /* to restore after read_fts() test */
+    FILE *fp = NULL;                    /* to test find_file() */
 
     /*
      * parse args
@@ -8144,53 +8145,6 @@ main(int argc, char **argv)
      */
 
     /*
-     * test read_fts()
-     *
-     * NOTE: we will only show path names if debug level is very very high
-     * as this would be annoying otherwise.
-     *
-     * We will show the filename (full path) and filetype as well (well - at
-     * least for regular file, directory and symlink - we will ignore the other
-     * kinds)
-     */
-    ent = read_fts("test_jparse", -1, &cwd, -1, &fts, fts_cmp);
-    if (ent == NULL) {
-        err(86, __func__, "read_fts() returned a NULL pointer on \"test_jparse\"");
-        not_reached();
-    } else {
-        do {
-            switch (ent->fts_info) {
-                case FTS_F:
-                    fdbg(stderr, DBG_VVHIGH, "%s (file)", ent->fts_path + 2);
-                    break;
-                case FTS_D:
-                    fdbg(stderr, DBG_VVHIGH, "%s (dir)", ent->fts_path + 2);
-                    break;
-                case FTS_SL:
-                    fdbg(stderr, DBG_VVHIGH, "%s (symlink)", ent->fts_path + 2);
-                    break;
-                case FTS_SLNONE:
-                    break;
-            }
-        } while ((ent = read_fts(NULL, -1, &cwd, -1, &fts, fts_cmp)) != NULL);
-    }
-
-    /*
-     * restore earlier directory that might have happened with read_fts()
-     */
-    (void) read_fts(NULL, -1, &cwd, -1, NULL, NULL);
-
-    /*
-     * now try and find a file called "jparse_test.sh"
-     */
-    fname = find_file("jparse_test.sh", NULL, -1, NULL, true, NULL, FTS_NOCHDIR, 1, 2);
-    if (fname != NULL) {
-        fdbg(stderr, DBG_MED, "full path of jparse_test.sh: %s", fname);
-    } else {
-        warn(__func__, "couldn't find file jparse_test.sh");
-    }
-
-    /*
      * make some directories
      */
     relpath = "test_jparse/a/b/c";
@@ -8302,5 +8256,74 @@ main(int argc, char **argv)
         fdbg(stderr, DBG_MED, "/dev/null is NOT a character device");
     }
 
+
+
+    /*
+     * test read_fts()
+     *
+     * NOTE: we will only show path names if debug level is very very high
+     * as this would be annoying otherwise.
+     *
+     * We will show the filename (full path) and filetype as well (well - at
+     * least for regular file, directory and symlink - we will ignore the other
+     * kinds)
+     */
+    ent = read_fts("test_jparse", -1, &cwd, -1, &fts, fts_cmp);
+    if (ent == NULL) {
+        err(86, __func__, "read_fts() returned a NULL pointer on \"test_jparse\"");
+        not_reached();
+    } else {
+        do {
+            switch (ent->fts_info) {
+                case FTS_F:
+                    fdbg(stderr, DBG_VVHIGH, "%s (file)", ent->fts_path + 2);
+                    break;
+                case FTS_D:
+                    fdbg(stderr, DBG_VVHIGH, "%s (dir)", ent->fts_path + 2);
+                    break;
+                case FTS_SL:
+                    fdbg(stderr, DBG_VVHIGH, "%s (symlink)", ent->fts_path + 2);
+                    break;
+                case FTS_SLNONE:
+                    break;
+            }
+        } while ((ent = read_fts(NULL, -1, &cwd, -1, &fts, fts_cmp)) != NULL);
+    }
+
+    /*
+     * restore earlier directory that might have happened with read_fts()
+     */
+    (void) read_fts(NULL, -1, &cwd, -1, NULL, NULL);
+
+    /*
+     * now try and find a file called "jparse_test.sh"
+     */
+    fname = find_file("jparse_test.sh", NULL, -1, NULL, true, NULL, FTS_NOCHDIR, 1, 2);
+    if (fname != NULL) {
+        fdbg(stderr, DBG_MED, "full path of jparse_test.sh: %s", fname);
+
+        /*
+         * try and open file from current directory
+         */
+        errno = 0; /* pre-clear errno for warnp() */
+        fp = fopen(fname, "r");
+        if (fp == NULL) {
+            warnp(__func__, "failed to open %s for reading", fname);
+        } else {
+            fdbg(stderr, DBG_MED, "successfully opened %s for reading", fname);
+
+            /*
+             * now close it
+             */
+            errno = 0; /* pre-clear errno for warnp() */
+            if (fclose(fp) != 0) {
+                warnp(__func__, "failed to close %s", fname);
+            } else {
+                fdbg(stderr, DBG_MED, "successfully closed %s", fname);
+            }
+        }
+    } else {
+        warn(__func__, "couldn't find file jparse_test.sh");
+    }
 }
 #endif
