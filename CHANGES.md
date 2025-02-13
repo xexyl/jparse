@@ -40,6 +40,15 @@ One can use the function like:
 
 or so, san typos.
 
+As a useful feature if you call `fts_read()` like:
+
+```c
+read_fts(NULL, -1, &cwd, -1, NULL, NULL);
+```
+
+and `*cwd` (an `int`) is `>= 0` it'll try doing `fchdir(*cwd)` to restore the
+directory to where it started, in case a change happened (as is quite likely).
+
 The function `fts_cmp()` is like `strcmp()` with the full path of a file (from
 the directory `.` - see below) and the function `fts_rcmp()` is the opposite of
 `strcmp()` on the full path.
@@ -47,6 +56,35 @@ the directory `.` - see below) and the function `fts_rcmp()` is the opposite of
 The function (`read_fts()`) does check for specific error conditions. For more
 details read the comments or the source (until eventually the functions in
 util.c are documented better).
+
+
+Added function `find_file()` which uses `read_fts()` to find file by name (base
+name or full path) from a directory (or current working directory if not
+requested) at a specified depth (if > 0). It is:
+
+```c
+extern char const *find_file(char const *filename, char const *dir, int dirfd, int *cwd, bool base,
+        int (*compar)(const FTSENT **, const FTSENT **), int options, int count, short int depth);
+```
+
+and the `filename` arg is the name to look for, the `dir` is the directory
+(name) to switch to (if not NULL), `dirfd` is the directory FD to switch to (if
+dir is NULL or `chdir(dir)` fails), `base` indicates whether to look by basename
+or full path (relative to directory, which if dir == NULL && dirfd < 0 we do not
+change directory at all), `compar()` is the same as in `read_fts()` (not
+required, one may simply use NULL just  like in `read_fts()`), options are the
+options to pass to `read_fts()` (if <= 0 it's set to `FTS_NOCHDIR`, otherwise we
+OR options with `FTS_NOCHDIR`), `count` allows one to control which number to
+match (that is if there are two files with the same match and you want the
+second one if you use count == 2 it'll not find the second one; if count <= 0
+this check is skipped) and `depth` allows one to find files at a specific depth
+(`<= 0` means skip this check). Before returning the FTS stream is closed and
+the original directory is restored. The `cwd` if not NULL will be set (in
+`read_fts()`) to the current working directory in case one needs to restore it.
+If it's not NULL this does mean the FD is left open until it is closed.
+
+`util_test` tests both of these functions.
+
 
 Updated `JPARSE_REPO_VERSION` to `"2.2.16 2025-02-13"`.
 Updated `UTIL_TEST_VERSION` to `"1.0.11 2025-02-13"`.
