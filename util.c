@@ -8325,5 +8325,37 @@ main(int argc, char **argv)
     } else {
         warn(__func__, "couldn't find file jparse_test.sh");
     }
+
+    /*
+     * now try and find a file called "test_jparse/jparse_test.sh"
+     */
+    fname = find_file("test_jparse/jparse_test.sh", NULL, -1, NULL, false, NULL, FTS_NOCHDIR, 1, 2);
+    if (fname != NULL) {
+        fdbg(stderr, DBG_MED, "full path of jparse_test.sh: %s", fname);
+
+        /*
+         * try and open file from current directory
+         */
+        errno = 0; /* pre-clear errno for warnp() */
+        fp = fopen(fname, "r");
+        if (fp == NULL) {
+            warnp(__func__, "failed to open %s for reading", fname);
+        } else {
+            fdbg(stderr, DBG_MED, "successfully opened %s for reading", fname);
+
+            /*
+             * now close it
+             */
+            errno = 0; /* pre-clear errno for warnp() */
+            if (fclose(fp) != 0) {
+                warnp(__func__, "failed to close %s", fname);
+            } else {
+                fdbg(stderr, DBG_MED, "successfully closed %s", fname);
+            }
+        }
+    } else {
+        warn(__func__, "couldn't find file test_jparse/jparse_test.sh");
+    }
+
 }
 #endif
