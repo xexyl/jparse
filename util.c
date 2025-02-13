@@ -1488,6 +1488,7 @@ read_fts(char const *dir, int dirfd, int *cwd, int options, FTS **fts,
                 errp(128, __func__, "close(%d) failed", *cwd);
                 not_reached();
             }
+            *cwd = -1;
             return NULL;
         } else {
             err(129, __func__, "invalid arguments");
@@ -8292,13 +8293,16 @@ main(int argc, char **argv)
 
     /*
      * restore earlier directory that might have happened with read_fts()
+     *
+     * NOTE: this will close cwd so it will no longer be valid (that does not
+     * mean it can't be reset)
      */
     (void) read_fts(NULL, -1, &cwd, -1, NULL, NULL);
 
     /*
      * now try and find a file called "jparse_test.sh"
      */
-    fname = find_file("jparse_test.sh", NULL, -1, NULL, true, NULL, FTS_NOCHDIR, 1, 2);
+    fname = find_file("jparse_test.sh", NULL, -1, &cwd, true, NULL, FTS_NOCHDIR, 1, 2);
     if (fname != NULL) {
         fdbg(stderr, DBG_MED, "full path of jparse_test.sh: %s", fname);
 
@@ -8323,18 +8327,17 @@ main(int argc, char **argv)
             }
         }
     } else {
-        warn(__func__, "couldn't find file jparse_test.sh");
+        warn(__func__, "couldn't find file jparse_test.sh: #0");
     }
 
     /*
-     * now try and find a file called "test_jparse/jparse_test.sh"
+     * now try and find a file called "jparse_test.sh" in "test_jparse/"
      */
-    fname = find_file("test_jparse/jparse_test.sh", NULL, -1, NULL, false, NULL, FTS_NOCHDIR, 1, 2);
+    fname = find_file("jparse_test.sh", "test_jparse", -1, &cwd, false, NULL, FTS_NOCHDIR, 1, 1);
     if (fname != NULL) {
         fdbg(stderr, DBG_MED, "full path of jparse_test.sh: %s", fname);
-
         /*
-         * try and open file from current directory
+         * try and open file from (now) current directory
          */
         errno = 0; /* pre-clear errno for warnp() */
         fp = fopen(fname, "r");
@@ -8357,5 +8360,12 @@ main(int argc, char **argv)
         warn(__func__, "couldn't find file test_jparse/jparse_test.sh");
     }
 
+    /*
+     * restore earlier directory that might have happened with read_fts()
+     *
+     * NOTE: this will close cwd so it will no longer be valid (that does not
+     * mean it can't be reset)
+     */
+    (void) read_fts(NULL, -1, &cwd, -1, NULL, NULL);
 }
 #endif
