@@ -201,6 +201,7 @@ extern bool is_dir(char const *path);
 extern bool is_read(char const *path);
 extern bool is_write(char const *path);
 extern bool is_mode(char const *path, mode_t mode);
+extern bool has_mode(char const *path, mode_t mode);
 extern mode_t filemode(char const *path);
 extern bool is_open_file_stream(FILE *stream);
 extern int fts_cmp(const FTSENT **a, const FTSENT **b);

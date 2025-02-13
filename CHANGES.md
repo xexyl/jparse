@@ -83,7 +83,10 @@ the original directory is restored. The `cwd` if not NULL will be set (in
 `read_fts()`) to the current working directory in case one needs to restore it.
 If it's not NULL this does mean the FD is left open until it is closed.
 
-`util_test` tests both of these functions.
+Added function `has_mode()` which is similar to `is_mode()` but it checks that
+any of the bits are set (i.e. `stat.st_mode & mode`).
+
+`util_test` tests all of these functions.
 
 
 Updated `JPARSE_REPO_VERSION` to `"2.2.16 2025-02-13"`.

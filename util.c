@@ -1152,7 +1152,8 @@ is_write(char const *path)
  * specific value as a workaround in some systems. In other words if you want to
  * check if a file is readable/writable/executable you should use
  * is_read()/is_write()/is_exec(). This function does NOT filter out by
- * user/group/other and it does not check any other bits either.
+ * user/group/other and it does not check any other bits either. If you need
+ * that just use has_mode() instead.
  */
 bool
 is_mode(char const *path, mode_t mode)
@@ -1195,14 +1196,69 @@ is_mode(char const *path, mode_t mode)
     }
 
     if (buf.st_mode != mode) {
-        dbg(DBG_HIGH, "path %s mode %o != %o", path, buf.st_mode, mode);
+        dbg(DBG_HIGH, "path %s mode %0o != %0o", path, buf.st_mode, mode);
         return false;
     }
 
-    dbg(DBG_VHIGH, "path %s mode is %o", path, mode);
+    dbg(DBG_VHIGH, "path %s mode is %0o", path, mode);
 
     return true;
 }
+
+/*
+ * has_mode - if a path has certain modes set (stat.st_mode)
+ *
+ * This function tests if a path exists and if its stat.st_mode has the mode
+ * bits set.
+ *
+ * given:
+ *      path    - the path to test
+ *      mode    - the mode to check
+ *
+ * returns:
+ *      true ==> path exists and it has the bits in mode in stat.st_mode
+ *      false ==> path does not exist OR does not have the bits in mode in
+ *                stat.st_mode
+ *
+ * NOTE: if you need exact check then use is_mode() instead.
+ */
+bool
+has_mode(char const *path, mode_t mode)
+{
+    int ret;			/* return code holder */
+    struct stat buf;		/* path status */
+    /*
+     * firewall
+     */
+    if (path == NULL) {
+	err(120, __func__, "called with NULL path");
+	not_reached();
+    }
+
+    /*
+     * test for existence of path
+     */
+    errno = 0;
+    ret = stat(path, &buf);
+    if (ret < 0) {
+	dbg(DBG_HIGH, "path %s does not exist, stat returned: %s", path, strerror(errno));
+	return false;
+    }
+    dbg(DBG_VHIGH, "path %s size: %jd", path, (intmax_t)buf.st_size);
+
+    if (buf.st_mode & mode) {
+        dbg(DBG_HIGH, "path %s mode %0o has %0o set: %0o & %0o == %0o", path, buf.st_mode, mode,
+            buf.st_mode, mode, buf.st_mode & mode);
+        return true;
+    }
+
+    dbg(DBG_VHIGH, "path %s mode %o does not have %0o set: %0o & %0o == %0o", path, buf.st_mode,
+            mode, buf.st_mode, mode, buf.st_mode & mode);
+
+    return false;
+}
+
+
 
 /*
  * fts_cmp
@@ -8088,6 +8144,53 @@ main(int argc, char **argv)
      */
 
     /*
+     * test read_fts()
+     *
+     * NOTE: we will only show path names if debug level is very very high
+     * as this would be annoying otherwise.
+     *
+     * We will show the filename (full path) and filetype as well (well - at
+     * least for regular file, directory and symlink - we will ignore the other
+     * kinds)
+     */
+    ent = read_fts("test_jparse", -1, &cwd, -1, &fts, fts_cmp);
+    if (ent == NULL) {
+        err(95, __func__, "read_fts() returned a NULL pointer on \"test_jparse\"");
+        not_reached();
+    } else {
+        do {
+            switch (ent->fts_info) {
+                case FTS_F:
+                    fdbg(stderr, DBG_VVHIGH, "%s (file)", ent->fts_path + 2);
+                    break;
+                case FTS_D:
+                    fdbg(stderr, DBG_VVHIGH, "%s (dir)", ent->fts_path + 2);
+                    break;
+                case FTS_SL:
+                    fdbg(stderr, DBG_VVHIGH, "%s (symlink)", ent->fts_path + 2);
+                    break;
+                case FTS_SLNONE:
+                    break;
+            }
+        } while ((ent = read_fts(NULL, -1, &cwd, -1, &fts, fts_cmp)) != NULL);
+    }
+
+    /*
+     * restore earlier directory that might have happened with read_fts()
+     */
+    (void) read_fts(NULL, -1, &cwd, -1, NULL, NULL);
+
+    /*
+     * now try and find a file called "jparse_test.sh"
+     */
+    fname = find_file("jparse_test.sh", NULL, -1, NULL, true, NULL, FTS_NOCHDIR, 1, 2);
+    if (fname != NULL) {
+        fdbg(stderr, DBG_MED, "full path of jparse_test.sh: %s", fname);
+    } else {
+        warn(__func__, "couldn't find file jparse_test.sh");
+    }
+
+    /*
      * make some directories
      */
     relpath = "test_jparse/a/b/c";
@@ -8149,6 +8252,37 @@ main(int argc, char **argv)
         } else {
             fdbg(stderr, DBG_MED, "%s is mode 07555", relpath);
         }
+
+        /*
+         * also check that has_mode() works with the 0755 mode we set
+         */
+        if (!has_mode(relpath, 0755)){
+            err(95, __func__, "%s does not have bits %0o set", relpath, 0755);
+            not_reached();
+        } else {
+            fdbg(stderr, DBG_MED, "%s has bits %0o in stat.st_mode",
+                relpath, 0755);
+        }
+
+        /*
+         * also check specific bits
+         */
+        if (!has_mode(relpath, S_IRWXU)) {
+            err(96, __func__, "%s does not have bits %0o set", relpath, S_IRWXU);
+            not_reached();
+        } else {
+            fdbg(stderr, DBG_MED, "%s has bits %0o in stat.st_mode", relpath, S_IRWXU);
+        }
+
+        /*
+         * check bits not set
+         */
+        if (has_mode(relpath, S_ISUID)) {
+            err(97, __func__, "%s has set user id on execution", relpath);
+            not_reached();
+        } else {
+            fdbg(stderr, DBG_MED, "%s does not have set user id on execution", relpath);
+        }
     }
 
     /*
@@ -8163,56 +8297,10 @@ main(int argc, char **argv)
         /*
          * test the file mode if verbose enough
          */
-        fdbg(stderr, DBG_HIGH, "/dev/null is mode: %o", filemode("/dev/null"));
+        fdbg(stderr, DBG_HIGH, "/dev/null is mode: %0o", filemode("/dev/null"));
     } else {
         fdbg(stderr, DBG_MED, "/dev/null is NOT a character device");
     }
 
-    /*
-     * test read_fts()
-     *
-     * NOTE: we will only show path names if debug level is very very high
-     * as this would be annoying otherwise.
-     *
-     * We will show the filename (full path) and filetype as well (well - at
-     * least for regular file, directory and symlink - we will ignore the other
-     * kinds)
-     */
-    ent = read_fts("test_jparse", -1, &cwd, -1, &fts, fts_cmp);
-    if (ent == NULL) {
-        err(95, __func__, "read_fts() returned a NULL pointer on \"test_jparse\"");
-        not_reached();
-    } else {
-        do {
-            switch (ent->fts_info) {
-                case FTS_F:
-                    fdbg(stderr, DBG_VVHIGH, "%s (file)", ent->fts_path + 2);
-                    break;
-                case FTS_D:
-                    fdbg(stderr, DBG_VVHIGH, "%s (dir)", ent->fts_path + 2);
-                    break;
-                case FTS_SL:
-                    fdbg(stderr, DBG_VVHIGH, "%s (symlink)", ent->fts_path + 2);
-                    break;
-                case FTS_SLNONE:
-                    break;
-            }
-        } while ((ent = read_fts(NULL, -1, &cwd, -1, &fts, fts_cmp)) != NULL);
-    }
-
-    /*
-     * restore earlier directory that might have happened with read_fts()
-     */
-    (void) read_fts(NULL, -1, &cwd, -1, NULL, NULL);
-
-    /*
-     * now try and find a file called "jparse_test.sh"
-     */
-    fname = find_file("jparse_test.sh", NULL, -1, NULL, true, NULL, FTS_NOCHDIR, 1, 2);
-    if (fname != NULL) {
-        fdbg(stderr, DBG_MED, "full path of jparse_test.sh: %s", fname);
-    } else {
-        warn(__func__, "couldn't find file jparse_test.sh");
-    }
 }
 #endif
