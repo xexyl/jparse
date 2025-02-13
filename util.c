@@ -8156,10 +8156,10 @@ main(int argc, char **argv)
     dir_exists = is_dir(relpath);
     mkdirs(-1, relpath, 0755);
     if (!exists(relpath)) {
-        err(87, __func__, "%s does not exist", relpath);
+        err(86, __func__, "%s does not exist", relpath);
         not_reached();
     } else if (!is_dir(relpath)) {
-        err(88, __func__, "%s is not a directory", relpath);
+        err(87, __func__, "%s is not a directory", relpath);
         not_reached();
     } else {
         fdbg(stderr, DBG_MED, "%s is a directory", relpath);
@@ -8170,7 +8170,7 @@ main(int argc, char **argv)
      */
     if (!dir_exists) {
         if (!is_mode(relpath, 0755)) {
-            err(89, __func__, "failed to set mode of %s to %o", relpath, 0755);
+            err(88, __func__, "failed to set mode of %s to %o", relpath, 0755);
             not_reached();
         } else {
             fdbg(stderr, DBG_MED, "%s is mode 07555", relpath);
@@ -8188,10 +8188,10 @@ main(int argc, char **argv)
     dir_exists = is_dir(relpath);
     mkdirs(-1, relpath, 0755);
     if (!exists(relpath)) {
-        err(90, __func__, "%s does not exist", relpath);
+        err(89, __func__, "%s does not exist", relpath);
         not_reached();
     } else if (!is_dir(relpath)) {
-        err(91, __func__, "%s is not a directory", relpath);
+        err(90, __func__, "%s is not a directory", relpath);
         not_reached();
     } else {
         fdbg(stderr, DBG_MED, "%s is a directory", relpath);
@@ -8202,7 +8202,7 @@ main(int argc, char **argv)
      */
     if (!dir_exists) {
         if (!is_mode(relpath, 0755)) {
-            err(92, __func__, "failed to set mode of %s to %o", relpath, 0755);
+            err(91, __func__, "failed to set mode of %s to %o", relpath, 0755);
             not_reached();
         } else {
             fdbg(stderr, DBG_MED, "%s is mode 07555", relpath);
@@ -8212,7 +8212,7 @@ main(int argc, char **argv)
          * also check that has_mode() works with the 0755 mode we set
          */
         if (!has_mode(relpath, 0755)){
-            err(93, __func__, "%s does not have bits %0o set", relpath, 0755);
+            err(92, __func__, "%s does not have bits %0o set", relpath, 0755);
             not_reached();
         } else {
             fdbg(stderr, DBG_MED, "%s has bits %0o in stat.st_mode",
@@ -8223,7 +8223,7 @@ main(int argc, char **argv)
          * also check specific bits
          */
         if (!has_mode(relpath, S_IRWXU)) {
-            err(94, __func__, "%s does not have bits %0o set", relpath, S_IRWXU);
+            err(93, __func__, "%s does not have bits %0o set", relpath, S_IRWXU);
             not_reached();
         } else {
             fdbg(stderr, DBG_MED, "%s has bits %0o in stat.st_mode", relpath, S_IRWXU);
@@ -8233,7 +8233,7 @@ main(int argc, char **argv)
          * check bits not set
          */
         if (has_mode(relpath, S_ISUID)) {
-            err(95, __func__, "%s has set user id on execution", relpath);
+            err(94, __func__, "%s has set user id on execution", relpath);
             not_reached();
         } else {
             fdbg(stderr, DBG_MED, "%s does not have set user id on execution", relpath);
@@ -8271,7 +8271,7 @@ main(int argc, char **argv)
      */
     ent = read_fts("test_jparse", -1, &cwd, -1, &fts, fts_cmp);
     if (ent == NULL) {
-        err(86, __func__, "read_fts() returned a NULL pointer on \"test_jparse\"");
+        err(95, __func__, "read_fts() returned a NULL pointer on \"test_jparse\"");
         not_reached();
     } else {
         do {
