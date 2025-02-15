@@ -1806,8 +1806,8 @@ find_path(char const *path, char const *dir, int dirfd, int *cwd, bool base,
         i = 0;
         do {
             if ((depth > 0 && ent->fts_level != depth) ||
-                    (ent->fts_info != FTS_D && ent->fts_info != FTS_F && ent->fts_info != FTS_DEFAULT) &&
-                    ent->fts_info != FTS_SL) {
+                    (ent->fts_info != FTS_D && ent->fts_info != FTS_F && ent->fts_info != FTS_DEFAULT &&
+                    ent->fts_info != FTS_SL)) {
                 continue;
             } else if (!seedot && (!strcmp(ent->fts_name, ".") || !strcmp(ent->fts_name, ".."))) {
                 continue;
@@ -2114,8 +2114,8 @@ find_paths(struct dyn_array *paths, char const *dir, int dirfd, int *cwd, bool b
         i = 0;
         do {
             if ((depth > 0 && ent->fts_level != depth) ||
-                    (ent->fts_info != FTS_D && ent->fts_info != FTS_F && ent->fts_info != FTS_DEFAULT) &&
-                    ent->fts_info != FTS_SL) {
+                    (ent->fts_info != FTS_D && ent->fts_info != FTS_F && ent->fts_info != FTS_DEFAULT &&
+                    ent->fts_info != FTS_SL)) {
                 continue;
             } else if (!seedot && (!strcmp(ent->fts_name, ".") || !strcmp(ent->fts_name, ".."))) {
                 continue;
