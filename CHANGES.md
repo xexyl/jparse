@@ -1,5 +1,14 @@
 # Significant changes in the JSON parser repo
 
+## Release 2.2.22 2025-02-19
+
+Fix bug in `dir_name()` with `level < 0` with many test cases added to the test
+code.
+
+Updated `JPARSE_UTILS_VERSION` to `"1.0.19 2025-02-19"`.
+Updated `UTIL_TEST_VERSION` to `"1.0.17 2025-02-19"`.
+
+
 ## Release 2.2.21 2025-02-18
 
 Enhance (w/o changing args) `find_path*()` functions.
