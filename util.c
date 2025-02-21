@@ -894,11 +894,11 @@ is_mode(char const *path, mode_t mode)
     }
 
     if (buf.st_mode != mode) {
-        dbg(DBG_HIGH, "path %s mode %0o != %0o", path, buf.st_mode, mode);
+        dbg(DBG_HIGH, "path %s mode %o != %o", path, buf.st_mode, mode);
         return false;
     }
 
-    dbg(DBG_VHIGH, "path %s mode is %0o", path, mode);
+    dbg(DBG_VHIGH, "path %s mode is %o", path, mode);
 
     return true;
 }
@@ -945,12 +945,12 @@ has_mode(char const *path, mode_t mode)
     dbg(DBG_VHIGH, "path %s size: %jd", path, (intmax_t)buf.st_size);
 
     if (buf.st_mode & mode) {
-        dbg(DBG_HIGH, "path %s mode %0o has %0o set: %0o & %0o == %0o", path, buf.st_mode, mode,
+        dbg(DBG_HIGH, "path %s mode %o has %o set: %o & %o == %o", path, buf.st_mode, mode,
             buf.st_mode, mode, buf.st_mode & mode);
         return true;
     }
 
-    dbg(DBG_VHIGH, "path %s mode %o does not have %0o set: %0o & %0o == %0o", path, buf.st_mode,
+    dbg(DBG_VHIGH, "path %s mode %o does not have %o set: %o & %o == %o", path, buf.st_mode,
             mode, buf.st_mode, mode, buf.st_mode & mode);
 
     return false;
@@ -9846,10 +9846,10 @@ main(int argc, char **argv)
          * also check that has_mode() works with the 0755 mode we set
          */
         if (!has_mode(relpath, 0755)){
-            err(154, __func__, "%s does not have bits %0o set", relpath, 0755);
+            err(154, __func__, "%s does not have bits %o set", relpath, 0755);
             not_reached();
         } else {
-            fdbg(stderr, DBG_MED, "%s has bits %0o in stat.st_mode",
+            fdbg(stderr, DBG_MED, "%s has bits %o in stat.st_mode",
                 relpath, 0755);
         }
 
@@ -9857,10 +9857,10 @@ main(int argc, char **argv)
          * also check specific bits
          */
         if (!has_mode(relpath, S_IRWXU)) {
-            err(155, __func__, "%s does not have bits %0o set", relpath, S_IRWXU);
+            err(155, __func__, "%s does not have bits %o set", relpath, S_IRWXU);
             not_reached();
         } else {
-            fdbg(stderr, DBG_MED, "%s has bits %0o in stat.st_mode", relpath, S_IRWXU);
+            fdbg(stderr, DBG_MED, "%s has bits %o in stat.st_mode", relpath, S_IRWXU);
         }
 
         /*
@@ -9886,7 +9886,7 @@ main(int argc, char **argv)
         /*
          * test the file mode if verbose enough
          */
-        fdbg(stderr, DBG_HIGH, "/dev/null is mode: %0o", filemode("/dev/null"));
+        fdbg(stderr, DBG_HIGH, "/dev/null is mode: %o", filemode("/dev/null"));
     } else {
         fdbg(stderr, DBG_MED, "/dev/null is NOT a character device");
     }
