@@ -31,6 +31,9 @@ New function `paths_in_array()` which counts the number of paths in the array
 (if not NULL) - i.e. it uses `dyn_array_tell()` but only if not NULL; if the
 array is NULL it simply returns 0.
 
+Added `data` (a `void *`) to struct `json_sem` and `json_sem_check()`. This may
+be NULL so it is the responsibility of the user to check this before using it.
+
 Updated `JPARSE_UTILS_VERSION` to `"1.0.21 2025-02-21"`.
 Updated `UTIL_TEST_VERSION` to `"1.0.19 2025-02-21"`.
 
