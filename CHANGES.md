@@ -1,5 +1,10 @@
 # Significant changes in the JSON parser repo
 
+## Release 2.2.26 2025-02-23
+
+Updated `jsemtblgen.c` for recent change to `json_sem.[ch]`.
+
+
 ## Release 2.2.25 2025-02-22
 
 Significantly simplify use of FTS functions.
