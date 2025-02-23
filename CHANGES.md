@@ -4,6 +4,14 @@
 
 Updated `jsemtblgen.c` for recent change to `json_sem.[ch]`.
 
+Internal improvement to `find_path()` and `find_paths()` functions: don't
+repeatedly call `lstat(2)`/`stat(2)` per file for the `FTS_DEFAULT`
+case: instead use the function `type_of_file()` once which will at most
+call `lstat(2)` once and if that is not used it will call `stat(2)` once. We
+can then check the file type as a simple comparison.
+
+Updated `JSEMTBLGEN_VERSION` to `"1.2.2 2025-02-23"`.
+Updated `JPARSE_UTILS_VERSION` to `"1.0.23 2025-02-23"`.
 
 ## Release 2.2.25 2025-02-22
 

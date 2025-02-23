@@ -1492,10 +1492,11 @@ is_exec(char const *path)
  *
  *      fts             - pointer to pointer struct fts to clear out (set to default values)
  *
- * NOTE: this function will do nothing on NULL fts. We will NOT do
- * fts_close(fts) because we cannot be sure the pointer is valid (it would be a
- * burden to make the user always have to set fts.tree = NULL prior to calling
- * this function).
+ * NOTE: this function will do nothing on NULL fts.
+ *
+ * And even if it is not NULL we will NOT do fts_close(fts) because we cannot be
+ * sure the pointer is valid (it would be a burden to make the user always have
+ * to set fts.tree = NULL prior to calling this function).
  *
  * NOTE: although this function does help with clearing out the struct, one
  * still has to explicitly set the values they wish after resetting it. This is
@@ -2411,16 +2412,24 @@ find_path(char const *path, char *dir, int dirfd, int *cwd, bool abspath, struct
                             continue;
                         }
                         break;
-                    case FTS_DEFAULT:
-                        /*
-                         * here we have to do more checks than the other cases
-                         * above
-                         */
-                        if ((!(fts->type & FTS_TYPE_SOCK) && is_socket(p)) ||
-                            (!(fts->type & FTS_TYPE_CHAR) && is_chardev(p)) ||
-                            (!(fts->type & FTS_TYPE_BLOCK) && is_blockdev(p)) ||
-                            (!(fts->type & FTS_TYPE_FIFO) && is_fifo(p))) {
-                                continue;
+                    case FTS_DEFAULT: /* other kinds of files */
+                        {
+                            /*
+                             * here we have to do more checks than the other cases
+                             * above
+                             */
+
+                            /*
+                             * get file first. This is useful so we don't have to repeatedly
+                             * call lstat(2)/stat(2) in the case of FTS_DEFAULT.
+                             */
+                            enum file_type type = type_of_file(ent->fts_path);
+                            if ((!(fts->type & FTS_TYPE_SOCK) && type == FILE_TYPE_SOCK) ||
+                                (!(fts->type & FTS_TYPE_CHAR) && type == FILE_TYPE_CHAR) ||
+                                (!(fts->type & FTS_TYPE_BLOCK) && type == FILE_TYPE_BLOCK) ||
+                                (!(fts->type & FTS_TYPE_FIFO) && type == FILE_TYPE_FIFO)) {
+                                    continue;
+                            }
                         }
                         break;
                     default:
@@ -3056,16 +3065,24 @@ find_paths(struct dyn_array *paths, char *dir, int dirfd, int *cwd, bool abspath
                             continue;
                         }
                         break;
-                    case FTS_DEFAULT:
-                        /*
-                         * here we have to do more checks than the other cases
-                         * above
-                         */
-                        if ((!(fts->type & FTS_TYPE_SOCK) && is_socket(p)) ||
-                            (!(fts->type & FTS_TYPE_CHAR) && is_chardev(p)) ||
-                            (!(fts->type & FTS_TYPE_BLOCK) && is_blockdev(p)) ||
-                            (!(fts->type & FTS_TYPE_FIFO) && is_fifo(p))) {
-                                continue;
+                    case FTS_DEFAULT: /* other kinds of files */
+                        {
+                            /*
+                             * here we have to do more checks than the other cases
+                             * above
+                             */
+
+                            /*
+                             * get file first. This is useful so we don't have to repeatedly
+                             * call lstat(2)/stat(2) in the case of FTS_DEFAULT.
+                             */
+                            enum file_type type = type_of_file(ent->fts_path);
+                            if ((!(fts->type & FTS_TYPE_SOCK) && type == FILE_TYPE_SOCK) ||
+                                (!(fts->type & FTS_TYPE_CHAR) && type == FILE_TYPE_CHAR) ||
+                                (!(fts->type & FTS_TYPE_BLOCK) && type == FILE_TYPE_BLOCK) ||
+                                (!(fts->type & FTS_TYPE_FIFO) && type == FILE_TYPE_FIFO)) {
+                                    continue;
+                            }
                         }
                         break;
                     default:

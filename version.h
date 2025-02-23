@@ -49,7 +49,7 @@
 /*
  * official utility functions (util.c) version
  */
-#define JPARSE_UTILS_VERSION "1.0.22 2025-02-22"         /* format: major.minor YYYY-MM-DD */
+#define JPARSE_UTILS_VERSION "1.0.23 2025-02-23"         /* format: major.minor YYYY-MM-DD */
 
 
 #endif /* INCLUDE_JPARSE_VERSION_H */
