@@ -1,5 +1,36 @@
 # Significant changes in the JSON parser repo
 
+## Release 2.2.27 2025-02-24
+
+Enhance and make more sane the FTS functions even more.
+
+The `struct fts` now holds a `struct dyn_array *ignore` list of paths to ignore.
+The function `read_fts()` checks for ignored paths and if one is encountered it
+is skipped. This uses the same logic as that of `find_path()` and `find_paths()`
+when looking for matches of filenames (not to be ignored).
+
+The `read_fts()` function handles the ignored files based on the booleans (in
+the `struct fts`) `base` and `match_case` (in the `struct fts`).
+
+The `read_fts()` function now checks the depth (instead of the `find_path()` and
+`find_paths()` functions that use it).
+
+In order to make the `reset_fts()` function saner it now requires another arg
+and one also should `memset()` it to 0 prior to calling `reset_fts()`. Doing
+this (with the new `bool` in `struct fts` called `initialised`) allows one to
+close the stream if it's not NULL (say because they used `read_fts()` without
+finishing the loop, leaving the stream in a bad state). It also allows to check
+the ignored list - deciding to free it or not based on the new bool
+(`free_ignored`). Having these updates is a trade-off (having to now use
+`memset(3)` prior to calling `reset_fts()` for the first time) but one that is
+worth it and good practice anyway.
+
+Fixed some comments in the functions (or above them) and removed some duplicate
+comments as well.
+
+Updated `JPARSE_UTILS_VERSION` to `"1.0.24 2025-02-24"`.
+Updated `UTIL_TEST_VERSION` to `"1.0.21 2025-02-24"`.
+
 ## Release 2.2.26 2025-02-23
 
 Updated `jsemtblgen.c` for recent change to `json_sem.[ch]`.
