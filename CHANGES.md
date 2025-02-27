@@ -1,5 +1,13 @@
 # Significant changes in the JSON parser repo
 
+## Release 2.2.29 2025-02-27
+
+The script `jparse_bug_report.sh` actually can have the script in the `TOOLS`
+variable as it will not actually cause an infinite loop as it only gets the
+version of the tool - which is quite useful to know that the user is using the
+most recent version of the script.
+
+
 ## Release 2.2.28 2025-02-26
 
 Finish 'depth' check concept in `struct fts`.
