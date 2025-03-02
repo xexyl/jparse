@@ -1,5 +1,27 @@
 # Significant changes in the JSON parser repo
 
+## Release 2.2.32 2025-03-02
+
+Updated `filemode()` with new boolean (sorry!) to mask `S_IFMT` if true. In
+other words if you want to print out the value it returns the `st_mode &
+~S_IFMT` (otherwise it still determines the file type and masks the correct
+bits).
+
+Since enums have different namespaces than function names the function
+`type_of_file()` was renamed `file_type()`.
+
+Also, `is_mode()` now uses the function (that did not exist at the time of
+original writing) `file_type()` rather than repeatedly having to use `lstat(2)`
+and `stat(2)` on the path.
+
+Fun fact: the release version, `2.2.32`, with the exception of the year in the
+date and the zeros (i.e. the `5` and zeroes in `2025-03-02`), has only the same
+digits as the date, `2025-03-02` (i.e. `2` and `3`).
+
+Updated `JPARSE_UTILS_VERSION` to `"2.0.2 2025-03-02"`.
+Updated `UTIL_TEST_VERSION` to `"2.0.1 2025-03-02"`.
+
+
 ## Release 2.2.31 2025-03-01
 
 Fix critical bug in `copyfile()`: obtaining the FD of the source file should not
