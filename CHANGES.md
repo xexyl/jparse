@@ -18,6 +18,13 @@ Fun fact: the release version, `2.2.32`, with the exception of the year in the
 date and the zeros (i.e. the `5` and zeroes in `2025-03-02`), has only the same
 digits as the date, `2025-03-02` (i.e. `2` and `3`).
 
+Fix bug in `read_fts()` with checking basename versus full path. In particular
+if the number of directories is just one then it has to be a basename check.
+Thus it's `(fts->base || count_dirs(name) == 1) && ...`. If it's not base or the
+`count_dirs(name) != 1` then it tries the other way (with `fts->base == false`).
+This solves a problem where files to be ignored were not ignored in the case of
+base being false (when we needed that to be the case).
+
 Updated `JPARSE_UTILS_VERSION` to `"2.0.2 2025-03-02"`.
 Updated `UTIL_TEST_VERSION` to `"2.0.1 2025-03-02"`.
 

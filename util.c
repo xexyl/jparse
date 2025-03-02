@@ -2429,7 +2429,7 @@ read_fts(char *dir, int dirfd, int *cwd, struct fts *fts)
                             err(152, __func__, "found NULL pointer in fts->ignore[%ju]", (uintmax_t)i);
                             not_reached();
                         }
-                        if (fts->base && ((fts->match_case && !strcmp(ent->fts_name, u)) ||
+                        if ((fts->base || count_dirs(name) == 1) && ((fts->match_case && !strcmp(ent->fts_name, u)) ||
                            (!fts->match_case && !strcasecmp(ent->fts_name, u)))) {
                             /*
                              * if this is a directory we will not descend into
@@ -2444,8 +2444,8 @@ read_fts(char *dir, int dirfd, int *cwd, struct fts *fts)
                             dbg(DBG_HIGH, "ignoring name: %s", ent->fts_name);
                             skip = true;
                             break;
-                        } else if (!fts->base && ((fts->match_case && !strcmp(u, ent->fts_path)) ||
-                                  (!fts->match_case && !strcasecmp(u, ent->fts_path)))) {
+                        } else if (!fts->base && ((fts->match_case && !strcmp(u, name)) ||
+                                  (!fts->match_case && !strcasecmp(u, name)))) {
                             /*
                              * if this is a directory we will not descend into
                              * it
