@@ -15,6 +15,13 @@ of `err()`).
 
 Updated `JPARSE_UTILS_VERSION` to `"2.0.3 2025-03-07"`.
 
+Moved `main()` in `verge.c` to `verge_main.c` and added function `vercmp()`
+which does the work of what `verge` does. The `verge.o` is now linked into the
+library and `verge.h` is installed with `make install`. This was necessary for
+mkiocccentry.
+
+Updated `VERGE_VERSION` to `"2.0.1 2025-03-07"`.
+
 
 ## Release 2.2.32 2025-03-02
 
