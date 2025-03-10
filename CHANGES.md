@@ -1,5 +1,14 @@
 # Significant changes in the JSON parser repo
 
+
+## Release 2.2.35 2025-03-10
+
+Improved `shell_cmd()` and `pipe_open()` to resolve path (using `resolve_path()`
+which searches `$PATH`) if there is no `/` in the command.
+
+Updated `JPARSE_UTILS_VERSION` to `"2.0.5 2025-03-10"`.
+
+
 ## Release 2.2.34 2025-03-09
 
 Updated `base_name()`, `dir_name()` and added new function `resolve_path()`.

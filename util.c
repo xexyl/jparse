@@ -4429,36 +4429,38 @@ resolve_path(char const *cmd)
 int
 shell_cmd(char const *name, bool flush_stdin, bool abort_on_error, char const *format, ...)
 {
-    va_list ap;			/* variable argument list */
-    char *cmd = NULL;		/* e.g. cp prog.c submission_dir/prog.c */
-    int exit_code;		/* exit code from system(cmd) */
+    va_list ap;                 /* variable argument list */
+    char *cmd = NULL;           /* e.g. cp prog.c submission_dir/prog.c */
+    int exit_code;              /* exit code from system(cmd) */
     int saved_errno = 0;        /* before we return from the function we need to let the caller have the errno */
+    char *command = NULL;
+    char *path = NULL;          /* for resolve_path() */
 
     /*
      * firewall
      */
     if (name == NULL) {
-	/* exit or error return depending on abort_on_error */
-	if (abort_on_error) {
-	    err(148, __func__, "function name is not caller name because we were called with NULL name");
-	    not_reached();
-	} else {
-	    dbg(DBG_MED, "called with NULL name, returning: %d < 0", EXIT_NULL_ARGS);
-	    return EXIT_NULL_ARGS;
-	}
+        /* exit or error return depending on abort_on_error */
+        if (abort_on_error) {
+            err(148, __func__, "function name is not caller name because we were called with NULL name");
+            not_reached();
+        } else {
+            dbg(DBG_MED, "called with NULL name, returning: %d < 0", EXIT_NULL_ARGS);
+            return EXIT_NULL_ARGS;
+        }
     }
     if (format == NULL) {
-	/* exit or error return depending on abort_on_error */
-	if (abort_on_error) {
-	    err(149, name, "called with NULL format");
-	    not_reached();
-	} else {
-	    dbg(DBG_MED, "called with NULL format, returning: %d < 0", EXIT_NULL_ARGS);
-	    return EXIT_NULL_ARGS;
-	}
+        /* exit or error return depending on abort_on_error */
+        if (abort_on_error) {
+            err(149, name, "called with NULL format");
+            not_reached();
+        } else {
+            dbg(DBG_MED, "called with NULL format, returning: %d < 0", EXIT_NULL_ARGS);
+            return EXIT_NULL_ARGS;
+        }
     }
 
-    /*
+   /*
      * stdarg variable argument list setup
      */
     va_start(ap, format);
@@ -4466,21 +4468,21 @@ shell_cmd(char const *name, bool flush_stdin, bool abort_on_error, char const *f
     /*
      * build a safe shell command
      */
-    errno = 0;			/* pre-clear errno for errp() */
+    errno = 0;                  /* pre-clear errno for errp() */
     cmd = vcmdprintf(format, ap);
     if (cmd == NULL) {
         saved_errno = 0;
-	/* exit or error return depending on abort_on_error */
-	if (abort_on_error) {
-	    errp(150, name, "calloc failed in vcmdprintf()");
-	    not_reached();
-	} else {
-	    dbg(DBG_MED, "called from %s: calloc failed in vcmdprintf(): %s, returning: %d < 0",
-			 name, strerror(errno), EXIT_CALLOC_FAILED);
-	    va_end(ap);		/* stdarg variable argument list cleanup */
+        /* exit or error return depending on abort_on_error */
+        if (abort_on_error) {
+            errp(150, name, "calloc failed in vcmdprintf()");
+            not_reached();
+        } else {
+            dbg(DBG_MED, "called from %s: calloc failed in vcmdprintf(): %s, returning: %d < 0",
+                         name, strerror(errno), EXIT_CALLOC_FAILED);
+            va_end(ap);         /* stdarg variable argument list cleanup */
             errno = saved_errno;
-	    return EXIT_CALLOC_FAILED;
-	}
+            return EXIT_CALLOC_FAILED;
+        }
     }
 
     /*
@@ -4489,71 +4491,80 @@ shell_cmd(char const *name, bool flush_stdin, bool abort_on_error, char const *f
     flush_tty(name, flush_stdin, abort_on_error);
 
     /*
-     * execute the command
+     * if we don't have a path we will try resolving the command
+     */
+    if (strchr(cmd, '/') == NULL) {
+        /*
+         * try resolving path
+         */
+        path = resolve_path(cmd);
+        if (path != NULL) {
+            free(cmd);
+            cmd = path;
+        }
+    }
+
+    /*
+     * try executing the command directly
      */
     dbg(DBG_HIGH, "about to perform: system(\"%s\")", cmd);
-    errno = 0;			/* pre-clear errno for errp() */
     exit_code = system(cmd);
+    /*
+     * if it failed try running directly with the shell
+     */
     if (exit_code < 0) {
-	/* exit or error return depending on abort_on_error */
-	if (abort_on_error) {
-	    errp(151, __func__, "error calling system(\"%s\")", cmd);
-	    not_reached();
-	} else {
-            saved_errno = errno;
-	    dbg(DBG_MED, "called from %s: error calling system(\"%s\")", name, cmd);
-	    va_end(ap);		/* stdarg variable argument list cleanup */
-	    /* free allocated command storage */
-	    if (cmd != NULL) {
-		free(cmd);
-		cmd = NULL;
-	    }
-            errno = saved_errno;
-	    return EXIT_SYSTEM_FAILED;
-	}
+        dbg(DBG_HIGH, "system(\"%s\") failed, will attempt to run through shell", cmd);
 
+        errno = 0; /* pre-clear errno for errp() */
+        command = calloc(1, LITLEN("/bin/sh -c ") + strlen(cmd) + 1);
+        if (command == NULL) {
+            errp(151, __func__, "calloc failed");
+            free(cmd);
+            cmd = NULL;
+            return EXIT_CALLOC_FAILED;
+        } else {
+            sprintf(command, "/bin/sh -c %s", cmd);
+            /*
+             * now try executing the command via the shell
+             */
+            exit_code = system(command);
+            free(command);
+            command = NULL;
+        }
     /*
      * case: exit code 127 usually means the fork/exec was unable to invoke the shell
      */
     } else if (exit_code == 127) {
-	/* exit or error return depending on abort_on_error */
-	if (abort_on_error) {
-	    errp(152, __func__, "execution of the shell failed for system(\"%s\")", cmd);
-	    not_reached();
-	} else {
+        /* exit or error return depending on abort_on_error */
+        if (abort_on_error) {
+            errp(152, __func__, "execution of the shell failed for system(\"%s\")", cmd);
+            not_reached();
+        } else {
             saved_errno = errno;
-	    dbg(DBG_MED, "called from %s: execution of the shell failed for system(\"%s\")", name, cmd);
-	    va_end(ap);		/* stdarg variable argument list cleanup */
-	    /* free allocated command storage */
-	    if (cmd != NULL) {
-		free(cmd);
-		cmd = NULL;
-	    }
+            dbg(DBG_MED, "called from %s: execution of the shell failed for system(\"%s\")", name, cmd);
+            va_end(ap);         /* stdarg variable argument list cleanup */
+            /* free allocated command storage */
+            if (cmd != NULL) {
+                free(cmd);
+                cmd = NULL;
+            }
             errno = saved_errno;
-	    return EXIT_SYSTEM_FAILED;
-	}
-    }
-
-    /*
-     * free allocated command storage
-     */
-    if (cmd != NULL) {
-	free(cmd);
-	cmd = NULL;
+            return EXIT_SYSTEM_FAILED;
+        }
     }
 
     /*
      * stdarg variable argument list cleanup
      */
     va_end(ap);
-
     /*
-     * return exit code from system()
+     * free storage
      */
+    free(cmd);
+    cmd = NULL;
+
     return exit_code;
 }
-
-
 /*
  * pipe_open - pass a command, via vcmdprintf() interface, to the shell
  *
@@ -4572,7 +4583,7 @@ shell_cmd(char const *name, bool flush_stdin, bool abort_on_error, char const *f
  *			  that the shell might threaten as command characters.
  *			  In the worst case, the algorithm will make twice as
  *			  many characters.  Will not use escaping if it isn't needed.
- *      ...     - args to give after the format
+ *      ...             - args to give after the format
  *
  * returns:
  *	FILE * stream for open pipe to shell, or NULL ==> error
@@ -4591,6 +4602,7 @@ pipe_open(char const *name, bool write_mode, bool abort_on_error, char const *fo
     FILE *stream = NULL;	/* open pipe to shell command or NULL */
     int ret;			/* libc function return */
     int saved_errno = 0;        /* in case of error, save errno for before we return */
+    char *path = NULL;          /* for resolve_path() */
 
     /*
      * firewall
@@ -4640,6 +4652,17 @@ pipe_open(char const *name, bool write_mode, bool abort_on_error, char const *fo
     }
 
     /*
+     * if it has no path resolve it
+     */
+    if (strchr(cmd, '/') == NULL) {
+        path = resolve_path(cmd);
+        if (path != NULL) {
+            free(cmd);
+            cmd = path;
+        }
+    }
+
+    /*
      * flush stdio as needed
      *
      * If we are in write_mode to a pipe, we also flush stdin in order to
@@ -4650,28 +4673,27 @@ pipe_open(char const *name, bool write_mode, bool abort_on_error, char const *fo
     /*
      * establish the open pipe to the shell command
      */
-    dbg(DBG_HIGH, "about to perform: popen(\"%s\", \"%s\")", cmd, write_mode?"w":"r");
-    errno = 0;			/* pre-clear errno for errp() */
-    stream = popen(cmd, write_mode?"w":"r");
+    dbg(DBG_HIGH, "about to perform: popen(\"%s\", \"%s\")", cmd, write_mode ? "w" : "r");
+    errno = 0;            /* pre-clear errno for errp() */
+    stream = popen(cmd, write_mode ? "w" : "r");
     if (stream == NULL) {
-	/* exit or error return depending on abort_on_error */
-	if (abort_on_error) {
-	    errp(156, name, "error calling popen(\"%s\", \"%s\")", cmd, write_mode?"w":"r");
-	    not_reached();
-	} else {
+        if (abort_on_error) {
+            errp(156, name, "error calling popen(\"%s\", \"%s\")", cmd, write_mode ? "w" : "r");
+            not_reached();
+        } else {
             saved_errno = errno;
-	    dbg(DBG_MED, "called from %s: error calling popen(\"%s\", \"%s\"): %s", name, cmd, write_mode?"w":"r",
-                    strerror(errno));
-	    va_end(ap);		/* stdarg variable argument list cleanup */
-	    /* free allocated command storage */
-	    if (cmd != NULL) {
-		free(cmd);
-		cmd = NULL;
-	    }
+            dbg(DBG_MED, "called from %s: error calling popen(\"%s\", \"%s\"): %s", name, cmd, write_mode ? "w" : "r",
+                strerror(errno));
+            va_end(ap);        /* stdarg variable argument list cleanup */
+            if (cmd != NULL) {
+                free(cmd);
+                cmd = NULL;
+            }
             errno = saved_errno;
-	    return NULL;
-	}
+            return NULL;
+        }
     }
+
 
     /*
      * set stream to line buffered
