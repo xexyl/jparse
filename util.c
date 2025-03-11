@@ -4282,12 +4282,21 @@ vcmdprintf(char const *fmt, va_list ap)
  * This function does not return on a NULL cmd.
  *
  * If getenv("PATH") returns NULL or an empty string or the command is not found
- * under the path the original cmd is returned, strdup()d.
+ * under the path, if the path (cmd) is not a regular executable file, NULL is
+ * returned; otherwise the original path is returned, strdup()d.
  *
- * Returns a char * which is the path to the executable file or the original
- * cmd if not found; in either case the return value is a strdup()d copy.
+ * If the command is not a regular executable file and $PATH is NULL or empty
+ * then NULL is returned.
+ *
+ * If it is a relative or absolute path and it is both a regular file and
+ * executable then a strdup()d copy of that is returned.
+ *
+ * If nothing is found in $PATH that results in a regular executable file then
+ * NULL is returned.
  *
  * It is the caller's responsibility to free() the returned value.
+ *
+ * This function will not return on error.
  */
 char *
 resolve_path(char const *cmd)
