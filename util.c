@@ -4357,7 +4357,7 @@ resolve_path(char const *cmd)
             /*
              * str should be the command's path
              */
-            dbg(DBG_MED, "found executable file at: %s/%s", p, cmd);
+            dbg(DBG_MED, "found executable file at: %s", str);
             /*
              * free dup
              */
