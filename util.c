@@ -4309,13 +4309,23 @@ resolve_path(char const *cmd)
      * check if absolute path or if it starts with ./
      */
     if (*cmd == '/' || (*cmd == '.' && cmd[1] == '/')) {
-        errno = 0; /* pre-clear errno for errp() */
-        str = strdup(cmd);
-        if (str == NULL) {
-            errp(144, __func__, "strstr(cmd) returned NULL");
-            not_reached();
+        if (is_file(cmd) && is_exec(cmd)) {
+            /*
+             * return a strdup() copy of the path
+             */
+            errno = 0; /* pre-clear errno for errp() */
+            str = strdup(cmd);
+            if (str == NULL) {
+                errp(144, __func__, "strstr(cmd) returned NULL");
+                not_reached();
+            }
+            return str;
+        } else {
+            /*
+             * no regular executable file here, return NULL
+             */
+            return NULL;
         }
-        return str;
     }
 
     /*
@@ -4324,15 +4334,20 @@ resolve_path(char const *cmd)
     path = getenv("PATH");
     if (path == NULL || *path == '\0') {
         /*
-         * if NULL or empty we will just strdup() the original command
+         * if NULL or empty we will just strdup() the original command, unless
+         * the command is not a regular executable file
          */
-        errno = 0; /* pre-clear errno for errp() */
-        str = strdup(cmd);
-        if (str == NULL) {
-            errp(145, __func__, "strdup(cmd) returned NULL");
-            not_reached();
+        if (is_file(cmd) && is_exec(cmd)) {
+            errno = 0; /* pre-clear errno for errp() */
+            str = strdup(cmd);
+            if (str == NULL) {
+                errp(145, __func__, "strdup(cmd) returned NULL");
+                not_reached();
+            }
+            return str;
+        } else {
+            return NULL;
         }
-        return str;
     }
     /*
      * now duplicate path to tokenise
