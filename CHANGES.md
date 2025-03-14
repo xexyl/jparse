@@ -22,6 +22,9 @@ In places (in `json_util.c`) where the debug output can be confusing a link to
 the jparse library README.md file is now in a comment, although for
 `json_string` it is not so much about the debug output as the struct itself.
 
+Fix bad bug in `sum_and_count()` - wrong value checked for < 0.
+
+Updated `JPARSE_UTILS_VERSION` to `"2.0.7 2025-03-14"`.
 
 ## Release 2.2.36 2025-03-11
 
