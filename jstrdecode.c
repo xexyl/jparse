@@ -384,13 +384,6 @@ main(int argc, char **argv)
     struct jstring *jstr = NULL;    /* decoded string */
     char *dup_input = NULL;	/* duplicate of arg string */
 
-    /*
-     * set locale
-     */
-    if (setlocale(LC_ALL, "") == NULL) {
-	err(13, __func__, "failed to set locale");
-	not_reached();
-    }
 
     /*
      * parse args
@@ -551,7 +544,7 @@ main(int argc, char **argv)
 		     */
 		    dup_input = dup_without_nl(input, &inputlen);
 		    if (dup_input == NULL) {
-			err(14, __func__, "dup_without_nl failed");
+			err(13, __func__, "dup_without_nl failed");
 			not_reached();
 		    }
 
@@ -569,7 +562,7 @@ main(int argc, char **argv)
                 if (json_parse) {
                     tree = parse_json_str(input, inputlen, &is_valid);
                     if (!is_valid || tree == NULL) {
-                        err(15, __func__, "invalid JSON");
+                        err(14, __func__, "invalid JSON");
                         not_reached();
                     } else {
                         json_tree_free(tree, JSON_INFINITE_DEPTH);

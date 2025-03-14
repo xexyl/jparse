@@ -1,6 +1,28 @@
 # Significant changes in the JSON parser repo
 
 
+## Release 2.2.37 2025-03-14
+
+Add man pages for `json_tree_walk()` and `vjson_tree_walk()` (symlinked to
+`jparse.3` which is under `man/man3`). The `jparse.3` has been updated to have
+these two functions.
+
+Changed the macro `JPARSE_VERSION` to `JPARSE_TOOL_VERSION` and the string
+`jparse_version` to `jparse_tool_version` to better reflect that it's the tool
+`jparse(1)` version, not something else.
+
+Don't use `setlocale(3)` in `jstrencode(1)` or `jstrdecode(3)`.
+
+Updated `JSTRENCODE_VERSION` to `"2.2.1 2025-03-15"`.
+Updated `JSTRDECODE_VERSION` to `"2.2.1 2025-03-14"`.
+
+Typo fix in at least one place.
+
+In places (in `json_util.c`) where the debug output can be confusing a link to
+the jparse library README.md file is now in a comment, although for
+`json_string` it is not so much about the debug output as the struct itself.
+
+
 ## Release 2.2.36 2025-03-11
 
 Fix bugs in `resolve_path()`. If one had the path of `./foo` or even `/foo` then
