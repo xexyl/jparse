@@ -384,6 +384,10 @@ main(int argc, char **argv)
     struct jstring *jstr = NULL;    /* decoded string */
     char *dup_input = NULL;	/* duplicate of arg string */
 
+    /*
+     * use default locale based on LANG
+     */
+    (void) setlocale(LC_ALL, "");
 
     /*
      * parse args

@@ -47,6 +47,7 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <locale.h>
 
 /*
  * jparse_main - tool that parses a block of JSON input
@@ -103,6 +104,11 @@ main(int argc, char **argv)
     struct json *tree = NULL;	    /* JSON parse tree or NULL */
     int arg_count = 0;		    /* number of args to process */
     int i;
+
+    /*
+     * use default locale based on LANG
+     */
+    (void) setlocale(LC_ALL, "");
 
     /*
      * parse args

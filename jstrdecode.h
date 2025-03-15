@@ -94,7 +94,7 @@
 /*
  * official jstrdecode version
  */
-#define JSTRDECODE_VERSION "2.2.1 2025-03-14"	/* format: major.minor YYYY-MM-DD */
+#define JSTRDECODE_VERSION "2.2.2 2025-03-15"	/* format: major.minor YYYY-MM-DD */
 
 
 /*

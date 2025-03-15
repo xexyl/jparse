@@ -427,6 +427,11 @@ main(int argc, char **argv)
     char *dup_input = NULL;	/* duplicate of input w/o newlines */
 
     /*
+     * use default locale based on LANG
+     */
+    (void) setlocale(LC_ALL, "");
+
+    /*
      * parse args
      */
     program = argv[0];
