@@ -9249,6 +9249,7 @@ check_invalid_option(char const *prog, int ch, int opt)
 #if defined(UTIL_TEST)
 
 #include <locale.h>
+#include <fnmatch.h>
 
 /*
  * jparse - JSON library
