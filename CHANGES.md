@@ -12,6 +12,12 @@ extern char *find_path_in_array(char *path, struct dyn_array *paths, bool match_
 extern bool append_path(struct dyn_array **paths, char *str, bool unique, bool duped, bool match_case, bool fn);
 ```
 
+It is entirely unclear if every case of 'true'/'false' is correct in every case
+due to the fact that this update is mostly for the fts(3) routines and there is
+an option to ignore and also an option to match, both of which can accept globs.
+If a problem arises the call to these functions can be revised but this does
+resolve a problem observed in the need for the fnmatch(3) change.
+
 Updated `JPARSE_UTILS_VERSION` to `"2.0.12 2025-06-21"`.
 Updated `UTIL_TEST_VERSION` to `"2.0.7 2025-06-21"`.
 
