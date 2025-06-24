@@ -1,4 +1,4 @@
-_README.md last updated: 21 January 2025
+_README.md last updated: 21 January 2025_
 
 # jparse -  JSON parser, library and tools written in C
 
