@@ -1720,6 +1720,8 @@ if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
     write_echo "# SECTION 6 ABOVE: USER MODIFICATIONS TO JPARSE REPO #"
     write_echo "#----------------------------------------------------#"
     write_echo ""
+else
+    write_echo "### Notice: directory not under git control."
 fi
 ################
 # final report #
