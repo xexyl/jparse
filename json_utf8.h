@@ -65,8 +65,7 @@
 extern size_t utf8len(const char *str, int32_t surrogate);
 extern int32_t surrogate_pair_to_codepoint(int32_t hi, int32_t lo);
 extern int codepoint_to_unicode(char *str, unsigned int val);
-extern uint32_t utf8_to_codepoint(const char *s, size_t *retlen);
+extern uint32_t utf8_to_codepoint(const char *str);
 extern bool is_surrogate_pair(const int32_t xa, const int32_t xb);
-extern void utf8_to_json_unicode(const char *input, char *output);
 
 #endif /* INCLUDE_JSON_UTF8_H */

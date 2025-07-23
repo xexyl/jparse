@@ -38,6 +38,8 @@
  *     --  Sirius Cybernetics Corporation Complaints Division, JSON spec department. :-)
  */
 
+
+
 #include <string.h>
 #include <stdint.h>
 #include <ctype.h>
@@ -315,14 +317,13 @@ codepoint_to_unicode(char *output, unsigned int codepoint)
  * utf8_to_codepoint - convert UTF-8 byte(s) to a codepoint
  *
  * given:
- *      str     - UTF-8 byte(s)
- *      retlen  - if not NULL set *retlen to number of bytes
+ *      str - UTF-8 byte(s)
  *
  * Returns the codepoint assuming no error occurs.
  *
  * NOTE: this function will not return on a NULL pointer.
  */
-uint32_t utf8_to_codepoint(const char *str, size_t *retlen)
+uint32_t utf8_to_codepoint(const char *str)
 {
     unsigned char c = '\0';
 
@@ -334,33 +335,14 @@ uint32_t utf8_to_codepoint(const char *str, size_t *retlen)
         not_reached();
     }
 
-    /*
-     * reset *retlen to 0 if not NULL
-     */
-    if (retlen != NULL) {
-        *retlen = 0;
-    }
-
     c = str[0];
     if ((str[0] & 0x80) == 0) {
-        if (retlen != NULL) {
-            *retlen = 1;
-        }
         return *str;
     } else if ((c & 0xE0) == 0xC0 && str[1] != '\0') {
-        if (retlen != NULL) {
-            *retlen = 2;
-        }
         return ((*str & 0x1F) << 6) | (str[1] & 0x3F);
     } else if ((*str & 0xF0) == 0xE0 && str[1] != '\0' && str[2] != '\0') {
-        if (retlen != NULL) {
-            *retlen = 3;
-        }
         return ((*str & 0x0F) << 12) | ((str[1] & 0x3F) << 6) | (str[2] & 0x3F);
     } else if ((c & 0xF8) == 0xF0 && str[1] != '\0' && str[2] != '\0' && str[3] != '\0') {
-        if (retlen != NULL) {
-            *retlen = 4;
-        }
         return ((*str & 0x07) << 18) | ((str[1] & 0x3F) << 12) | ((str[2] & 0x3F) << 6) | (str[3] & 0x3F);
     }
     warn(__func__, "invalid UTF-8 sequence");
@@ -405,58 +387,3 @@ is_surrogate_pair(const int32_t xa, const int32_t xb)
     }
     return false;
 }
-
-void
-utf8_to_json_unicode(const char *input, char *output)
-{
-    unsigned char c = '\0';
-    uint16_t high;
-    uint16_t low;
-
-    /*
-     * firewall
-     */
-    if (input == NULL || *input == '\0') {
-        err(55, __func__, "NULL or empty input string");
-        not_reached();
-    }
-    if (output == NULL) {
-        err(56, __func__, "NULL output");
-        not_reached();
-    }
-    while ((c = (unsigned char)*input)) {
-        uint32_t codepoint = 0;
-
-        if (c < 0x80) {
-            codepoint = c;
-            ++input;
-        } else if ((c & 0xE0) == 0xC0) {
-            codepoint = (c & 0x1F) << 6 | (input[1] & 0x3F);
-            input += 2;
-        } else if ((c & 0xF0) == 0xE0) {
-            codepoint = (c & 0x0F) << 12 | (input[1] & 0x3F) << 6 | (input[2] & 0x3F);
-            input += 3;
-        } else if ((c & 0xF8) == 0xF0) {
-            codepoint = (c & 0x07) << 18 | (input[1] & 0x3F) << 12 | (input[2] & 0x3F) << 6 | (input[3] & 0x3F);
-            input += 4;
-        } else {
-            ++input;
-            continue;
-        }
-
-        if (codepoint <= 0xFFFF) {
-            output += sprintf(output, "\\u%04X", codepoint);
-        } else {
-            /*
-             * surrogate pair
-             */
-            codepoint -= 0x10000;
-            high = 0xD800 + ((codepoint >> 10) & 0x3FF);
-            low  = 0xDC00 + (codepoint & 0x3FF);
-            output += sprintf(output, "\\u%04X\\u%04X", high, low);
-        }
-    }
-
-    *output = '\0';
-}
-
