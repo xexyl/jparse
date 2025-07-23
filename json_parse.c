@@ -138,52 +138,52 @@ struct byte2asciistr byte2asciistr[JSON_BYTE_VALUES] = {
     {'|', 1, "|", 1}, {'}', 1, "}", 1}, {'~', 1, "~", 1}, {0x7f, 6, "\\u007f", 1},
 
     /* \x80 - \x8f */
-    {0x80, 1, "\x80", 1}, {0x81, 1, "\x81", 1}, {0x82, 1, "\x82", 1}, {0x83, 1, "\x83", 1},
-    {0x84, 1, "\x84", 1}, {0x85, 1, "\x85", 1}, {0x86, 1, "\x86", 1}, {0x87, 1, "\x87", 1},
-    {0x88, 1, "\x88", 1}, {0x89, 1, "\x89", 1}, {0x8a, 1, "\x8a", 1}, {0x8b, 1, "\x8b", 1},
-    {0x8c, 1, "\x8c", 1}, {0x8d, 1, "\x8d", 1}, {0x8e, 1, "\x8e", 1}, {0x8f, 1, "\x8f", 1},
+    {0x80, 6, "\\u0080", 2}, {0x81, 6, "\\u0081", 2}, {0x82, 6, "\\u0082", 2}, {0x83, 6, "\\u0083", 2},
+    {0x84, 6, "\\u0084", 2}, {0x85, 6, "\\u0085", 2}, {0x86, 6, "\\u0086", 2}, {0x87, 6, "\\u0087", 2},
+    {0x88, 6, "\\u0088", 2}, {0x89, 6, "\\u0089", 2}, {0x8a, 6, "\\u008a", 2}, {0x8b, 6, "\\u008b", 2},
+    {0x8c, 6, "\\u008c", 2}, {0x8d, 6, "\\u008d", 2}, {0x8e, 6, "\\u008e", 2}, {0x8f, 6, "\\u008f", 2},
 
     /* \x90 - \x9f */
-    {0x90, 1, "\x90", 1}, {0x91, 1, "\x91", 1}, {0x92, 1, "\x92", 1}, {0x93, 1, "\x93", 1},
-    {0x94, 1, "\x94", 1}, {0x95, 1, "\x95", 1}, {0x96, 1, "\x96", 1}, {0x97, 1, "\x97", 1},
-    {0x98, 1, "\x98", 1}, {0x99, 1, "\x99", 1}, {0x9a, 1, "\x9a", 1}, {0x9b, 1, "\x9b", 1},
-    {0x9c, 1, "\x9c", 1}, {0x9d, 1, "\x9d", 1}, {0x9e, 1, "\x9e", 1}, {0x9f, 1, "\x9f", 1},
+    {0x90, 6, "\\u0090", 2}, {0x91, 6, "\\u0091", 2}, {0x92, 6, "\\u0092", 2}, {0x93, 6, "\\u0093", 2},
+    {0x94, 6, "\\u0094", 2}, {0x95, 6, "\\u0095", 2}, {0x96, 6, "\\u0096", 2}, {0x97, 6, "\\u0097", 2},
+    {0x98, 6, "\\u0098", 2}, {0x99, 6, "\\u0099", 2}, {0x9a, 6, "\\u009a", 2}, {0x9b, 6, "\\u009b", 2},
+    {0x9c, 6, "\\u009c", 2}, {0x9d, 6, "\\u009d", 2}, {0x9e, 6, "\\u009e", 2}, {0x9f, 6, "\\u009f", 2},
 
     /* \xa0 - \xaf */
-    {0xa0, 1, "\xa0", 1}, {0xa1, 1, "\xa1", 1}, {0xa2, 1, "\xa2", 1}, {0xa3, 1, "\xa3", 1},
-    {0xa4, 1, "\xa4", 1}, {0xa5, 1, "\xa5", 1}, {0xa6, 1, "\xa6", 1}, {0xa7, 1, "\xa7", 1},
-    {0xa8, 1, "\xa8", 1}, {0xa9, 1, "\xa9", 1}, {0xaa, 1, "\xaa", 1}, {0xab, 1, "\xab", 1},
-    {0xac, 1, "\xac", 1}, {0xad, 1, "\xad", 1}, {0xae, 1, "\xae", 1}, {0xaf, 1, "\xaf", 1},
+    {0xa0, 6, "\\u00a0", 2}, {0xa1, 6, "\\u00a1", 2}, {0xa2, 6, "\\u00a2", 2}, {0xa3, 6, "\\u00a3", 2},
+    {0xa4, 6, "\\u00a4", 2}, {0xa5, 6, "\\u00a5", 2}, {0xa6, 6, "\\u00a6", 2}, {0xa7, 6, "\\u00a7", 2},
+    {0xa8, 6, "\\u00a8", 2}, {0xa9, 6, "\\u00a9", 2}, {0xaa, 6, "\\u00aa", 2}, {0xab, 6, "\\u00ab", 2},
+    {0xac, 6, "\\u00ac", 2}, {0xad, 6, "\\u00ad", 2}, {0xae, 6, "\\u00ae", 2}, {0xaf, 6, "\\u00af", 2},
 
     /* \xb0 - \xbf */
-    {0xb0, 1, "\xb0", 1}, {0xb1, 1, "\xb1", 1}, {0xb2, 1, "\xb2", 1}, {0xb3, 1, "\xb3", 1},
-    {0xb4, 1, "\xb4", 1}, {0xb5, 1, "\xb5", 1}, {0xb6, 1, "\xb6", 1}, {0xb7, 1, "\xb7", 1},
-    {0xb8, 1, "\xb8", 1}, {0xb9, 1, "\xb9", 1}, {0xba, 1, "\xba", 1}, {0xbb, 1, "\xbb", 1},
-    {0xbc, 1, "\xbc", 1}, {0xbd, 1, "\xbd", 1}, {0xbe, 1, "\xbe", 1}, {0xbf, 1, "\xbf", 1},
+    {0xb0, 6, "\\u00b0", 2}, {0xb1, 6, "\\u00b1", 2}, {0xb2, 6, "\\u00b2", 2}, {0xb3, 6, "\\u00b3", 2},
+    {0xb4, 6, "\\u00b4", 2}, {0xb5, 6, "\\u00b5", 2}, {0xb6, 6, "\\u00b6", 2}, {0xb7, 6, "\\u00b7", 2},
+    {0xb8, 6, "\\u00b8", 2}, {0xb9, 6, "\\u00b9", 2}, {0xba, 6, "\\u00ba", 2}, {0xbb, 6, "\\u00bb", 2},
+    {0xbc, 6, "\\u00bc", 2}, {0xbd, 6, "\\u00bd", 2}, {0xbe, 6, "\\u00be", 2}, {0xbf, 6, "\\u00bf", 2},
 
     /* \xc0 - \xcf */
-    {0xc0, 1, "\xc0", 1}, {0xc1, 1, "\xc1", 1}, {0xc2, 1, "\xc2", 1}, {0xc3, 1, "\xc3", 1},
-    {0xc4, 1, "\xc4", 1}, {0xc5, 1, "\xc5", 1}, {0xc6, 1, "\xc6", 1}, {0xc7, 1, "\xc7", 1},
-    {0xc8, 1, "\xc8", 1}, {0xc9, 1, "\xc9", 1}, {0xca, 1, "\xca", 1}, {0xcb, 1, "\xcb", 1},
-    {0xcc, 1, "\xcc", 1}, {0xcd, 1, "\xcd", 1}, {0xce, 1, "\xce", 1}, {0xcf, 1, "\xcf", 1},
+    {0xc0, 6, "\\u00c0", 2}, {0xc1, 6, "\\u00c1", 2}, {0xc2, 6, "\\u00c2", 2}, {0xc3, 6, "\\u00c3", 2},
+    {0xc4, 6, "\\u00c4", 2}, {0xc5, 6, "\\u00c5", 2}, {0xc6, 6, "\\u00c6", 2}, {0xc7, 6, "\\u00c7", 2},
+    {0xc8, 6, "\\u00c8", 2}, {0xc9, 6, "\\u00c9", 2}, {0xca, 6, "\\u00ca", 2}, {0xcb, 6, "\\u00cb", 2},
+    {0xcc, 6, "\\u00cc", 2}, {0xcd, 6, "\\u00cd", 2}, {0xce, 6, "\\u00ce", 2}, {0xcf, 6, "\\u00cf", 2},
 
     /* \xd0 - \xdf */
-    {0xd0, 1, "\xd0", 1}, {0xd1, 1, "\xd1", 1}, {0xd2, 1, "\xd2", 1}, {0xd3, 1, "\xd3", 1},
-    {0xd4, 1, "\xd4", 1}, {0xd5, 1, "\xd5", 1}, {0xd6, 1, "\xd6", 1}, {0xd7, 1, "\xd7", 1},
-    {0xd8, 1, "\xd8", 1}, {0xd9, 1, "\xd9", 1}, {0xda, 1, "\xda", 1}, {0xdb, 1, "\xdb", 1},
-    {0xdc, 1, "\xdc", 1}, {0xdd, 1, "\xdd", 1}, {0xde, 1, "\xde", 1}, {0xdf, 1, "\xdf", 1},
+    {0xd0, 6, "\\u00d0", 2}, {0xd1, 6, "\\u00d1", 2}, {0xd2, 6, "\\u00d2", 2}, {0xd3, 6, "\\u00d3", 2},
+    {0xd4, 6, "\\u00d4", 2}, {0xd5, 6, "\\u00d5", 2}, {0xd6, 6, "\\u00d6", 2}, {0xd7, 6, "\\u00d7", 2},
+    {0xd8, 6, "\\u00d8", 2}, {0xd9, 6, "\\u00d9", 2}, {0xda, 6, "\\u00da", 2}, {0xdb, 6, "\\u00db", 2},
+    {0xdc, 6, "\\u00dc", 2}, {0xdd, 6, "\\u00dd", 2}, {0xde, 6, "\\u00de", 2}, {0xdf, 6, "\\u00df", 2},
 
     /* \xe0 - \xef */
-    {0xe0, 1, "\xe0", 1}, {0xe1, 1, "\xe1", 1}, {0xe2, 1, "\xe2", 1}, {0xe3, 1, "\xe3", 1},
-    {0xe4, 1, "\xe4", 1}, {0xe5, 1, "\xe5", 1}, {0xe6, 1, "\xe6", 1}, {0xe7, 1, "\xe7", 1},
-    {0xe8, 1, "\xe8", 1}, {0xe9, 1, "\xe9", 1}, {0xea, 1, "\xea", 1}, {0xeb, 1, "\xeb", 1},
-    {0xec, 1, "\xec", 1}, {0xed, 1, "\xed", 1}, {0xee, 1, "\xee", 1}, {0xef, 1, "\xef", 1},
+    {0xe0, 6, "\\u00e0", 2}, {0xe1, 6, "\\u00e1", 2}, {0xe2, 6, "\\u00e2", 2}, {0xe3, 6, "\\u00e3", 2},
+    {0xe4, 6, "\\u00e4", 2}, {0xe5, 6, "\\u00e5", 2}, {0xe6, 6, "\\u00e6", 2}, {0xe7, 6, "\\u00e7", 2},
+    {0xe8, 6, "\\u00e8", 2}, {0xe9, 6, "\\u00e9", 2}, {0xea, 6, "\\u00ea", 2}, {0xeb, 6, "\\u00eb", 2},
+    {0xec, 6, "\\u00ec", 2}, {0xed, 6, "\\u00ed", 2}, {0xee, 6, "\\u00ee", 2}, {0xef, 6, "\\u00ef", 2},
 
     /* \xf0 - \xff */
-    {0xf0, 1, "\xf0", 1}, {0xf1, 1, "\xf1", 1}, {0xf2, 1, "\xf2", 1}, {0xf3, 1, "\xf3", 1},
-    {0xf4, 1, "\xf4", 1}, {0xf5, 1, "\xf5", 1}, {0xf6, 1, "\xf6", 1}, {0xf7, 1, "\xf7", 1},
-    {0xf8, 1, "\xf8", 1}, {0xf9, 1, "\xf9", 1}, {0xfa, 1, "\xfa", 1}, {0xfb, 1, "\xfb", 1},
-    {0xfc, 1, "\xfc", 1}, {0xfd, 1, "\xfd", 1}, {0xfe, 1, "\xfe", 1}, {0xff, 1, "\xff", 1}
+    {0xf0, 6, "\\u00f0", 2}, {0xf1, 6, "\\u00f1", 2}, {0xf2, 6, "\\u00f2", 2}, {0xf3, 6, "\\u00f3", 2},
+    {0xf4, 6, "\\u00f4", 2}, {0xf5, 6, "\\u00f5", 2}, {0xf6, 6, "\\u00f6", 2}, {0xf7, 6, "\\u00f7", 2},
+    {0xf8, 6, "\\u00f8", 2}, {0xf9, 6, "\\u00f9", 2}, {0xfa, 6, "\\u00fa", 2}, {0xfb, 6, "\\u00fb", 2},
+    {0xfc, 6, "\\u00fc", 2}, {0xfd, 6, "\\u00fd", 2}, {0xfe, 6, "\\u00fe", 2}, {0xff, 6, "\\u00ff", 2}
 };
 
 /*
@@ -227,6 +227,12 @@ json_encode(char const *ptr, size_t len, size_t *retlen, bool skip_quote)
     ssize_t mlen = 0;	    /* length of allocated encoded string */
     char *p;		    /* next place to encode */
     size_t i;
+    uint32_t xa = 0;        /* first hex character numeric value */
+    uint32_t xb = 0;        /* second hex character numeric value */
+    int scanned = 0;        /* for sscanf if '\u' found */
+    int32_t bytes = 0;      /* for '\u' */
+    int32_t surrogate = 0;  /* for '\u' */
+    char *utf8 = NULL;      /* for '\u' */
 
     /*
      * firewall
@@ -244,7 +250,148 @@ json_encode(char const *ptr, size_t len, size_t *retlen, bool skip_quote)
      * count the bytes that will be in the encoded allocated string
      */
     for (i=0; i < len; ++i) {
-	mlen += byte2asciistr[(uint8_t)(ptr[i])].len;
+        if ((ptr[i] & 0xE0) == 0xC0) {
+            #if 0
+            if (i + 2 > len) {
+                /* error - clear allocated length */
+                if (retlen != NULL) {
+                    *retlen = 0;
+                }
+                if (ret != NULL) {
+                    free(ret);
+                    ret = NULL;
+                }
+                warn(__func__, "#0: encoding ran beyond end of allocated encoded string");
+                return NULL;
+            }
+            #endif
+            i += 2;
+            mlen += 2;
+        } else if ((ptr[i] & 0xF0) == 0xE0) {
+            if (i + 3 > len) {
+                /* error - clear allocated length */
+                if (retlen != NULL) {
+                    *retlen = 0;
+                }
+                if (ret != NULL) {
+                    free(ret);
+                    ret = NULL;
+                }
+                warn(__func__, "#1: encoding ran beyond end of allocated encoded string");
+                return NULL;
+            }
+            i += 3;
+            mlen += 3;
+        } else if ((ptr[i] & 0xF8) == 0xF0) {
+            if (i + 4 > len) {
+                /* error - clear allocated length */
+                if (retlen != NULL) {
+                    *retlen = 0;
+                }
+                if (ret != NULL) {
+                    free(ret);
+                    ret = NULL;
+                }
+                warn(__func__, "#2: encoding ran beyond end of allocated encoded string");
+                return NULL;
+            }
+            i += 4;
+            mlen += 4;
+        }
+        if (ptr[i] == '\\' && ptr[i+1] == 'u') {
+            /*
+             * there must be at least five more characters beyond \
+             */
+            if (i+5 >= len) {
+                /* error - clear allocated length */
+                if (retlen != NULL) {
+                    *retlen = 0;
+                }
+                warn(__func__, "found \\u, but not enough for 4 hex chars at end of buffer");
+                return NULL;
+            }
+            xa = 0;
+            xb = 0;
+            scanned = sscanf(ptr + i + 2, "%4x\\u%4x", &xa, &xb);
+            if (scanned == EOF) {
+                /* error - clear allocated length and free buffer */
+                if (retlen != NULL) {
+                    *retlen = 0;
+                }
+
+                warn(__func__, "reached EOF trying to scan for hex bytes");
+                return NULL;
+            } else if (scanned == 2 && ((xa == 0xe0 && xb < 0xa0) || (xa == 0xf0 && xb < 0x90))) {
+                /* error - clear allocated length and free buffer */
+                if (retlen != NULL) {
+                    *retlen = 0;
+                }
+                if (ret != NULL) {
+                    free(ret);
+                    ret = NULL;
+                }
+
+                warn(__func__, "invalid overlong encoding: %4x followed by %4x", xa, xb);
+                return NULL;
+            } else if (scanned == 1 || (scanned == 2 && surrogate_pair_to_codepoint((int32_t)xa, (int32_t)xb) < 0)) {
+                surrogate = xa;
+                bytes = utf8len(ptr + i, surrogate);
+                if (bytes <= 0) {
+                    if (retlen != NULL) {
+                        *retlen = 0;
+                    }
+                    /* utf8len() already warns */
+                    return NULL;
+                }
+                dbg(DBG_VVHIGH, "UTF-8 bytes: %ju", (uintmax_t)bytes);
+                mlen += bytes;
+                i += 5;
+            } else if (scanned == 2) {
+                /*
+                 * if there is a \uxxxx\uxxxx then we try for a surrogate
+                 * pair.
+                 */
+                surrogate = surrogate_pair_to_codepoint((int32_t)xa, (int32_t)xb);
+                if (surrogate < 0) {
+                    if (retlen != NULL) {
+                        *retlen = 0;
+                    }
+                    warn(__func__, "surrogate pair invalid: \\u%x\\u%x", xa, xb);
+
+                    return NULL;
+                }
+
+                /*
+                 * assuming no error from surrogate_pair_to_codepoint(), we will
+                 * try counting the bytes needed.
+                 */
+                bytes = utf8len(NULL, surrogate);
+                if (bytes <= 0) {
+                    if (retlen != NULL) {
+                        *retlen = 0;
+                    }
+                    /* utf8len() already warns */
+                    return NULL;
+                }
+                dbg(DBG_VVHIGH, "UTF-8 bytes: %ju", (uintmax_t)bytes);
+                mlen += bytes;
+
+                /*
+                 * we skip 11 instead of 5 because 5 + LITLEN("\\uxxxx") is
+                 * 11.
+                 */
+                i += 11;
+            } else {
+                /* error - clear allocated length and free buffer */
+                if (retlen != NULL) {
+                    *retlen = 0;
+                }
+                warn(__func__, "did not read \\uxxxx hex value");
+                return NULL;
+            }
+        } else {
+	    mlen += byte2asciistr[(uint8_t)(ptr[i])].len;
+        }
     }
     if (mlen < 0) { /* paranoia */
 	/* error - clear allocated length */
@@ -288,21 +435,213 @@ json_encode(char const *ptr, size_t len, size_t *retlen, bool skip_quote)
     /*
      * JSON encode each byte
      */
-    for (p=ret; i < len; ++i) {
-	if (p+byte2asciistr[(uint8_t)(ptr[i])].len > beyond) {
-	    /* error - clear allocated length */
-	    if (retlen != NULL) {
-		*retlen = 0;
-	    }
-	    if (ret != NULL) {
-		free(ret);
-		ret = NULL;
-	    }
-	    warn(__func__, "encoding ran beyond end of allocated encoded string");
-	    return NULL;
-	}
-	strcpy(p, byte2asciistr[(uint8_t)(ptr[i])].enc);
-	p += byte2asciistr[(uint8_t)(ptr[i])].len;
+    for (p=utf8=ret; i < len; ++i, ++utf8) {
+        #if 0
+        if (ptr[i] == '\\' && ptr[i+1] == 'u') {
+            /*
+             * there must be at least five more characters beyond \
+             */
+            if (i+5 >= len) {
+                /* error - clear allocated length and free buffer */
+                if (retlen != NULL) {
+                    *retlen = 0;
+                }
+                if (ret != NULL) {
+                    free(ret);
+                    ret = NULL;
+                }
+
+                warn(__func__, "found \\u while decoding, but not enough for 4 hex chars at end of buffer");
+                return NULL;
+            }
+            xa = 0;
+            xb = 0;
+
+            /*
+             * we check for a second \uxxxx first, in case it is a surrogate
+             * pair
+             */
+            scanned = sscanf(ptr + i + 2, "%4x\\u%4x", &xa, &xb);
+            if (scanned == EOF) {
+                /* error - clear allocated length and free buffer */
+                if (retlen != NULL) {
+                    *retlen = 0;
+                }
+                if (ret != NULL) {
+                    free(ret);
+                    ret = NULL;
+                }
+
+                warn(__func__, "reached EOF trying to scan for hex bytes");
+                return NULL;
+            } else if (scanned == 2 && ((xa == 0xe0 && xb < 0xa0) || (xa == 0xf0 && xb < 0x90))) {
+                /* error - clear allocated length and free buffer */
+                if (retlen != NULL) {
+                    *retlen = 0;
+                }
+                if (ret != NULL) {
+                    free(ret);
+                    ret = NULL;
+                }
+
+                warn(__func__, "invalid overlong encoding: %4x followed by %4x", xa, xb);
+                return NULL;
+            } else if (scanned == 1 || (scanned == 2 && surrogate_pair_to_codepoint((int32_t)xa, (int32_t)xb) < 0)) {
+                /*
+                 * no possible surrogate pair found so proceed like there
+                 * was not another \uxxxx
+                 */
+
+                bytes = codepoint_to_unicode(utf8, xa);
+                if (bytes <= 0) {
+                    /* error - clear allocated length and free buffer */
+                    if (retlen != NULL) {
+                        *retlen = 0;
+                    }
+                    if (ret != NULL) {
+                        free(ret);
+                        ret = NULL;
+                    }
+                    /* codepoint_to_unicode warns on error */
+                    return NULL;
+                }
+                /*
+                 * bytes - 1 because we increment utf8 in the increment phase
+                 * of the loop
+                 */
+                utf8 += bytes - 1;
+                /*
+                 * however, for p we need to update the entire amount
+                 */
+                p += bytes;
+                /*
+                 * we increment by 5 because LITLEN("uxxxx") is 5: the for() loop
+                 * increments by 1 at the increment/update phase.
+                 */
+                i += 5;
+            } else if (scanned == 2) {
+                /*
+                 * in this case we have to check if we have a valid
+                 * surrogate pair.
+                 */
+                surrogate = surrogate_pair_to_codepoint((int32_t)xa, (int32_t)xb);
+                if (surrogate < 0) {
+                    if (retlen != NULL) {
+                        *retlen = 0;
+                    }
+                    if (ret != NULL) {
+                        free(ret);
+                        ret = NULL;
+                    }
+                    warn(__func__, "surrogate pair invalid: \\u%x\\u%x", xa, xb);
+
+                    return NULL;
+                }
+
+                bytes = codepoint_to_unicode(utf8, surrogate);
+                if (bytes <= 0) {
+                    /* error - clear allocated length and free buffer */
+                    if (retlen != NULL) {
+                        *retlen = 0;
+                    }
+                    if (ret != NULL) {
+                        free(ret);
+                        ret = NULL;
+                    }
+                    /* codepoint_to_unicode() warns on error */
+                    return NULL;
+                }
+
+                /*
+                 * bytes - 1 because we increment utf8 in the increment phase
+                 * of the loop
+                 */
+                utf8 += bytes - 1;
+                /*
+                 * however, for p we need to update the entire amount
+                 */
+                p += bytes;
+
+                /*
+                 * we increment by 11 because LITLEN("uxxxx") +
+                 * LITLEN("\\uxxxx") is 11.
+                 */
+                i += 11;
+            } else {
+                /* error - clear allocated length and free buffer */
+                if (retlen != NULL) {
+                    *retlen = 0;
+                }
+                if (ret != NULL) {
+                    free(ret);
+                    ret = NULL;
+                }
+                warn(__func__, "did not read \\uxxxx hex value");
+                return NULL;
+            }
+        } else
+            #endif
+        if ((ptr[i] & 0xE0) == 0xC0) {
+            if (ptr + i + 2 > beyond) {
+                /* error - clear allocated length */
+                if (retlen != NULL) {
+                    *retlen = 0;
+                }
+                if (ret != NULL) {
+                    free(ret);
+                    ret = NULL;
+                }
+                warn(__func__, "#3: encoding ran beyond end of allocated encoded string");
+                return NULL;
+            }
+            snprintf(p, 2, "%c%c", ptr[i], ptr[i+1]);
+            i += 2;
+            p += 2;
+        } else if ((ptr[i] & 0xF0) == 0xE0) {
+            if (ptr + i + 3 > beyond) {
+                /* error - clear allocated length */
+                if (retlen != NULL) {
+                    *retlen = 0;
+                }
+                if (ret != NULL) {
+                    free(ret);
+                    ret = NULL;
+                }
+                warn(__func__, "#4: encoding ran beyond end of allocated encoded string");
+                return NULL;
+            }
+            i += 2;
+            p += 3;
+        } else if ((ptr[i] & 0xF8) == 0xF0) {
+            if (ptr + i + 4 > beyond) {
+                /* error - clear allocated length */
+                if (retlen != NULL) {
+                    *retlen = 0;
+                }
+                if (ret != NULL) {
+                    free(ret);
+                    ret = NULL;
+                }
+                warn(__func__, "#5: encoding ran beyond end of allocated encoded string");
+                return NULL;
+            }
+            i += 3;
+            p += 4;
+        } else if (p+byte2asciistr[(uint8_t)(ptr[i])].len > beyond) {
+            /* error - clear allocated length */
+            if (retlen != NULL) {
+                *retlen = 0;
+            }
+            if (ret != NULL) {
+                free(ret);
+                ret = NULL;
+            }
+            warn(__func__, "#6: encoding ran beyond end of allocated encoded string");
+            return NULL;
+        } else {
+            strcpy(p, byte2asciistr[(uint8_t)(ptr[i])].enc);
+            p += byte2asciistr[(uint8_t)(ptr[i])].len;
+        }
     }
     *p = '\0';	/* paranoia */
     mlen = p - ret; /* paranoia */
@@ -415,7 +754,7 @@ jdecencchk(int entertainment)
 	not_reached();
     }
 
-    dbg(DBG_HIGH, "decoded string: %s (len: %ju)", mstr2, mlen2);
+    dbg(DBG_HIGH, "decoded string from '%s': %s (len: %ju)", decstr, mstr2, mlen2);
 
     /*
      * encode the string we just decoded
@@ -426,17 +765,17 @@ jdecencchk(int entertainment)
 	err(148, __func__, "json_encode(mstr2: %s, mlen2: %ju, mlen: %ju) == NULL", mstr2, (uintmax_t)mlen2, (uintmax_t)mlen);
 	not_reached();
     }
-    dbg(DBG_HIGH, "encoded string: %s (len: %ju)", mstr, mlen);
+    dbg(DBG_HIGH, "encoded string from '%s': %s (len: %ju)", mstr2, mstr, mlen);
 
 
     /*
      * verify that the encoded string matches the original string
      */
     if (strcmp(mstr2, mstr) != 0) {
-	err(149, __func__, "mstr2: %s != decstr: %s", mstr2, mstr);
+	err(149, __func__, "mstr2: %s != mstr: %s", mstr2, mstr);
 	not_reached();
     } else {
-	dbg(DBG_MED, "%s: %s == %s: true", decstr, mstr, mstr2);
+	dbg(DBG_MED, "%s: %s == %s: true", mstr, mstr, mstr2);
 	if (entertainment > 0) {
 	    msg("%s", mstr2);
 	}
@@ -958,8 +1297,8 @@ chkbyte2asciistr(void)
      */
     for (i=0; i < JSON_BYTE_VALUES; ++i) {
 	if (strlen(byte2asciistr[i].enc) != byte2asciistr[i].len) {
-	    err(176, __func__, "byte2asciistr[0x%02x].enc length: %ju != byte2asciistr[0x%02x].len: %ju",
-			       i, (uintmax_t)strlen(byte2asciistr[i].enc),
+	    err(176, __func__, "byte2asciistr[0x%02x].enc: %s length: %ju != byte2asciistr[0x%02x].len: %ju",
+			       i, byte2asciistr[i].enc, (uintmax_t)strlen(byte2asciistr[i].enc),
 			       i, (uintmax_t)byte2asciistr[i].len);
 	    not_reached();
 	}
@@ -1181,45 +1520,24 @@ chkbyte2asciistr(void)
     }
 
     /*
-     * assert: \x7f encodes to \u007f
+     * assert: \x7f-0xff encodes to \u00XX
      */
-    for (i=0x7f; i <= 0x7f; ++i) {
+    for (i=0x7f; i <= 0xff; ++i) {
 	if (byte2asciistr[i].len != LITLEN("\\uxxxx")) {
 	    err(205, __func__, "byte2asciistr[0x%02x].enc length: %ju != %ju",
 			       i, (uintmax_t)strlen(byte2asciistr[i].enc),
 			       (uintmax_t)LITLEN("\\uxxxx"));
 	    not_reached();
 	}
-	ret = sscanf(byte2asciistr[i].enc, "\\u%04x%c", &int_hexval, &guard);
-	if (ret != 1) {
-	    err(206, __func__, "byte2asciistr[0x%02x].enc: <%s> is not in <\\uxxxx> form", i, byte2asciistr[i].enc);
-	    not_reached();
-	}
-	if (i != int_hexval) {
-	    err(207, __func__, "byte2asciistr[0x%02x].enc: <%s> != <\\u%04x> form", i, byte2asciistr[i].enc, i);
-	    not_reached();
-	}
-    }
-
-    /*
-     * assert: \x80-\xff encodes to the character
-     */
-    for (i=0x80; i <= 0xff; ++i) {
-	if (byte2asciistr[i].len != 1) {
-	    err(208, __func__, "byte2asciistr[0x%02x].enc length: %ju != %d",
-			       i, (uintmax_t)strlen(byte2asciistr[i].enc), 1);
-	    not_reached();
-	}
-	if ((uint8_t)(byte2asciistr[i].enc[0]) != i) {
-	    err(209, __func__, "byte2asciistr[0x%02x].enc[0]: 0x%02x is not 0x%02jx",
-			       i, (uint8_t)(byte2asciistr[i].enc[0]) & 0xff, (uintmax_t)i);
-	    not_reached();
-	}
-	if ((uint8_t)(byte2asciistr[i].enc[1]) != 0) {
-	    err(210, __func__, "byte2asciistr[0x%02x].enc[1]: 0x%02x is not 0",
-			       i, (uint8_t)(byte2asciistr[i].enc[1]) & 0xff);
-	    not_reached();
-	}
+        ret = sscanf(byte2asciistr[i].enc, "\\u%04x%c", &int_hexval, &guard);
+        if (ret != 1) {
+            err(206, __func__, "byte2asciistr[0x%02x].enc: <%s> is not in <\\uxxxx> form", i, byte2asciistr[i].enc);
+            not_reached();
+        }
+        if (i != int_hexval) {
+            err(207, __func__, "byte2asciistr[0x%02x].enc: <%s> != <\\u%04x> form", i, byte2asciistr[i].enc, i);
+            not_reached();
+        }
     }
 
     /*
@@ -1248,6 +1566,7 @@ chkbyte2asciistr(void)
 	mstr = NULL;
     }
 
+    memset(str, 0, sizeof(str));    /* clear all bytes in str, including the final '\0' */
     /*
      * finally try to encode every possible string with a single non-NUL character
      */
@@ -1268,8 +1587,8 @@ chkbyte2asciistr(void)
 	    not_reached();
 	}
 	if (mlen != byte2asciistr[i].len) {
-	    err(215, __func__, "json_encode_str(0x%02x, *mlen %ju != %ju)",
-			       i, (uintmax_t)mlen, (uintmax_t)byte2asciistr[i].len);
+	    err(215, __func__, "json_encode_str(0x%02x, *mlen %ju != %ju): mstr %s != %s",
+			       i, (uintmax_t)mlen, (uintmax_t)byte2asciistr[i].len, mstr, byte2asciistr[i].enc);
 	    not_reached();
 	}
 	if (strcmp(byte2asciistr[i].enc, mstr) != 0) {
@@ -1295,11 +1614,13 @@ chkbyte2asciistr(void)
 			       mstr, (uintmax_t)mlen2, byte2asciistr[i].decoded_len);
 	    not_reached();
 	}
-	if ((uint8_t)(mstr2[0]) != i) {
-	    err(219, __func__, "json_decode_str(<%s>, false, *mlen2: %ju): 0x%02x != 0x%02x",
-			       mstr, (uintmax_t)mlen2, (uint8_t)(mstr2[0]) & 0xff, i);
-	    not_reached();
-	}
+        if (i < 0x80) {
+            if ((uint8_t)(mstr2[0]) != i) {
+                err(219, __func__, "json_decode_str(<%s>, false, *mlen2: %ju): 0x%02x != 0x%02x (mstr2: %x)",
+                                   mstr, (uintmax_t)mlen2, (uint8_t)(mstr2[0]) & 0xff, i, (uint8_t)mstr2[0]);
+                not_reached();
+            }
+        }
 
 	/* free the allocated encoded string */
 	if (mstr != NULL) {
@@ -1508,6 +1829,18 @@ decode_json_string(char const *ptr, size_t len, size_t mlen, size_t *retlen)
 		    }
 
 		    warn(__func__, "reached EOF trying to scan for hex bytes");
+		    return NULL;
+                } else if (scanned == 2 && ((xa == 0xe0 && xb < 0xa0) || (xa == 0xf0 && xb < 0x90))) {
+		    /* error - clear allocated length and free buffer */
+		    if (retlen != NULL) {
+			*retlen = 0;
+		    }
+		    if (ret != NULL) {
+			free(ret);
+			ret = NULL;
+		    }
+
+		    warn(__func__, "invalid overlong encoding: %4x followed by %4x", xa, xb);
 		    return NULL;
 		} else if (scanned == 1 || (scanned == 2 && surrogate_pair_to_codepoint((int32_t)xa, (int32_t)xb) < 0)) {
 		    /*
@@ -1816,6 +2149,18 @@ json_decode(char const *ptr, size_t len, bool quote, size_t *retlen)
 		    }
 
 		    warn(__func__, "reached EOF trying to scan for hex bytes");
+		    return NULL;
+                } else if (scanned == 2 && ((xa == 0xe0 && xb < 0xa0) || (xa == 0xf0 && xb < 0x90))) {
+		    /* error - clear allocated length and free buffer */
+		    if (retlen != NULL) {
+			*retlen = 0;
+		    }
+		    if (ret != NULL) {
+			free(ret);
+			ret = NULL;
+		    }
+
+		    warn(__func__, "invalid overlong encoding: %4x followed by %4x", xa, xb);
 		    return NULL;
 		} else if (scanned == 1 || (scanned == 2 && surrogate_pair_to_codepoint((int32_t)xa, (int32_t)xb) < 0)) {
 		    surrogate = xa;
