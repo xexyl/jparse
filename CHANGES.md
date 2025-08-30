@@ -1,5 +1,13 @@
 # Significant changes in the JSON parser repo
 
+## Release 2.2.48 2025-08-30
+
+Don't assume bits in a byte is 8. If `CHAR_BIT` is not defined define it as 8.
+Then set `BITS_IN_BYTE` to `CHAR_BIT`.
+
+Updated `JPARSE_UTILS_VERSION` to `"2.0.14 2025-08-30"`.
+
+
 ## Release 2.2.47 2025-07-23
 
 Update issues URL in `jparse_bug_report.sh`.
