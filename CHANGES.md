@@ -15,6 +15,9 @@ functions in `jparse/util.c`.
 
 Updated `JPARSE_UTILS_VERSION` to `"2.0.15 2025-09-01"`.
 
+The `test_jparse/Makefile` removes `test_jparse/util_test.o` for
+`make clean`, and removes `test_jparse/util_test.c` for `make clobber`.
+
 
 ## Release 2.2.47 2025-07-23
 

@@ -655,6 +655,7 @@ clean:
 	${S} echo "${OUR_NAME}: make $@ starting"
 	${S} echo
 	${Q} ${RM} ${RM_V} -f ${ALL_OBJS} ${ALL_BUILT_SRC}
+	${Q} ${RM} ${RM_V} -f util_test.o
 	${S} echo
 	${S} echo "${OUR_NAME}: make $@ ending"
 
@@ -665,7 +666,7 @@ clobber: legacy_clobber clean
 	${S} echo "${OUR_NAME}: make $@ starting"
 	${S} echo
 	${Q} ${RM} ${RM_V} -f ${TARGETS}
-	${Q} ${RM} ${RM_V} -f jparse_test.log
+	${Q} ${RM} ${RM_V} -f jparse_test.log util_test.c
 	${Q} ${RM} ${RM_V} -f tags ${LOCAL_DIR_TAGS}
 	${Q} ${RM} ${RM_V} -rf a b
 	${S} echo
