@@ -51,43 +51,32 @@
 #include <fnmatch.h>    /* for fnmatch(3) (for ignored paths - if desired) */
 #include <limits.h>	/* for CHAR_BIT */
 
-
 /*
- * standard truth :-)
+ * dbg - info, debug, warning, error, and usage message facility
  */
-#if !defined(BOOL_IS_DEFINED)
-#define BOOL_IS_DEFINED
-#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
-/* have a C99 compiler - we should expect to have <stdbool.h> */
-#include <stdbool.h>
-#elif !defined(__cplusplus)
-/* do not have a C99 compiler - fake a <stdbool.h> header file */
-typedef unsigned char bool;
-#undef true
-#define true ((bool)(1))
-#undef false
-#define false ((bool)(0))
+#if defined(INTERNAL_INCLUDE)
+  #include "../dbg/c_bool.h"
+  #include "../dbg/c_compat.h"
+  #include "../dbg/dbg.h"
+#elif defined(INTERNAL_INCLUDE_2)
+  #include "../dbg/c_bool.h"
+  #include "../dbg/c_compat.h"
+  #include "../dbg/dbg.h"
+#else
+  #include <c_bool.h>
+  #include <c_compat.h>
+  #include <dbg.h>
 #endif
-#endif
-/* booltostr - convert a boolean to a string */
-#if !defined(booltostr)
-#define booltostr(x) ((x) ? "true" : "false")
-#endif
-/* strtobool - convert a string to a boolean */
-#if !defined(strtobool)
-#define strtobool(x) ((x) != NULL && !strcmp((x), "true"))
-#endif
-
 
 /*
  * dyn_array - dynamic array facility
  */
 #if defined(INTERNAL_INCLUDE)
+  #include "../dyn_array/dyn_array.h"
+#elif defined(INTERNAL_INCLUDE_2)
 #include "../dyn_array/dyn_array.h"
-#include "../dbg/dbg.h"
 #else
-#include <dyn_array.h>
-#include <dbg.h>
+  #include <dyn_array.h>
 #endif
 
 /*
