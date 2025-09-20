@@ -1,13 +1,5 @@
 # Significant changes in the JSON parser repo
 
-Removed unused macros from util.h, some of which are leftovers from mkiocccentry
-(at the time of moving code out of here that never belonged here but was here
-due to the history of the repo the macros were missed).
-
-Updated `JPARSE_UTILS_VERSION` to `"2.1.3 2025-09-20"` (yes this jumped up but
-that's because the last two code updates to util.[ch] did not have a version
-update).
-
 
 ## Release 2.4.0 2025-09-20
 
@@ -41,6 +33,14 @@ for the `${BISONFILES}` and ${FLEXFILES} files.
 
 The `make picky` rule tests a single set, if that set is non-empty,
 one at a time.
+
+Removed unused macros from util.h, some of which are leftovers from mkiocccentry
+(at the time of moving code out of here that never belonged here but was here
+due to the history of the repo the macros were missed).
+
+Updated `JPARSE_UTILS_VERSION` to `"2.1.3 2025-09-20"` (yes this jumped up but
+that's because the last two code updates to util.[ch] did not have a version
+update).
 
 
 ## Release 2.3.2 2025-09-09
