@@ -14,3 +14,9 @@ git clone https://github.com/lcn2/dyn_array
 cd dyn_array && make clobber all
 sudo make install
 
+# and then we need the pr api from the pr repo at
+# https://github.com/lcn2/pr.
+git clone https://github.com/lcn2/pr
+cd pr && make clobber all
+sudo make install
+

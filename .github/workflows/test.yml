@@ -45,6 +45,10 @@ jobs:
       run: git clone https://github.com/lcn2/dyn_array
     - name: install dyn_array
       run: cd dyn_array && sudo make clobber all install
+    - name: clone pr
+      run: git clone https://github.com/lcn2/pr
+    - name: install pr
+      run: cd pr && sudo make clobber all install
     - name: rebuild parser
       run: make parser-o
     - name: make
