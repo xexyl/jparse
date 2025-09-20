@@ -72,6 +72,10 @@ jobs:
        cd dyn_array
        make clobber all
        sudo make install
+       git clone https://github.com/lcn2/pr
+       cd pr
+       make clobber all
+       sudo make install
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
