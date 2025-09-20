@@ -1,6 +1,16 @@
 # Significant changes in the JSON parser repo
 
 
+## Release 2.4.0 2025-09-20
+
+Now using stdio help function from the [pr repo](https://github.com/lcn2/pr).
+Removed `libpr` duplicate from `util.c`.
+Removed `libpr` duplicate from `util.h`.
+
+Replaced calls to the `check_invalid_option()` function with the more general
+`fchk_inval_opt()` interface from `libpr.a`.
+
+
 ## Release 2.3.3 2025-09-16
 
 In keeping with the mkiocccentry toolkit, the new header
