@@ -1,6 +1,13 @@
 # Significant changes in the JSON parser repo
 
 
+## Release 2.4.1 2025-09-21
+
+Rename generic `INCLUDE_UTIL_H` to `INCLUDE_JPARSE_UTIL_H` to prevent problems
+with other projects not including code they need, if they have a similar
+structure.
+
+
 ## Release 2.4.0 2025-09-20
 
 Now using stdio help function from the [pr repo](https://github.com/lcn2/pr).
