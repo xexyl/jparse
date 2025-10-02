@@ -1,6 +1,13 @@
 # Significant changes in the JSON parser repo
 
 
+## Release 2.4.3 2025-10-02
+
+Added `#include` of `pr.h` and `dyn_array.h` in `jparse.h`.
+
+Updated `JPARSE_LIBRARY_VERSION` to `"2.4.2 2025-10-02"`.
+
+
 ## Release 2.4.2 2025-09-28
 
 Moved the `fd_is_ready()` function and the `flush_tty()` function
