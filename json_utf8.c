@@ -45,6 +45,7 @@
 #include <ctype.h>
 #include "json_utf8.h"
 
+
 /*
  * count_utf8_bytes	- count bytes needed to decode/encode in str
  *
@@ -55,7 +56,7 @@
  *	bytes	    pointer to the number of bytes
  *
  * NOTE: If str is NULL we use the value in surrogate; otherwise we attempt to
- * extract the value by parsing the string as %4x and then, assuming we extract
+ * extract the value by parsing the string as 0x%4x and then, assuming we extract
  * a value, we count the number of bytes required for the string. It is this
  * value that is returned.
  *
@@ -76,18 +77,18 @@ utf8len(const char *str, int32_t surrogate)
 	x = surrogate;
 	if (x < 0x80) {
 	    len = 1;
-	    dbg(DBG_VVHIGH, "%X length %jd", x, (intmax_t)len);
+	    dbg(DBG_VVHIGH, "%X length %zd", x, len);
 	} else if (x < 0x800) {
 	    len = 2;
-	    dbg(DBG_VVHIGH, "%X length %jd", x, (intmax_t)len);
+	    dbg(DBG_VVHIGH, "%X length %zd", x, len);
 	} else if (x < 0x10000) {
 	    len = 3;
-	    dbg(DBG_VVHIGH, "%X length %jd", x, (intmax_t)len);
+	    dbg(DBG_VVHIGH, "%X length %zd", x, len);
 	} else if (x < 0x110000) {
 	    len = 4;
-	    dbg(DBG_VVHIGH, "%X length %jd", x, (intmax_t)len);
+	    dbg(DBG_VVHIGH, "%X length %zd", x, len);
 	} else {
-	    warn(__func__, "%X: illegal value, len: %jd\n", x, (intmax_t)len);
+	    warn(__func__, "%X: illegal value, len: %zd\n", x, len);
 	    len = -1;
 	}
 
@@ -133,24 +134,25 @@ utf8len(const char *str, int32_t surrogate)
 	 */
 	if (x < 0x80) {
 	    len = 1;
-	    dbg(DBG_VVHIGH, "%X length %jd", x, (intmax_t)len);
+	    dbg(DBG_VVHIGH, "%X length %zd", x, len);
 	} else if (x < 0x800) {
 	    len = 2;
-	    dbg(DBG_VVHIGH, "%X length %jd", x, (intmax_t)len);
+	    dbg(DBG_VVHIGH, "%X length %zd", x, len);
 	} else if (x < 0x10000) {
 	    len = 3;
-	    dbg(DBG_VVHIGH, "%X length %jd", x, (intmax_t)len);
+	    dbg(DBG_VVHIGH, "%X length %zd", x, len);
 	} else if (x < 0x110000) {
 	    len = 4;
-	    dbg(DBG_VVHIGH, "%X length %jd", x, (intmax_t)len);
+	    dbg(DBG_VVHIGH, "%X length %zd", x, len);
 	} else {
-	    warn(__func__, "%X: illegal value, len %jd\n", x, (intmax_t)len);
+	    warn(__func__, "%X: illegal value, len %zd\n", x, len);
 	    len = -1;
 	}
     }
 
     return len;
 }
+
 
 /*
  * surrogate_pair_to_codepoint - convert surrogate pair to a single codepoint
@@ -179,10 +181,10 @@ surrogate_pair_to_codepoint(int32_t hi, int32_t lo)
      * These should theoretically never happen.
      */
     if (hi < 0) {
-        warn(__func__, "high byte < 0: %4x", hi);
+        warn(__func__, "high byte < 0: 0x%4X", hi);
         return -1;
     } else if (lo < 0) {
-        warn(__func__, "low byte < 0: %4x", lo);
+        warn(__func__, "low byte < 0: 0x%4X", lo);
         return -1;
     }
 
@@ -193,9 +195,10 @@ surrogate_pair_to_codepoint(int32_t hi, int32_t lo)
 	return -1;
     }
     codepoint = ((hi - 0xD800) << 10) + (lo - 0xDC00) + 0x10000;
-    dbg(DBG_VVHIGH, "codepoint: %jd", (intmax_t)codepoint);
+    dbg(DBG_VVHIGH, "codepoint: %d", codepoint);
     return codepoint;
 }
+
 
 /*
  * codepoint_to_unicode - convert a codepoint to Unicode
@@ -313,6 +316,7 @@ codepoint_to_unicode(char *output, unsigned int codepoint)
     return len;
 }
 
+
 /*
  * utf8_to_codepoint - convert UTF-8 byte(s) to a codepoint
  *
@@ -349,6 +353,7 @@ uint32_t utf8_to_codepoint(const char *str)
     return 0;
 }
 
+
 /*
  * is_surrogate_pair    - detect if valid surrogate pair
  *
@@ -379,10 +384,10 @@ is_surrogate_pair(const int32_t xa, const int32_t xb)
         return false;
     }
     if (xa >= 0xD800 && xa <= 0xDBFF && xb >= 0xDC00 && xb <= 0xDFFF) {
-        dbg(DBG_HIGH, "high surrogate %4x followed by low surrogate %4x", xa, xb);
+        dbg(DBG_HIGH, "high surrogate 0x%4X followed by low surrogate 0x%4X", xa, xb);
         return true;
     } else if (xa >= 0xDC00 && xa <= 0xDFFF) {
-        warn(__func__, "low surrogate %4x not preceded by high surrogate", xa);
+        warn(__func__, "low surrogate 0x%4X not preceded by high surrogate", xa);
         return false;
     }
     return false;
