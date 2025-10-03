@@ -749,8 +749,14 @@ depend: ${ALL_CSRC}
 	    fi; \
 	    ${SED} -i\.orig -n -e '1,/^### DO NOT CHANGE MANUALLY BEYOND THIS LINE$$/p' Makefile; \
 	    ${CC} ${CFLAGS} -MM -I. ${ALL_CSRC} | \
-	      ${SED} -E -e 's;\s/usr/local/include/\S+;;g' -e 's;\s/usr/include/\S+;;g' | \
-	      ${SED} -e 's;../../jparse/;../;g' | \
+	      ${SED} -E -e 's;\s/usr/local/include/\S+;;g' -e 's;\s/usr/include/\S+;;g' \
+			-e 's;\.\./\.\./pr/\.\./dyn_array/;../../dyn_array/;g' \
+			-e 's;\.\./\.\./pr/\.\./dbg/;../../dbg/;g' \
+			-e 's;\.\./\.\./dyn_array/\.\./dbg/;../../dbg/;g' \
+			-e 's;\.\./\.\./jparse/\.\./pr/;../../pr/;g' \
+			-e 's;\.\./\.\./jparse/\.\./dyn_array/;../../dyn_array/;g' \
+			-e 's;\.\./\.\./jparse/\.\./dbg/;../../dbg/;g' \
+			| \
 	      ${INDEPEND} -v ${VERBOSITY} >> Makefile; \
 	    if ${CMP} -s Makefile.orig Makefile; then \
 		${RM} ${RM_V} -f Makefile.orig; \
