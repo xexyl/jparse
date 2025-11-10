@@ -79,7 +79,7 @@ if [[ -z "$MAKE" ]]; then
 fi
 export MAKE
 export MAKE_FLAGS="V=@ S=@ Q= E=@ I= Q_V_OPTION=1 INSTALL_V= MAKE_CD_Q="
-export JPARSE_BUG_REPORT_VERSION="2.1.3 2025-11-11"
+export BUG_REPORT_VERSION="2.1.2 2025-07-23"
 export FAILURE_SUMMARY=
 export NOTICE_SUMMARY=
 export DBG_LEVEL="0"
@@ -1439,8 +1439,8 @@ if [[ $(basename "$MAKE") == gmake ]]; then
     get_version "gmake"
 fi
 
-# cc -dM -E -xc /dev/null: get predefined macros
-run_check 40 "cc -dM -E -xc /dev/null"
+# cpp -dM /dev/null: get predefined macros
+run_check 40 "cpp -dM /dev/null"
 
 write_echo "#--------------------------------#"
 write_echo "# SECTION 2 ABOVE: C ENVIRONMENT #"
