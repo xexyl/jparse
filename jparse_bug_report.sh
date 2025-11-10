@@ -111,7 +111,7 @@ Exit codes:
      5      required file doesn't exist, wrong type or wrong permissions
  >= 10	    at least one check failed
 
-jparse_bug_report.sh version: $BUG_REPORT_VERSION"
+jparse_bug_report.sh version: $JPARSE_BUG_REPORT_VERSION"
 
 # Determine the name of the log file
 #
@@ -128,7 +128,7 @@ while getopts :hVv:D:txlL:m:M:c: flag; do
     h)	echo "$USAGE" 1>&2
         exit 2
         ;;
-    V)	echo "$BUG_REPORT_VERSION" 1>&2
+    V)	echo "$JPARSE_BUG_REPORT_VERSION" 1>&2
 	exit 2
 	;;
     v)	V_FLAG="$OPTARG";
@@ -1161,7 +1161,7 @@ if [[ $V_FLAG -gt 1 ]]; then
     write_echo "Will write report to \"$LOGFILE\""
 fi
 write_echo "# TIME OF REPORT: \"$(date)\""
-write_echo "# BUG_REPORT_VERSION: \"$BUG_REPORT_VERSION\""
+write_echo "# JPARSE_BUG_REPORT_VERSION: \"$JPARSE_BUG_REPORT_VERSION\""
 
 #################################################
 # Section 0: environment and system information #
