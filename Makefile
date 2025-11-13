@@ -1253,6 +1253,8 @@ uninstall: legacy_uninstall
 	${Q} ${RM} ${RM_V} -f ${MAN1_DIR}/jparse.1
 	${Q} ${RM} ${RM_V} -f ${MAN1_DIR}/jstrdecode.1
 	${Q} ${RM} ${RM_V} -f ${MAN1_DIR}/jstrencode.1
+	${Q} ${RM} ${RM_V} -f ${MAN1_DIR}/run_bison.1
+	${Q} ${RM} ${RM_V} -f ${MAN1_DIR}/run_flex.1
 	${Q} ${RM} ${RM_V} -f ${MAN3_DIR}/jparse.3
 	${Q} ${RM} ${RM_V} -f ${MAN3_DIR}/json_dbg.3
 	${Q} ${RM} ${RM_V} -f ${MAN3_DIR}/json_dbg_allowed.3
