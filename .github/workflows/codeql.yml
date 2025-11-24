@@ -55,7 +55,7 @@ jobs:
           build-mode: autobuild
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     # Initialises the CodeQL tools for scanning.
     - name: Initialize CodeQL
