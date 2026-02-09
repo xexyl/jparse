@@ -538,7 +538,7 @@ jstrdecode: jstrdecode.o libjparse.a
 	${CC} ${CFLAGS} $^ -lm -o $@ ${LD_DIR} -lpr -ldbg -ldyn_array
 
 json_parse.o: json_parse.c
-	${CC} ${CFLAGS} json_parse.c -c
+	${CC} ${CFLAGS} -Wno-unused-command-line-argument json_parse.c -c -lm
 
 jsemtblgen.o: jsemtblgen.c jparse.tab.h json_utf8.h version.h
 	${CC} ${CFLAGS} jsemtblgen.c -c

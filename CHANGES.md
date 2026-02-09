@@ -1,5 +1,11 @@
 # Significant changes in the JSON parser repo
 
+## Release 2.5.5 2026-02-09
+
+Add `-lm` to Makefile for `floor()` etc for `json_parse.o`. As macOS does not
+use this I have added to that rule `-Wno-unused-command-line-argument`.
+
+
 ## Release 2.5.4 2025-11-13
 
 Fix Makefile to not install repo specific man pages and to uninstall two missing
