@@ -1,5 +1,10 @@
 # Significant changes in the JSON parser repo
 
+## Release 2.5.6 2026-03-15
+
+Updated copyright dates to 2022-2026.
+
+
 ## Release 2.5.5 2026-02-09
 
 Add `-lm` to Makefile for `floor()` etc for `json_parse.o`. As macOS does not
