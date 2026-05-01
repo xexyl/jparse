@@ -1,5 +1,15 @@
 # Significant changes in the JSON parser repo
 
+## Release 2.5.7 2026-05-01
+
+Added stub `jval.c` and `jval.h`. As there is no code yet (other than parsing
+the usual options like `-h`, `-V`, `-v`, `-J` ...) the version is just "0.0.0
+2026-05-01".
+
+Also there is no stub man page either as that is to be dealt with later,
+much later in fact, at least by me, given other issues in real life.
+
+
 ## Release 2.5.6 2026-03-15
 
 Updated copyright dates to 2022-2026.
