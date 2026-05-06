@@ -421,7 +421,7 @@ SH_TARGETS=
 
 # program targets to make by all, installed by install, and removed by clobber
 #
-PROG_TARGETS= jparse verge jsemtblgen jstrdecode jstrencode
+PROG_TARGETS= jparse verge jsemtblgen jstrdecode jstrencode jval
 
 # include files NOT to removed by clobber
 #
@@ -518,7 +518,7 @@ jparse.o: jparse.c jparse.h version.h
 jparse: jparse_main.o libjparse.a
 	${CC} ${CFLAGS} $^ -lm -o $@ ${LD_DIR} -lpr -ldbg -ldyn_array
 
-jval.o: jval.c version.h jparse.h
+jval.o: jval.c jval.h version.h jparse.h
 	${CC} ${CFLAGS} jval.c -c
 
 jval: jval.o libjparse.a

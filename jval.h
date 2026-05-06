@@ -1,5 +1,5 @@
 /*
- * jval - XXX - fill out - XXX
+ * jval - use XPath for JSON to analyse, transform and selectively extract data from JSON
  *
  * "Because specs w/o version numbers are forced to commit to their original design flaws." :-)
  *
@@ -79,7 +79,7 @@
 /*
  * official jval version
  */
-#define JVAL_VERSION "0.0.0 2026-05-01"	/* format: major.minor YYYY-MM-DD */
+#define JVAL_VERSION "0.1.0 2026-05-06"	/* format: major.minor YYYY-MM-DD */
 
 
 /*
