@@ -1,5 +1,5 @@
 /*
- * jval - use JPath for JSON to analyse, transform and selectively extract data from JSON
+ * jval - use XPath for JSON to analyse, transform and selectively extract data from JSON
  *
  * "Because specs w/o version numbers are forced to commit to their original design flaws." :-)
  *

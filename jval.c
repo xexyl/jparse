@@ -1,5 +1,5 @@
 /*
- * jval - use JPath for JSON to analyse, transform and selectively extract data from JSON
+ * jval - use XPath for JSON to analyse, transform and selectively extract data from JSON
  *
  * "Because specs w/o version numbers are forced to commit to their original design flaws." :-)
  *
@@ -80,7 +80,7 @@ static const char * const usage_msg =
     "\t\t\tNOTE: if file.json is - (dash) read from standard input.\n"
     "\t\t\tNOTE: if file.json is . (dot) do not read any file, perform an internal test\n"
     "\t\t\tand exit accordingly.\n"
-    "\tpattern\t\tJPath Expression\n"
+    "\tpattern\t\tXPath Expression\n"
     "\n"
     "Exit codes:\n"
     "    0\tJSON is valid\n"
@@ -106,7 +106,7 @@ main(int argc, char **argv)
 {
     char const *program = NULL;	    /* our name */
     char const *json_path = NULL;   /* file.json */
-    char const *pattern = NULL;     /* JPath pattern */
+    char const *pattern = NULL;     /* XPath pattern */
     extern char *optarg;	    /* option argument */
     extern int optind;		    /* argv index of the next arg */
     bool valid_json = false;	    /* true ==> JSON parse was valid */
@@ -209,7 +209,7 @@ main(int argc, char **argv)
     else {
         dbg(DBG_HIGH, "%s is valid JSON", strcmp(json_path,"-")?json_path:"stdin");
         /*
-         * XXX - write the JPath code here (or call a function to do so), before
+         * XXX - write the XPath code here (or call a function to do so), before
          * freeing the tree - XXX
          */
         json_tree_free(tree, JSON_INFINITE_DEPTH);
