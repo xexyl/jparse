@@ -9,7 +9,7 @@ if `argc - optind` is the right value, which is checked, and also make sure it
 is not an empty string) and then parse the JSON file, validating it (if invalid
 it's an error otherwise it just, depending on debug level, specifically
 `DBG_HIGH`, it reports it is valid JSON and then frees it). What this means is
-that the only code left to do is the actual XPath parsing.
+that the only code left to do is the actual JPath parsing.
 
 All options per issue #10 are implemented except that because of how `getopt(3)`
 works the `--use-jparse` has been changed to `-use-jparse`. I have tested

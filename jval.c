@@ -1,5 +1,5 @@
 /*
- * jval - use XPath for JSON to analyse, transform and selectively extract data from JSON
+ * jval - use JPath for JSON to analyse, transform and selectively extract data from JSON
  *
  * "Because specs w/o version numbers are forced to commit to their original design flaws." :-)
  *
@@ -209,7 +209,7 @@ main(int argc, char **argv)
     else {
         dbg(DBG_HIGH, "%s is valid JSON", strcmp(json_path,"-")?json_path:"stdin");
         /*
-         * XXX - write the XPath code here (or call a function to do so), before
+         * XXX - write the JPath code here (or call a function to do so), before
          * freeing the tree - XXX
          */
         json_tree_free(tree, JSON_INFINITE_DEPTH);
