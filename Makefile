@@ -1366,7 +1366,7 @@ jstrdecode.o: jparse.h jparse.tab.h json_parse.h json_sem.h json_utf8.h \
     json_util.h jstr_util.h jstrdecode.c jstrdecode.h util.h version.h
 jstrencode.o: jparse.h jparse.tab.h json_parse.h json_sem.h json_utf8.h \
     json_util.h jstr_util.h jstrencode.c jstrencode.h util.h version.h
-jval.o: jparse.h jparse.tab.h jparse_main.h json_parse.h json_sem.h \
-    json_utf8.h json_util.h jval.c util.h version.h
+jval.o: jparse.h jparse.tab.h json_parse.h json_sem.h json_utf8.h \
+    json_util.h jval.c jval.h util.h version.h
 util.o: util.c util.h
 verge.o: json_utf8.h util.h verge.c verge.h version.h
