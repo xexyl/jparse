@@ -1,5 +1,13 @@
 # Significant changes in the JSON parser repo
 
+## Release 2.5.11 2026-08-03
+
+Make jval.c `#include "jval.h"` rather than `jparse_main.h`. The code is
+currently a stub due to the fact that details have not been completely worked
+out (and likely won't be for a good while) and it was therefore (partly) a copy
+paste from `jparse_main.c`. There is no version update for this reason.
+
+
 ## Release 2.5.10 2026-06-13
 
 Removed calls to `isascii()` as it was deprecated in POSIX.1-2008 and finally

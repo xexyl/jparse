@@ -53,7 +53,7 @@
 /*
  * jval - XXX - fill out - XXX
  */
-#include "jparse_main.h"
+#include "jval.h"
 
 
 /*
@@ -112,7 +112,7 @@ main(int argc, char **argv)
     bool valid_json = false;	    /* true ==> JSON parse was valid */
     int exit_code = 0;              /* exit code depends on if any JSON is invalid */
     struct json *tree = NULL;	    /* JSON parse tree or NULL */
-    bool opt_error = false;		/* fchk_inval_opt() return */
+    bool opt_error = false;	    /* fchk_inval_opt() return */
     int i;
 
     /*
