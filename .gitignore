@@ -9,7 +9,6 @@
 ._.DS_Store
 *.dSYM/
 foobar
-/.github
 /jfmt
 /jnamval
 /jparse
