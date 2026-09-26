@@ -52,9 +52,9 @@
  *	accordingly.
  */
 #line 1 "./jparse.c"
-#line 1 "jparse.c"
+#line 2 "jparse.c"
 
-#line 3 "jparse.c"
+#line 4 "jparse.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -877,7 +877,7 @@ static YY_BUFFER_STATE bs;
 				} \
 			    } \
 			}
-#line 826 "jparse.c"
+#line 827 "jparse.c"
 /*
  * Section 1 - Patterns (regular expressions) and actions.
  */
@@ -947,7 +947,7 @@ static YY_BUFFER_STATE bs;
  * JSON_COMMA		","
  */
 /* Actions. */
-#line 896 "jparse.c"
+#line 897 "jparse.c"
 
 #define INITIAL 0
 
@@ -1229,7 +1229,7 @@ YY_DECL
 	{
 #line 214 "./jparse.l"
 
-#line 1178 "jparse.c"
+#line 1179 "jparse.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1491,7 +1491,7 @@ YY_RULE_SETUP
 #line 357 "./jparse.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1440 "jparse.c"
+#line 1441 "jparse.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2959,6 +2959,16 @@ parse_json(char const *ptr, size_t len, char const *filename, bool *is_valid)
 	tree = json_alloc(JTYPE_UNSET);
 	return tree;
     }
+    if (len > (size_t)INT_MAX) {
+	werr(40, __func__, "len: %zu > INT_MAX: %d", len, INT_MAX);
+
+	/*
+         * yy_scan_bytes() accepts an int length, so oversized input cannot be scanned safely.
+         */
+	*is_valid = false;
+	tree = json_alloc(JTYPE_UNSET);
+	return tree;
+    }
 
     /*
      * initialise scanner
@@ -2966,7 +2976,7 @@ parse_json(char const *ptr, size_t len, char const *filename, bool *is_valid)
     errno = 0;
     ret = jparse_lex_init_extra(&extra, &scanner);
     if (ret != 0) {
-	werrp(40, __func__, "jparse_lex_init_extra failed");
+	werrp(41, __func__, "jparse_lex_init_extra failed");
 
         /*
          * if jparse_lex_init_extra() reports an error (!= 0) then *is_valid
@@ -2987,7 +2997,7 @@ parse_json(char const *ptr, size_t len, char const *filename, bool *is_valid)
 	 * perhaps it should call err() instead but for now we make it a
 	 * non-fatal error as well.
 	 */
-	werr(41, __func__, "unable to scan string");
+	werr(42, __func__, "unable to scan string");
 
 	/*
          * since we cannot scan the bytes, we set *is_valid to false, even
