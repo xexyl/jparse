@@ -376,7 +376,7 @@ json_api_test.o: json_api_test.c ../json_utf8.h ../version.h
 	${CC} ${CFLAGS} json_api_test.c -c
 
 json_api_test: json_api_test.o ../libjparse.a
-	${CC} ${CFLAGS} $^ -o $@ ${LD_DIR2} -lpr -ldyn_array -ldbg
+	${CC} ${CFLAGS} $^ -lm -o $@ ${LD_DIR2} -lpr -ldyn_array -ldbg
 
 pr_jparse_test.o: pr_jparse_test.c pr_jparse_test.h ../json_utf8.h ../version.h
 	${CC} ${CFLAGS} pr_jparse_test.c -c
