@@ -659,8 +659,8 @@ parse_json(char const *ptr, size_t len, char const *filename, bool *is_valid)
 	tree = json_alloc(JTYPE_UNSET);
 	return tree;
     }
-    if (len > (size_t)INT_MAX) {
-	werr(40, __func__, "len: %zu > INT_MAX: %d", len, INT_MAX);
+if (len > (size_t)(INT_MAX - 2)) {
+	werr(40, __func__, "len: %zu > INT_MAX - 2: %d", len, INT_MAX - 2);
 
 	/*
          * yy_scan_bytes() accepts an int length, so oversized input cannot be scanned safely.
