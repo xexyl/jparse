@@ -704,7 +704,7 @@ clobber: legacy_clobber clean
 	${S} echo "${OUR_NAME}: make $@ starting"
 	${S} echo
 	${Q} ${RM} ${RM_V} -f ${TARGETS}
-	${Q} ${RM} ${RM_V} -f jparse_test.log
+	${Q} ${RM} ${RM_V} -f jparse_test.log json_api_test
 	${Q} ${RM} ${RM_V} -f tags ${LOCAL_DIR_TAGS}
 	${Q} ${RM} ${RM_V} -rf a b
 	${S} echo
@@ -802,6 +802,8 @@ jnum_header.o: ../jparse.h ../jparse.tab.h ../json_parse.h ../json_sem.h \
 jnum_test.o: ../jparse.h ../jparse.tab.h ../json_parse.h ../json_sem.h \
     ../json_utf8.h ../json_util.h ../util.h ../version.h jnum_chk.h \
     jnum_test.c
+json_api_test.o: ../jparse.h ../jparse.tab.h ../json_parse.h ../json_sem.h \
+    ../json_utf8.h ../json_util.h ../util.h json_api_test.c
 pr_jparse_test.o: ../jparse.h ../jparse.tab.h ../json_parse.h ../json_sem.h \
     ../json_utf8.h ../json_util.h ../util.h ../version.h pr_jparse_test.c \
     pr_jparse_test.h

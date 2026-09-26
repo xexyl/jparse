@@ -839,7 +839,7 @@ parse_json_str(char const *ptr, size_t len, bool *is_valid)
      * firewall
      */
     if (is_valid == NULL) {
-	err(42, __func__, "is_valid == NULL");
+	err(43, __func__, "is_valid == NULL");
 	not_reached();
     } else {
 	/*
@@ -854,7 +854,7 @@ parse_json_str(char const *ptr, size_t len, bool *is_valid)
      * firewall
      */
     if (ptr == NULL) {
-	werr(43, __func__, "ptr is NULL");
+	werr(44, __func__, "ptr is NULL");
 
 	/*
          * flag that we have invalid JSON
@@ -919,7 +919,7 @@ parse_json_stream(FILE *stream, char const *filename, bool *is_valid)
      * firewall
      */
     if (is_valid == NULL) {
-	err(44, __func__, "is_valid == NULL");
+	err(45, __func__, "is_valid == NULL");
 	not_reached();
     } else {
 	/*
@@ -943,7 +943,7 @@ parse_json_stream(FILE *stream, char const *filename, bool *is_valid)
 	/*
          * report NULL stream
          */
-	werr(45, __func__, "stream is NULL");
+	werr(46, __func__, "stream is NULL");
 
 	/*
          * flag that we have invalid JSON
@@ -965,7 +965,7 @@ parse_json_stream(FILE *stream, char const *filename, bool *is_valid)
 	/*
          * report closed stream
          */
-	werr(46, __func__, "stream is not open");
+	werr(47, __func__, "stream is not open");
 
 	/*
          * flag that we have invalid JSON
@@ -988,7 +988,7 @@ parse_json_stream(FILE *stream, char const *filename, bool *is_valid)
 	/*
          * warn about read error
          */
-	werr(47, __func__, "could not read read stream");
+	werr(48, __func__, "could not read read stream");
         /*
          * we need to clearerr() or fclose(), depending on the stream.
          */
@@ -1014,14 +1014,14 @@ parse_json_stream(FILE *stream, char const *filename, bool *is_valid)
          * report invalid bytes
          */
 	if (low_bytes > 0 && nul_bytes > 0) {
-	    werr(48, __func__, "%zu low byte%s and %zu NUL byte%s detected: data block is NOT valid JSON",
+	    werr(49, __func__, "%zu low byte%s and %zu NUL byte%s detected: data block is NOT valid JSON",
 		    low_bytes, low_bytes > 1 ? "s":"",
 		    nul_bytes, nul_bytes > 1 ? "s":"");
 	} else if (low_bytes > 0) {
-	    werr(49, __func__, "%zu low byte%s detected: data block is NOT valid JSON",
+	    werr(50, __func__, "%zu low byte%s detected: data block is NOT valid JSON",
 		    low_bytes, low_bytes > 1 ? "s":"");
 	} else if (nul_bytes > 0) {
-	    werr(50, __func__, "%zu NUL byte%s detected: data block is NOT valid JSON",
+	    werr(51, __func__, "%zu NUL byte%s detected: data block is NOT valid JSON",
 		    nul_bytes, nul_bytes > 1 ? "s":"");
 	}
 
@@ -1102,7 +1102,7 @@ exists(char const *path)
      * firewall
      */
     if (path == NULL) {
-	err(51, __func__, "called with NULL path");
+	err(52, __func__, "called with NULL path");
 	not_reached();
     }
 
@@ -1143,7 +1143,7 @@ is_file(char const *path)
      * firewall
      */
     if (path == NULL) {
-	err(52, __func__, "called with NULL path");
+	err(53, __func__, "called with NULL path");
 	not_reached();
     }
 
@@ -1194,7 +1194,7 @@ is_read(char const *path)
      * firewall
      */
     if (path == NULL) {
-	err(53, __func__, "called with NULL path");
+	err(54, __func__, "called with NULL path");
 	not_reached();
     }
 
@@ -1254,7 +1254,7 @@ parse_json_file(char const *filename, bool *is_valid)
      * firewall
      */
     if (is_valid == NULL) {
-	err(54, __func__, "is_valid == NULL");
+	err(55, __func__, "is_valid == NULL");
 	not_reached();
     } else {
 	/*
@@ -1265,7 +1265,7 @@ parse_json_file(char const *filename, bool *is_valid)
 	*is_valid = true;
     }
     if (filename == NULL) {
-	werr(55, __func__, "passed NULL filename");
+	werr(56, __func__, "passed NULL filename");
 
 	/*
          * flag that we have invalid JSON
@@ -1283,7 +1283,7 @@ parse_json_file(char const *filename, bool *is_valid)
 	/*
          * warn about bogus filename
          */
-	werr(56, __func__, "passed empty filename");
+	werr(57, __func__, "passed empty filename");
 
 	/*
          * flag that we have invalid JSON
@@ -1315,7 +1315,7 @@ parse_json_file(char const *filename, bool *is_valid)
 	    /*
              * report missing file
              */
-	    werr(57, __func__, "passed filename that's not actually a file: %s", filename);
+	    werr(58, __func__, "passed filename that's not actually a file: %s", filename);
 
 	    /*
              * flag that we have invalid JSON
@@ -1333,7 +1333,7 @@ parse_json_file(char const *filename, bool *is_valid)
 	    /*
              * report that file is not a normal file
              */
-	    werr(58, __func__, "passed filename not a normal file: %s", filename);
+	    werr(59, __func__, "passed filename not a normal file: %s", filename);
 
 	    /*
              * report invalid JSON
@@ -1350,7 +1350,7 @@ parse_json_file(char const *filename, bool *is_valid)
 	    /*
              * report unreadable file
              */
-	    werr(59, __func__, "passed filename not a readable file: %s", filename);
+	    werr(60, __func__, "passed filename not a readable file: %s", filename);
 
 	    /*
              * flag that we have invalid JSON
@@ -1374,7 +1374,7 @@ parse_json_file(char const *filename, bool *is_valid)
 	    /*
              * warn about file open error
              */
-	    werrp(60, __func__, "couldn't open file %s, ignoring", filename);
+	    werrp(61, __func__, "couldn't open file %s, ignoring", filename);
 
 	    /*
              * flag that we have invalid JSON
