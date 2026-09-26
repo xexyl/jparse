@@ -659,6 +659,16 @@ parse_json(char const *ptr, size_t len, char const *filename, bool *is_valid)
 	tree = json_alloc(JTYPE_UNSET);
 	return tree;
     }
+if (len > (size_t)(INT_MAX - 2)) {
+	werr(40, __func__, "len: %zu > INT_MAX - 2: %d", len, INT_MAX - 2);
+
+	/*
+         * yy_scan_bytes() accepts an int length, so oversized input cannot be scanned safely.
+         */
+	*is_valid = false;
+	tree = json_alloc(JTYPE_UNSET);
+	return tree;
+    }
 
     /*
      * initialise scanner
@@ -666,7 +676,7 @@ parse_json(char const *ptr, size_t len, char const *filename, bool *is_valid)
     errno = 0;
     ret = jparse_lex_init_extra(&extra, &scanner);
     if (ret != 0) {
-	werrp(40, __func__, "jparse_lex_init_extra failed");
+	werrp(41, __func__, "jparse_lex_init_extra failed");
 
         /*
          * if jparse_lex_init_extra() reports an error (!= 0) then *is_valid
@@ -687,7 +697,7 @@ parse_json(char const *ptr, size_t len, char const *filename, bool *is_valid)
 	 * perhaps it should call err() instead but for now we make it a
 	 * non-fatal error as well.
 	 */
-	werr(41, __func__, "unable to scan string");
+	werr(42, __func__, "unable to scan string");
 
 	/*
          * since we cannot scan the bytes, we set *is_valid to false, even

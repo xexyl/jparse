@@ -843,6 +843,7 @@ alloc_c_funct_name(char const *prefix, char const *str)
 {
     bool prefix_is_reserved = false;	/* true ==> prefix is a reserved word in C */
     bool str_is_reserved = false;	/* true ==> str is a reserved word in C */
+    size_t alloc_len = 0;			/* allocated size of ret including guard byte */
     size_t len = 0;			/* length of allocated string */
     char *ret = NULL;			/* allocated string to return */
     char *p = NULL;			/* next character to add */
@@ -860,13 +861,23 @@ alloc_c_funct_name(char const *prefix, char const *str)
      */
     if (prefix != NULL) {
 	prefix_is_reserved = test_reserved(prefix);
-	len = strlen(prefix) + (prefix_is_reserved ? 1 : 0) + 1;	/* + 1 for _ after prefix */
+	if (size_add(strlen(prefix), (prefix_is_reserved ? 1 : 0), &len) == false ||
+	    size_add(len, 1, &len) == false) {
+	    err(20, __func__, "prefix length overflow");
+	    not_reached();
+	}
     }
     str_is_reserved = test_reserved(str);
-    len += strlen(str) + (str_is_reserved ? 1 : 0) + 1;	/* + 1 for NUL */
-    ret = calloc(len + 1, sizeof(*ret));		/* + 1 for guard byte paranoia */
+    if (size_add(len, strlen(str), &len) == false ||
+	size_add(len, (str_is_reserved ? 1 : 0), &len) == false ||
+	size_add(len, 1, &len) == false ||
+	size_add(len, 1, &alloc_len) == false) {
+	err(20, __func__, "function name length overflow");
+	not_reached();
+    }
+    ret = calloc(alloc_len, sizeof(*ret));		/* + 1 for guard byte paranoia */
     if (ret == NULL) {
-	errp(20, __func__, "calloc of %zu bytes failed", len);
+	errp(20, __func__, "calloc of %zu bytes failed", alloc_len);
 	not_reached();
     }
     p = ret;
