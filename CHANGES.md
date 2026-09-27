@@ -3,6 +3,13 @@
 
 ## Release 2.6.0 2026-09-25
 
+Sequenced exit codes.
+
+Updated `JPARSE_UTF8_VERSION` to `"2.1.5 2026-09-27"` for recent changes.
+
+
+## Release 2.6.0 2026-09-25
+
 Performed a major code audit.
 
 Harden parser allocation and length handling across JSON decode and scanner entry points
