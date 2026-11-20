@@ -1,6 +1,13 @@
 # Significant changes in the JSON parser repo
 
 
+## Release 2.6.1 2026-11-20
+
+Added `jprint.[ch]` stub files.
+
+Updated `jparse.lex.ref.h` and `jparse.ref.c` for updated flex/bison versions.
+
+
 ## Release 2.6.0 2026-09-25
 
 Sequenced exit codes.
