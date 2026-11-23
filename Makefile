@@ -1359,6 +1359,8 @@ jparse.tab.ref.o: jparse.h jparse.lex.h jparse.tab.h jparse.tab.ref.c \
     json_parse.h json_sem.h json_utf8.h json_util.h util.h version.h
 jparse_main.o: jparse.h jparse.tab.h jparse_main.c jparse_main.h \
     json_parse.h json_sem.h json_utf8.h json_util.h util.h version.h
+jprint.o: jparse.h jparse.tab.h jprint.c jprint.h json_parse.h json_sem.h \
+    json_utf8.h json_util.h util.h version.h
 jsemtblgen.o: jparse.h jparse.tab.h jsemtblgen.c jsemtblgen.h json_parse.h \
     json_sem.h json_utf8.h json_util.h util.h version.h
 json_parse.o: jparse.h jparse.tab.h json_parse.c json_parse.h json_sem.h \
